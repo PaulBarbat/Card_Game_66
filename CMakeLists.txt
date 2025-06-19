@@ -18,7 +18,7 @@ endif()
 
 # Set executable name
 if(WIN32)
-    set(EXECUTABLE_NAME "Card_Game_66-${VERSION_STRING}-${PLATFORM_NAME}.exe")
+    set(EXECUTABLE_NAME "Card_Game_66-${VERSION_STRING}-${PLATFORM_NAME}")
 else()
     set(EXECUTABLE_NAME "Card_Game_66-${VERSION_STRING}-${PLATFORM_NAME}")
 endif()

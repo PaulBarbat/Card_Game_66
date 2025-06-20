@@ -26,7 +26,6 @@ endif()
 # Add the executable
 add_executable(${EXECUTABLE_NAME}
     main.cpp
-    src/Card.cpp
     src/Game.cpp)
 
 # Compiler warnings

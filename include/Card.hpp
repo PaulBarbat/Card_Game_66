@@ -3,31 +3,21 @@
 
 #include <iostream>
 #include <stdio.h>
+#include "ICard.hpp"
+#include "SuitAndRank.hpp"
 
-enum class Suit{
-Hearts = 1,
-Diamonds,
-Clubs,
-Spades
-};
-
-enum class Rank{
-    Two = 2,
-    Three,
-    Four,
-    Ten = 10,
-    Ace
-};
-
-class Card{
+template <typename SuitType, typename RankType>
+class Card : public ICard{
 private:
-    Suit suit;
-    Rank rank;
+    SuitType suit;
+    RankType rank;
 
 public:
     Card()=delete;
-    Card(Suit suit, Rank rank);
-    std::string toString();
+    Card(SuitType suit, RankType rank): suit(suit), rank(rank){}
+    std::string toString() const override {
+        return rankToString(rank)+suitToString(suit);
+    }
 };
 
 #endif

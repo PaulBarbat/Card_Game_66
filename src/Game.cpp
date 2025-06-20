@@ -5,7 +5,9 @@ Game::Game(){
 }
 
 void Game::run() {
-    Card c = Card(Suit::Clubs, Rank::Four);
+    Card<ClasicSuit, ClasicRank> classic(ClasicSuit::Clubs, ClasicRank::Ten);
+    Card<MagyarSuit, MagyarRank> magyar(MagyarSuit::Verde, MagyarRank::Doi);
+    std::cout << classic.toString()<<std::endl;
+    std::cout << magyar.toString()<<std::endl;
     std::cout << "Hello everyone. This is the game run method" << std::endl;
-    std::cout << c.toString() << std::endl;
 }

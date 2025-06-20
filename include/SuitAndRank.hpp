@@ -32,7 +32,7 @@ enum class MagyarRank{
     Tuz
 };
 
-std::string rankToString(ClasicRank rank){
+inline std::string rankToString(ClasicRank rank){
     switch (rank)
     {
         case ClasicRank::Two:
@@ -61,11 +61,13 @@ std::string rankToString(ClasicRank rank){
             break;
         }
         default:
+            return "Unknown";
             break;
     }
+    return "Unknown";
 }
 
-std::string rankToString(MagyarRank rank){
+inline std::string rankToString(MagyarRank rank){
     switch (rank)
     {
         case MagyarRank::Doi:
@@ -94,11 +96,13 @@ std::string rankToString(MagyarRank rank){
             break;
         }
         default:
+            return "Unknown";
             break;
     }
+    return "Unknown";
 }
 
-std::string suitToString(ClasicSuit suit)
+inline std::string suitToString(ClasicSuit suit)
 {
     switch (suit)
     {
@@ -123,11 +127,13 @@ std::string suitToString(ClasicSuit suit)
             break;
         }
         default:
+            return "Unknown";
             break;
     }
+    return "Unknown";
 }
 
-std::string suitToString(MagyarSuit suit)
+inline std::string suitToString(MagyarSuit suit)
 {
     switch (suit)
     {
@@ -152,8 +158,10 @@ std::string suitToString(MagyarSuit suit)
             break;
         }
         default:
+            return "Unknown";
             break;
     }
+    return "Unknown";
 }
 
 #endif

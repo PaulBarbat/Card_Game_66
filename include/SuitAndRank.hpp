@@ -2,14 +2,14 @@
 #define SUITANDRANK_HPP
 #include <string>
 
-enum class ClasicSuit{
+enum class ClassicSuit{
     Hearts = 1,
     Diamonds,
     Clubs,
     Spades
 };
 
-enum class ClasicRank{
+enum class ClassicRank{
     Two = 2,
     Three,
     Four,
@@ -32,30 +32,30 @@ enum class MagyarRank{
     Tuz
 };
 
-inline std::string rankToString(ClasicRank rank){
+inline std::string rankToString(ClassicRank rank){
     switch (rank)
     {
-        case ClasicRank::Two:
+        case ClassicRank::Two:
         {
             return "Two";
             break;
         }
-        case ClasicRank::Three:
+        case ClassicRank::Three:
         {
             return "Three";
             break;
         }
-        case ClasicRank::Four:
+        case ClassicRank::Four:
         {
             return "Four";
             break;
         }
-        case ClasicRank::Ten:
+        case ClassicRank::Ten:
         {
             return "Ten";
             break;
         }
-        case ClasicRank::Ace:
+        case ClassicRank::Ace:
         {
             return "Ace";
             break;
@@ -102,26 +102,26 @@ inline std::string rankToString(MagyarRank rank){
     return "Unknown";
 }
 
-inline std::string suitToString(ClasicSuit suit)
+inline std::string suitToString(ClassicSuit suit)
 {
     switch (suit)
     {
-        case ClasicSuit::Hearts:
+        case ClassicSuit::Hearts:
         {
             return " of Hearts";
             break;
         }
-        case ClasicSuit::Diamonds:
+        case ClassicSuit::Diamonds:
         {
             return " of Diamonds";
             break;
         }
-        case ClasicSuit::Clubs:
+        case ClassicSuit::Clubs:
         {
             return " of Clubs";
             break;
         }
-        case ClasicSuit::Spades:
+        case ClassicSuit::Spades:
         {
             return " of Spades";
             break;

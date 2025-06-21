@@ -2,7 +2,7 @@
 #define GAME_HPP
 
 #include <iostream>
-#include "Card.hpp"
+#include "CardFactory.hpp"
 
 class Game{
     public:

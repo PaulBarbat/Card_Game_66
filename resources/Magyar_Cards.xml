@@ -1,83 +1,83 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Deck>
     <Card>
-        <Suite>Ghinda</Suite>
+        <Suit>Ghinda</Suit>
         <Rank>Doi</Rank>
     </Card>
     <Card>
-        <Suite>Ghinda</Suite>
+        <Suit>Ghinda</Suit>
         <Rank>Trei</Rank>
     </Card>
     <Card>
-        <Suite>Ghinda</Suite>
+        <Suit>Ghinda</Suit>
         <Rank>Cal</Rank>
     </Card>
     <Card>
-        <Suite>Ghinda</Suite>
+        <Suit>Ghinda</Suit>
         <Rank>Craita</Rank>
     </Card>
     <Card>
-        <Suite>Ghinda</Suite>
+        <Suit>Ghinda</Suit>
         <Rank>Tuz</Rank>
     </Card>
     <Card>
-        <Suite>Rosu</Suite>
+        <Suit>Rosu</Suit>
         <Rank>Doi</Rank>
     </Card>
     <Card>
-        <Suite>Rosu</Suite>
+        <Suit>Rosu</Suit>
         <Rank>Trei</Rank>
     </Card>
     <Card>
-        <Suite>Rosu</Suite>
+        <Suit>Rosu</Suit>
         <Rank>Cal</Rank>
     </Card>
     <Card>
-        <Suite>Rosu</Suite>
+        <Suit>Rosu</Suit>
         <Rank>Craita</Rank>
     </Card>
     <Card>
-        <Suite>Rosu</Suite>
+        <Suit>Rosu</Suit>
         <Rank>Tuz</Rank>
     </Card>
     <Card>
-        <Suite>Bata</Suite>
+        <Suit>Bata</Suit>
         <Rank>Doi</Rank>
     </Card>
     <Card>
-        <Suite>Bata</Suite>
+        <Suit>Bata</Suit>
         <Rank>Trei</Rank>
     </Card>
     <Card>
-        <Suite>Bata</Suite>
+        <Suit>Bata</Suit>
         <Rank>Cal</Rank>
     </Card>
     <Card>
-        <Suite>Bata</Suite>
+        <Suit>Bata</Suit>
         <Rank>Craita</Rank>
     </Card>
     <Card>
-        <Suite>Bata</Suite>
+        <Suit>Bata</Suit>
         <Rank>Tuz</Rank>
     </Card>
     <Card>
-        <Suite>Verde</Suite>
+        <Suit>Verde</Suit>
         <Rank>Doi</Rank>
     </Card>
     <Card>
-        <Suite>Verde</Suite>
+        <Suit>Verde</Suit>
         <Rank>Trei</Rank>
     </Card>
     <Card>
-        <Suite>Verde</Suite>
+        <Suit>Verde</Suit>
         <Rank>Cal</Rank>
     </Card>
     <Card>
-        <Suite>Verde</Suite>
+        <Suit>Verde</Suit>
         <Rank>Craita</Rank>
     </Card>
     <Card>
-        <Suite>Verde</Suite>
+        <Suit>Verde</Suit>
         <Rank>Tuz</Rank>
     </Card>
 </Deck>

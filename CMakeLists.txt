@@ -6,6 +6,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # Include directories
 include_directories(include)
+include_directories(external/tinyxml2)
 
 # Read version from Version.txt
 file(READ "${CMAKE_SOURCE_DIR}/Version.txt" VERSION_STRING)
@@ -26,7 +27,10 @@ endif()
 # Add the executable
 add_executable(${EXECUTABLE_NAME}
     main.cpp
-    src/Game.cpp)
+    src/Deck.cpp
+    src/CardFactory.cpp
+    src/Game.cpp
+    external/tinyxml2/tinyxml2.cpp)
 
 # Compiler warnings
 target_compile_options(${EXECUTABLE_NAME} PRIVATE -Wall -Wextra -Wpedantic)

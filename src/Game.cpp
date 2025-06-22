@@ -10,7 +10,9 @@ void Game::run() {
     std::cout << classic.toString()<<std::endl;
     std::cout << magyar.toString()<<std::endl;
     std::cout << "Hello everyone. This is the game run method" << std::endl;
+    std::cin.get(); 
     std::shared_ptr<Deck> classicDeck = CardFactory::createDeckFromXML(DeckType::Classic, "resources/Clasic_Cards.xml");
+    std::cin.get(); 
     std::shared_ptr<Deck> magyarDeck = CardFactory::createDeckFromXML(DeckType::Magyar, "resources/Magyar_Cards.xml");
 
     classicDeck->printDeck();

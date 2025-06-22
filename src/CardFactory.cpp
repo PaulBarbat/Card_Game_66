@@ -3,6 +3,8 @@
 using namespace tinyxml2;
 
 std::shared_ptr<Deck> CardFactory::createDeckFromXML(DeckType type, const std::string& path){
+    std::cout<< "Inside the createDeckFromXML"<<std::endl;
+    std::cin.get(); 
     switch(type){
         case DeckType::Classic:
             return createClassicDeckFromXML(path);
@@ -16,20 +18,24 @@ std::shared_ptr<Deck> CardFactory::createDeckFromXML(DeckType type, const std::s
 std::shared_ptr<Deck> CardFactory::createClassicDeckFromXML(const std::string& path){
     XMLDocument doc;
     Deck deck;
-
+    std::cout<< "Inside the createDeckFromXML"<<std::endl;
+    std::cin.get(); 
     if(doc.LoadFile(path.c_str()) != XML_SUCCESS)
         throw std::runtime_error("Failed to load XML from file "+path);
-    
+    std::cout<< "1"<<std::endl;
+    std::cin.get(); 
     //Getting the root of the Deck
     auto* root = doc.FirstChildElement("Deck");
     if(!root)
         throw std::runtime_error("Missing <Deck> Element "+path);
-
+    std::cout<< "2"<<std::endl;
+    std::cin.get(); 
     //Getting all elements in Deck
     for(auto* card = root->FirstChildElement("Card"); card; card = card->NextSiblingElement("Card")){
         std::string suitStr = card->FirstChildElement("Suite")->GetText();
         std::string rankStr = card->FirstChildElement("Rank")->GetText();
-
+        std::cout<< "3"<<std::endl;
+        std::cin.get(); 
         ClassicSuit suit;
         ClassicRank rank;
 
@@ -39,7 +45,8 @@ std::shared_ptr<Deck> CardFactory::createClassicDeckFromXML(const std::string& p
         else if(suitStr == "Clubs") suit = ClassicSuit::Clubs;
         else if(suitStr == "Spades") suit = ClassicSuit::Spades;
         else throw std::runtime_error("Invalid suit: " + suitStr);
-
+        std::cout<< "4"<<std::endl;
+        std::cin.get(); 
         //get the rank
         if(rankStr == "Two") rank = ClassicRank::Two;
         else if(rankStr == "Three") rank = ClassicRank::Three;
@@ -47,7 +54,8 @@ std::shared_ptr<Deck> CardFactory::createClassicDeckFromXML(const std::string& p
         else if(rankStr == "Ten") rank = ClassicRank::Ten;
         else if(rankStr == "Ace") rank = ClassicRank::Ace;
         else throw std::runtime_error("Invalid rank: " + rankStr);
-
+        std::cout<< "5"<<std::endl;
+        std::cin.get(); 
         //add the card to the deck
         deck.addCard(std::make_shared<Card<ClassicSuit,ClassicRank>>(suit,rank));
     }

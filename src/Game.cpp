@@ -11,7 +11,7 @@ void Game::run() {
     std::cout << magyar.toString()<<std::endl;
     std::cout << "Hello everyone. This is the game run method" << std::endl;
     std::shared_ptr<Deck> classicDeck = CardFactory::createDeckFromXML(DeckType::Classic, "resources/Clasic_Cards.xml");
-    std::shared_ptr<Deck> magyarDeck = CardFactory::createDeckFromXML(DeckType::Magyar, "resources/<Magyar>_Cards.xml");
+    std::shared_ptr<Deck> magyarDeck = CardFactory::createDeckFromXML(DeckType::Magyar, "resources/Magyar_Cards.xml");
 
     classicDeck->printDeck();
     classicDeck->shuffleDeck();

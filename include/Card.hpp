@@ -4,19 +4,19 @@
 #include <iostream>
 #include <stdio.h>
 #include "ICard.hpp"
-#include "SuitAndRank.hpp"
+#include "SuiteAndRank.hpp"
 
-template <typename SuitType, typename RankType>
+template <typename SuiteType, typename RankType>
 class Card : public ICard{
 private:
-    SuitType suit;
+    SuiteType suite;
     RankType rank;
 
 public:
     Card()=delete;
-    Card(SuitType suit, RankType rank): suit(suit), rank(rank){}
+    Card(SuiteType suite, RankType rank): suite(suite), rank(rank){}
     std::string toString() const override {
-        return rankToString(rank)+suitToString(suit);
+        return rankToString(rank)+suiteToString(suite);
     }
 };
 

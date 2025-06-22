@@ -3,7 +3,7 @@
 
 #include "Deck.hpp"
 #include "Card.hpp"
-#include "SuitAndRank.hpp"
+#include "SuiteAndRank.hpp"
 #include "tinyxml2.h"
 
 

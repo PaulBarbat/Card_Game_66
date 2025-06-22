@@ -1,83 +1,83 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Deck>
     <Card>
-        <Suit>Spades</Suit>
+        <Suite>Spades</Suite>
         <Rank>Two</Rank>
     </Card>
     <Card>
-        <Suit>Spades</Suit>
+        <Suite>Spades</Suite>
         <Rank>Three</Rank>
     </Card>
     <Card>
-        <Suit>Spades</Suit>
+        <Suite>Spades</Suite>
         <Rank>Four</Rank>
     </Card>
     <Card>
-        <Suit>Spades</Suit>
+        <Suite>Spades</Suite>
         <Rank>Ten</Rank>
     </Card>
     <Card>
-        <Suit>Spades</Suit>
+        <Suite>Spades</Suite>
         <Rank>Ace</Rank>
     </Card>
     <Card>
-        <Suit>Hearts</Suit>
+        <Suite>Hearts</Suite>
         <Rank>Two</Rank>
     </Card>
     <Card>
-        <Suit>Hearts</Suit>
+        <Suite>Hearts</Suite>
         <Rank>Three</Rank>
     </Card>
     <Card>
-        <Suit>Hearts</Suit>
+        <Suite>Hearts</Suite>
         <Rank>Four</Rank>
     </Card>
     <Card>
-        <Suit>Hearts</Suit>
+        <Suite>Hearts</Suite>
         <Rank>Ten</Rank>
     </Card>
     <Card>
-        <Suit>Hearts</Suit>
+        <Suite>Hearts</Suite>
         <Rank>Ace</Rank>
     </Card>
     <Card>
-        <Suit>Diamonds</Suit>
+        <Suite>Diamonds</Suite>
         <Rank>Two</Rank>
     </Card>
     <Card>
-        <Suit>Diamonds</Suit>
+        <Suite>Diamonds</Suite>
         <Rank>Three</Rank>
     </Card>
     <Card>
-        <Suit>Diamonds</Suit>
+        <Suite>Diamonds</Suite>
         <Rank>Four</Rank>
     </Card>
     <Card>
-        <Suit>Diamonds</Suit>
+        <Suite>Diamonds</Suite>
         <Rank>Ten</Rank>
     </Card>
     <Card>
-        <Suit>Diamonds</Suit>
+        <Suite>Diamonds</Suite>
         <Rank>Ace</Rank>
     </Card>
     <Card>
-        <Suit>Clubs</Suit>
+        <Suite>Clubs</Suite>
         <Rank>Two</Rank>
     </Card>
     <Card>
-        <Suit>Clubs</Suit>
+        <Suite>Clubs</Suite>
         <Rank>Three</Rank>
     </Card>
     <Card>
-        <Suit>Clubs</Suit>
+        <Suite>Clubs</Suite>
         <Rank>Four</Rank>
     </Card>
     <Card>
-        <Suit>Clubs</Suit>
+        <Suite>Clubs</Suite>
         <Rank>Ten</Rank>
     </Card>
     <Card>
-        <Suit>Clubs</Suit>
+        <Suite>Clubs</Suite>
         <Rank>Ace</Rank>
     </Card>
 </Deck>

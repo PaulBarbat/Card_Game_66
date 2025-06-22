@@ -34,21 +34,21 @@ std::shared_ptr<Deck> CardFactory::createClassicDeckFromXML(const std::string& p
     for(auto* card = root->FirstChildElement("Card"); card; card = card->NextSiblingElement("Card")){
         std::cout<< "M"<<std::endl;
         std::cin.get(); 
-        std::string suitStr = card->FirstChildElement("Suite")->GetText();
+        std::string suiteStr = card->FirstChildElement("Suitee")->GetText();
         std::cout<< "M"<<std::endl;
         std::cin.get(); 
         std::string rankStr = card->FirstChildElement("Rank")->GetText();
         std::cout<< "3"<<std::endl;
         std::cin.get(); 
-        ClassicSuit suit;
+        ClassicSuite suite;
         ClassicRank rank;
 
-        //get the suit
-        if(suitStr == "Hearts") suit = ClassicSuit::Hearts;
-        else if(suitStr == "Diamonds") suit = ClassicSuit::Diamonds;
-        else if(suitStr == "Clubs") suit = ClassicSuit::Clubs;
-        else if(suitStr == "Spades") suit = ClassicSuit::Spades;
-        else throw std::runtime_error("Invalid suit: " + suitStr);
+        //get the suite
+        if(suiteStr == "Hearts") suite = ClassicSuite::Hearts;
+        else if(suiteStr == "Diamonds") suite = ClassicSuite::Diamonds;
+        else if(suiteStr == "Clubs") suite = ClassicSuite::Clubs;
+        else if(suiteStr == "Spades") suite = ClassicSuite::Spades;
+        else throw std::runtime_error("Invalid suite: " + suiteStr);
         std::cout<< "4"<<std::endl;
         std::cin.get(); 
         //get the rank
@@ -61,7 +61,7 @@ std::shared_ptr<Deck> CardFactory::createClassicDeckFromXML(const std::string& p
         std::cout<< "5"<<std::endl;
         std::cin.get(); 
         //add the card to the deck
-        deck.addCard(std::make_shared<Card<ClassicSuit,ClassicRank>>(suit,rank));
+        deck.addCard(std::make_shared<Card<ClassicSuite,ClassicRank>>(suite,rank));
     }
     return std::make_shared<Deck>(deck);
 }
@@ -85,20 +85,20 @@ std::shared_ptr<Deck> CardFactory::createMagyarDeckFromXML(const std::string& pa
     for(auto* card = root->FirstChildElement("Card"); card; card = card->NextSiblingElement("Card")){
         std::cout<< "M"<<std::endl;
         std::cin.get(); 
-        std::string suitStr = card->FirstChildElement("Suite")->GetText();
+        std::string suiteStr = card->FirstChildElement("Suitee")->GetText();
         std::cout<< "M"<<std::endl;
         std::cin.get(); 
         std::string rankStr = card->FirstChildElement("Rank")->GetText();
 
-        MagyarSuit suit;
+        MagyarSuite suite;
         MagyarRank rank;
 
-        //get the suit
-        if(suitStr == "Rosu") suit = MagyarSuit::Rosu;
-        else if(suitStr == "Verde") suit = MagyarSuit::Verde;
-        else if(suitStr == "Ghinda") suit = MagyarSuit::Ghinda;
-        else if(suitStr == "Bata") suit = MagyarSuit::Bata;
-        else throw std::runtime_error("Invalid suit: " + suitStr);
+        //get the suite
+        if(suiteStr == "Rosu") suite = MagyarSuite::Rosu;
+        else if(suiteStr == "Verde") suite = MagyarSuite::Verde;
+        else if(suiteStr == "Ghinda") suite = MagyarSuite::Ghinda;
+        else if(suiteStr == "Bata") suite = MagyarSuite::Bata;
+        else throw std::runtime_error("Invalid suite: " + suiteStr);
 
         //get the rank
         if(rankStr == "Doi") rank = MagyarRank::Doi;
@@ -109,7 +109,7 @@ std::shared_ptr<Deck> CardFactory::createMagyarDeckFromXML(const std::string& pa
         else throw std::runtime_error("Invalid rank: " + rankStr);
 
         //add the card to the deck
-        deck.addCard(std::make_shared<Card<MagyarSuit,MagyarRank>>(suit,rank));
+        deck.addCard(std::make_shared<Card<MagyarSuite,MagyarRank>>(suite,rank));
     }
     return std::make_shared<Deck>(deck);
 }

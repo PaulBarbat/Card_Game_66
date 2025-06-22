@@ -2,7 +2,7 @@
 #define SUITANDRANK_HPP
 #include <string>
 
-enum class ClassicSuit{
+enum class ClassicSuite{
     Hearts = 1,
     Diamonds,
     Clubs,
@@ -17,7 +17,7 @@ enum class ClassicRank{
     Ace
 };
 
-enum class MagyarSuit{
+enum class MagyarSuite{
     Rosu = 1,
     Ghinda,
     Bata,
@@ -102,26 +102,26 @@ inline std::string rankToString(MagyarRank rank){
     return "Unknown";
 }
 
-inline std::string suitToString(ClassicSuit suit)
+inline std::string suiteToString(ClassicSuite suite)
 {
-    switch (suit)
+    switch (suite)
     {
-        case ClassicSuit::Hearts:
+        case ClassicSuite::Hearts:
         {
             return " of Hearts";
             break;
         }
-        case ClassicSuit::Diamonds:
+        case ClassicSuite::Diamonds:
         {
             return " of Diamonds";
             break;
         }
-        case ClassicSuit::Clubs:
+        case ClassicSuite::Clubs:
         {
             return " of Clubs";
             break;
         }
-        case ClassicSuit::Spades:
+        case ClassicSuite::Spades:
         {
             return " of Spades";
             break;
@@ -133,26 +133,26 @@ inline std::string suitToString(ClassicSuit suit)
     return "Unknown";
 }
 
-inline std::string suitToString(MagyarSuit suit)
+inline std::string suiteToString(MagyarSuite suite)
 {
-    switch (suit)
+    switch (suite)
     {
-        case MagyarSuit::Rosu:
+        case MagyarSuite::Rosu:
         {
             return " de Rosu";
             break;
         }
-        case MagyarSuit::Ghinda:
+        case MagyarSuite::Ghinda:
         {
             return " de Ghinda";
             break;
         }
-        case MagyarSuit::Bata:
+        case MagyarSuite::Bata:
         {
             return " de Bata";
             break;
         }
-        case MagyarSuit::Verde:
+        case MagyarSuite::Verde:
         {
             return " de Verde";
             break;

@@ -34,7 +34,7 @@ std::shared_ptr<Deck> CardFactory::createClassicDeckFromXML(const std::string& p
     for(auto* card = root->FirstChildElement("Card"); card; card = card->NextSiblingElement("Card")){
         std::cout<< "M"<<std::endl;
         std::cin.get(); 
-        std::string suiteStr = card->FirstChildElement("Suitee")->GetText();
+        std::string suiteStr = card->FirstChildElement("Suite")->GetText();
         std::cout<< "M"<<std::endl;
         std::cin.get(); 
         std::string rankStr = card->FirstChildElement("Rank")->GetText();
@@ -85,7 +85,7 @@ std::shared_ptr<Deck> CardFactory::createMagyarDeckFromXML(const std::string& pa
     for(auto* card = root->FirstChildElement("Card"); card; card = card->NextSiblingElement("Card")){
         std::cout<< "M"<<std::endl;
         std::cin.get(); 
-        std::string suiteStr = card->FirstChildElement("Suitee")->GetText();
+        std::string suiteStr = card->FirstChildElement("Suite")->GetText();
         std::cout<< "M"<<std::endl;
         std::cin.get(); 
         std::string rankStr = card->FirstChildElement("Rank")->GetText();

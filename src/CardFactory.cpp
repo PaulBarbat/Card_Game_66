@@ -3,8 +3,6 @@
 using namespace tinyxml2;
 
 std::shared_ptr<Deck> CardFactory::createDeckFromXML(DeckType type, const std::string& path){
-    std::cout<< "Inside the createDeckFromXML"<<std::endl;
-    std::cin.get(); 
     switch(type){
         case DeckType::Classic:
             return createClassicDeckFromXML(path);
@@ -18,28 +16,19 @@ std::shared_ptr<Deck> CardFactory::createDeckFromXML(DeckType type, const std::s
 std::shared_ptr<Deck> CardFactory::createClassicDeckFromXML(const std::string& path){
     XMLDocument doc;
     Deck deck;
-    std::cout<< "Inside the createDeckFromXML"<<std::endl;
-    std::cin.get(); 
     if(doc.LoadFile(path.c_str()) != XML_SUCCESS)
         throw std::runtime_error("Failed to load XML from file "+path);
-    std::cout<< "1"<<std::endl;
-    std::cin.get(); 
+
     //Getting the root of the Deck
     auto* root = doc.FirstChildElement("Deck");
     if(!root)
         throw std::runtime_error("Missing <Deck> Element "+path);
-    std::cout<< "2"<<std::endl;
-    std::cin.get(); 
+     
     //Getting all elements in Deck
     for(auto* card = root->FirstChildElement("Card"); card; card = card->NextSiblingElement("Card")){
-        std::cout<< "M"<<std::endl;
-        std::cin.get(); 
         std::string suiteStr = card->FirstChildElement("Suite")->GetText();
-        std::cout<< "M"<<std::endl;
-        std::cin.get(); 
         std::string rankStr = card->FirstChildElement("Rank")->GetText();
-        std::cout<< "3"<<std::endl;
-        std::cin.get(); 
+        
         ClassicSuite suite;
         ClassicRank rank;
 
@@ -49,8 +38,7 @@ std::shared_ptr<Deck> CardFactory::createClassicDeckFromXML(const std::string& p
         else if(suiteStr == "Clubs") suite = ClassicSuite::Clubs;
         else if(suiteStr == "Spades") suite = ClassicSuite::Spades;
         else throw std::runtime_error("Invalid suite: " + suiteStr);
-        std::cout<< "4"<<std::endl;
-        std::cin.get(); 
+        
         //get the rank
         if(rankStr == "Two") rank = ClassicRank::Two;
         else if(rankStr == "Three") rank = ClassicRank::Three;
@@ -58,8 +46,7 @@ std::shared_ptr<Deck> CardFactory::createClassicDeckFromXML(const std::string& p
         else if(rankStr == "Ten") rank = ClassicRank::Ten;
         else if(rankStr == "Ace") rank = ClassicRank::Ace;
         else throw std::runtime_error("Invalid rank: " + rankStr);
-        std::cout<< "5"<<std::endl;
-        std::cin.get(); 
+        
         //add the card to the deck
         deck.addCard(std::make_shared<Card<ClassicSuite,ClassicRank>>(suite,rank));
     }
@@ -69,25 +56,18 @@ std::shared_ptr<Deck> CardFactory::createClassicDeckFromXML(const std::string& p
 std::shared_ptr<Deck> CardFactory::createMagyarDeckFromXML(const std::string& path){
     XMLDocument doc;
     Deck deck;
-    std::cout<< "M"<<std::endl;
-    std::cin.get(); 
+    
     if(doc.LoadFile(path.c_str()) != XML_SUCCESS)
         throw std::runtime_error("Failed to load XML from file "+path);
-    std::cout<< "M"<<std::endl;
-    std::cin.get(); 
+    
     //Getting the root of the Deck
     auto* root = doc.FirstChildElement("Deck");
     if(!root)
         throw std::runtime_error("Missing <Deck> Element "+path);
-    std::cout<< "M"<<std::endl;
-    std::cin.get(); 
+    
     //Getting all elements in Deck
     for(auto* card = root->FirstChildElement("Card"); card; card = card->NextSiblingElement("Card")){
-        std::cout<< "M"<<std::endl;
-        std::cin.get(); 
         std::string suiteStr = card->FirstChildElement("Suite")->GetText();
-        std::cout<< "M"<<std::endl;
-        std::cin.get(); 
         std::string rankStr = card->FirstChildElement("Rank")->GetText();
 
         MagyarSuite suite;

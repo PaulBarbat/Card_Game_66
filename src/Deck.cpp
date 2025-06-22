@@ -12,6 +12,7 @@ std::shared_ptr<ICard> Deck::drawCard(){
 }
 
 void Deck::shuffleDeck(){
+    std::cout<<"Shuffle the deck"<<std::endl;
     auto randomizer = std::default_random_engine {};
     std::shuffle(std::begin(this->deck), std::end(this->deck), randomizer);
     this->currentCard=0;

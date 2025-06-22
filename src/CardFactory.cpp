@@ -32,7 +32,11 @@ std::shared_ptr<Deck> CardFactory::createClassicDeckFromXML(const std::string& p
     std::cin.get(); 
     //Getting all elements in Deck
     for(auto* card = root->FirstChildElement("Card"); card; card = card->NextSiblingElement("Card")){
+        std::cout<< "M"<<std::endl;
+        std::cin.get(); 
         std::string suitStr = card->FirstChildElement("Suite")->GetText();
+        std::cout<< "M"<<std::endl;
+        std::cin.get(); 
         std::string rankStr = card->FirstChildElement("Rank")->GetText();
         std::cout<< "3"<<std::endl;
         std::cin.get(); 
@@ -65,18 +69,25 @@ std::shared_ptr<Deck> CardFactory::createClassicDeckFromXML(const std::string& p
 std::shared_ptr<Deck> CardFactory::createMagyarDeckFromXML(const std::string& path){
     XMLDocument doc;
     Deck deck;
-
+    std::cout<< "M"<<std::endl;
+    std::cin.get(); 
     if(doc.LoadFile(path.c_str()) != XML_SUCCESS)
         throw std::runtime_error("Failed to load XML from file "+path);
-    
+    std::cout<< "M"<<std::endl;
+    std::cin.get(); 
     //Getting the root of the Deck
     auto* root = doc.FirstChildElement("Deck");
     if(!root)
         throw std::runtime_error("Missing <Deck> Element "+path);
-
+    std::cout<< "M"<<std::endl;
+    std::cin.get(); 
     //Getting all elements in Deck
     for(auto* card = root->FirstChildElement("Card"); card; card = card->NextSiblingElement("Card")){
+        std::cout<< "M"<<std::endl;
+        std::cin.get(); 
         std::string suitStr = card->FirstChildElement("Suite")->GetText();
+        std::cout<< "M"<<std::endl;
+        std::cin.get(); 
         std::string rankStr = card->FirstChildElement("Rank")->GetText();
 
         MagyarSuit suit;

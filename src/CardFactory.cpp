@@ -31,6 +31,7 @@ std::shared_ptr<Deck> CardFactory::createClassicDeckFromXML(const std::string& p
         
         ClassicSuite suite;
         ClassicRank rank;
+        unsigned points=0;
 
         //get the suite
         if(suiteStr == "Hearts") suite = ClassicSuite::Hearts;
@@ -40,15 +41,30 @@ std::shared_ptr<Deck> CardFactory::createClassicDeckFromXML(const std::string& p
         else throw std::runtime_error("Invalid suite: " + suiteStr);
         
         //get the rank
-        if(rankStr == "Two") rank = ClassicRank::Two;
-        else if(rankStr == "Three") rank = ClassicRank::Three;
-        else if(rankStr == "Four") rank = ClassicRank::Four;
-        else if(rankStr == "Ten") rank = ClassicRank::Ten;
-        else if(rankStr == "Ace") rank = ClassicRank::Ace;
+        if(rankStr == "Two"){
+            rank = ClassicRank::Two;
+            points=2;
+        } 
+        else if(rankStr == "Three"){
+            rank = ClassicRank::Three;
+            points=3;
+        } 
+        else if(rankStr == "Four"){
+            rank = ClassicRank::Four;
+            points=4;
+        } 
+        else if(rankStr == "Ten"){
+            rank = ClassicRank::Ten;
+            points=10;
+        } 
+        else if(rankStr == "Ace"){
+             rank = ClassicRank::Ace;
+            points=11;
+        }
         else throw std::runtime_error("Invalid rank: " + rankStr);
         
         //add the card to the deck
-        deck.addCard(std::make_shared<Card<ClassicSuite,ClassicRank>>(suite,rank));
+        deck.addCard(std::make_shared<Card<ClassicSuite,ClassicRank>>(suite,rank,points));
     }
     return std::make_shared<Deck>(deck);
 }
@@ -72,6 +88,7 @@ std::shared_ptr<Deck> CardFactory::createMagyarDeckFromXML(const std::string& pa
 
         MagyarSuite suite;
         MagyarRank rank;
+        unsigned points=0;
 
         //get the suite
         if(suiteStr == "Rosu") suite = MagyarSuite::Rosu;
@@ -81,15 +98,30 @@ std::shared_ptr<Deck> CardFactory::createMagyarDeckFromXML(const std::string& pa
         else throw std::runtime_error("Invalid suite: " + suiteStr);
 
         //get the rank
-        if(rankStr == "Doi") rank = MagyarRank::Doi;
-        else if(rankStr == "Trei") rank = MagyarRank::Trei;
-        else if(rankStr == "Cal") rank = MagyarRank::Cal;
-        else if(rankStr == "Craita") rank = MagyarRank::Craita;
-        else if(rankStr == "Tuz") rank = MagyarRank::Tuz;
+        if(rankStr == "Doi"){
+            rank = MagyarRank::Doi;
+            points=2;
+        } 
+        else if(rankStr == "Trei"){
+            rank = MagyarRank::Trei;
+            points=3;
+        } 
+        else if(rankStr == "Cal"){
+            rank = MagyarRank::Cal;
+            points=4;
+        } 
+        else if(rankStr == "Craita"){
+            rank = MagyarRank::Craita;
+            points=10;
+        } 
+        else if(rankStr == "Tuz"){
+            rank = MagyarRank::Tuz;
+            points=11;
+        } 
         else throw std::runtime_error("Invalid rank: " + rankStr);
 
         //add the card to the deck
-        deck.addCard(std::make_shared<Card<MagyarSuite,MagyarRank>>(suite,rank));
+        deck.addCard(std::make_shared<Card<MagyarSuite,MagyarRank>>(suite,rank,points));
     }
     return std::make_shared<Deck>(deck);
 }

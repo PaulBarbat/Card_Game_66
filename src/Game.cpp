@@ -30,4 +30,19 @@ void Game::run() {
     std::cout<< std::endl << "Printing the Magyar Deck after shuffling"<<std::endl;
     magyarDeck->printDeck();
 
+    std::cout<< std::endl << "Creating a Player"<<std::endl;
+    Player p(PlayerType::Player);
+    std::cout<< std::endl << "Drawing cards"<<std::endl;
+    p.drawCard(*magyarDeck);
+    p.drawCard(*magyarDeck);
+    p.drawCard(*magyarDeck);
+    p.drawCard(*magyarDeck);
+    p.drawCard(*magyarDeck);
+
+    std::cout<< std::endl << "Showing the hand"<<std::endl;
+    p.showHand();
+
+    std::cout<< std::endl << "Showing the hand with options"<<std::endl;
+    p.calculateOptions(*magyarDeck);
+    p.showHand();
 }

@@ -18,6 +18,8 @@ public:
     std::shared_ptr<ICard> drawCard();
     void shuffleDeck();
     void printDeck();
+    std::shared_ptr<ICard> getTromf() const;
+    void changeTromf(ICard& card);
 };
 
 #endif

@@ -22,4 +22,10 @@ void Deck::printDeck(){
     std::cout<<"The deck has "<<this->deck.size()<<" Cards"<<std::endl;
     for(std::vector<std::shared_ptr<ICard>>::const_iterator i = this->deck.begin(); i!= this->deck.end(); ++i)
         std::cout <<(*i)->toString() << std::endl;
+    std::cout <<"Tromf is "<<this->getTromf()->toString(); 
+}
+
+std::shared_ptr<ICard> Deck::getTromf() const{
+    if (deck.empty()) return nullptr;
+    return deck.at(deck.size()-1);
 }

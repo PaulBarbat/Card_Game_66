@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include "CardFactory.hpp"
+#include "Player.hpp"
 
 class Game{
     public:

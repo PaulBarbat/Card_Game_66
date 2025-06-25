@@ -95,7 +95,7 @@ void Player::changeTromf(std::shared_ptr<ICard> card, Deck& deck){
 void Player::showHand() const{
     for(Hand::const_iterator i = this->hand.begin(); i!= this->hand.end(); ++i)
     {
-        std::cout<<i->first->toString();
+        std::cout<<i->first->toString()<<std::endl;
         if(i->second.empty())
             std::cout<<" with no special options"<<std::endl;
         else{

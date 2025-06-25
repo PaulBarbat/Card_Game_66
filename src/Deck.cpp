@@ -8,7 +8,7 @@ void Deck::addCard(std::shared_ptr<ICard> card){
 std::shared_ptr<ICard> Deck::drawCard(){
     if(this->currentCard >= this->deck.size())
         return nullptr;
-    std::cout<<"Current Card is "<<currentCard<<std::endl;
+    std::cout<<"Current Card is "<<deck[this->currentCard]->toString()<<" position "<<currentCard <<std::endl;
     return this->deck[this->currentCard++];
 }
 
@@ -29,4 +29,8 @@ void Deck::printDeck(){
 std::shared_ptr<ICard> Deck::getTromf() const{
     if (deck.empty()) return nullptr;
     return deck.at(deck.size()-1);
+}
+
+void Deck::showFirstCard()const{
+    std::cout<<this->deck[currentCard]->toString()<<" position "<<currentCard<<std::endl;
 }

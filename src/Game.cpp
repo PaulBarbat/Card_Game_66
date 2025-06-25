@@ -33,11 +33,23 @@ void Game::run() {
     std::cout<< std::endl << "Creating a Player"<<std::endl;
     Player p(PlayerType::Player);
     std::cout<< std::endl << "Drawing cards"<<std::endl;
+    magyarDeck->showFirstCard();
+    (*magyarDeck).showFirstCard();
     p.drawCard(*magyarDeck);
+    magyarDeck->showFirstCard();
+    (*magyarDeck).showFirstCard();
     p.drawCard(*magyarDeck);
+    magyarDeck->showFirstCard();
+    (*magyarDeck).showFirstCard();
     p.drawCard(*magyarDeck);
+    magyarDeck->showFirstCard();
+    (*magyarDeck).showFirstCard();
     p.drawCard(*magyarDeck);
+    magyarDeck->showFirstCard();
+    (*magyarDeck).showFirstCard();
     p.drawCard(*magyarDeck);
+    magyarDeck->showFirstCard();
+    (*magyarDeck).showFirstCard();
 
     std::cout<< std::endl << "Showing the hand"<<std::endl;
     p.showHand();

@@ -21,6 +21,7 @@ public:
     void printDeck();
     std::shared_ptr<ICard> getTromf() const;
     void changeTromf(ICard& card);
+    void showFirstCard()const;
 };
 
 #endif

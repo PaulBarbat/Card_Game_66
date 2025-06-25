@@ -62,7 +62,9 @@ void Player::renderOptions(){
 }
 
 void Player::drawCard(Deck& deck){
+    deck.showFirstCard();
     auto card = deck.drawCard();
+    std::cout<<"Drawn card "<<card->toString()<<std::endl;
     if(card){
         hand[card] = std::vector<CardOption>();
     }

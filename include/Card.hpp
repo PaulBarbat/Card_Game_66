@@ -51,6 +51,10 @@ public:
         this->rank = other->rank;
         this->points = other->points;
     }
+
+    std::shared_ptr<ICard> clone() const {
+        return std::make_shared<Card<SuiteType, RankType>>(*this);
+    }
 };
 
 #endif

@@ -87,9 +87,9 @@ void Player::changeTromf(std::shared_ptr<ICard> card, Deck& deck){
     if(!copy || !card)
         return;
         
-    auto handCopy = *card;
+    auto handCopy = card->clone();
     card->changeCard(*copy);
-    copy->changeCard(handCopy);
+    copy->changeCard(*handCopy);
 }
 
 void Player::showHand() const{

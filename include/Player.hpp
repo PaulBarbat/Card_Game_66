@@ -2,7 +2,7 @@
 #define PLAYER_HPP
 
 #include <vector>
-#include <map>
+#include <utility>
 #include <memory>
 #include <functional>
 #include "Deck.hpp"
@@ -19,7 +19,7 @@ struct CardOption {
     std::function<void()> action;//Optional. This can be set with a function for example for 2 of Tromf to change it with the Tromf that is down on the deck
 };
 
-using Hand = std::map<std::shared_ptr<ICard>,std::vector<CardOption>>;
+using Hand = std::vector<std::pair<std::shared_ptr<ICard>,std::vector<CardOption>>>;
 
 class Player{
 private:

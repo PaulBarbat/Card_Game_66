@@ -48,8 +48,6 @@ void Game::run() {
     magyarDeck->showFirstCard();
     (*magyarDeck).showFirstCard();
     p.drawCard(*magyarDeck);
-    magyarDeck->showFirstCard();
-    (*magyarDeck).showFirstCard();
 
     std::cout<< std::endl << "Showing the hand"<<std::endl;
     p.showHand();

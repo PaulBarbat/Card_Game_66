@@ -66,7 +66,8 @@ void Player::drawCard(Deck& deck){
     auto card = deck.drawCard();
     std::cout<<"Drawn card "<<card->toString()<<std::endl;
     if(card){
-        hand[card] = std::vector<CardOption>();
+        hand.push_back(std::make_pair(card, std::vector<CardOption>{}));
+        //hand.push_back({card, {}});
     }
 }
 

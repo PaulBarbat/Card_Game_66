@@ -48,10 +48,10 @@ void Game::run() {
     p1.drawCard(*magyarDeck);
     p2.drawCard(*magyarDeck);
 
-    std::cout<< std::endl << "Showing the hand"<<std::endl;
-    p.showHand();
-
-    std::cout<< std::endl << "Showing the hand with options"<<std::endl;
-    p.calculateOptions(*magyarDeck);
-    p.showHand();
+    std::cout<< std::endl << "Player 1 Showing the hand"<<std::endl;
+    p1.calculateOptions(*magyarDeck);
+    p1.showHand();
+    std::cout<< std::endl << "Player 1 Showing the hand"<<std::endl;
+    p2.calculateOptions(*magyarDeck);
+    p2.showHand();
 }

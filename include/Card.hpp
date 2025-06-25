@@ -24,7 +24,7 @@ public:
         return rankToString(rank)+suiteToString(suite);
     }
 
-    bool compareSuit(const ICard& card)const{
+    bool compareSuite(const ICard& card)const{
         auto* other = dynamic_cast<const Card<SuiteType, RankType>*>(&card);
         if (!other) return false; 
         return other->suite==this->suite;
@@ -32,7 +32,7 @@ public:
 
     int compareRank(const ICard& card)const{
         auto* other = dynamic_cast<const Card<SuiteType, RankType>*>(&card);
-        if(!other) return -2//to know that there is an Error
+        if(!other) return -2;//to know that there is an Error
         if(other->rank==this->rank) return 0;//0 return code means ranks are equal
         else if(other->rank < this->rank) return -1;//-1 return code means parameter rank is lower than the current rank
         else return 1;//1 return code means parameter rank is higher than the current rank

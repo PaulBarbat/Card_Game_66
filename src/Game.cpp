@@ -50,8 +50,12 @@ void Game::run() {
 
     std::cout<< std::endl << "Player 1 Showing the hand"<<std::endl;
     p1.calculateOptions(*magyarDeck);
-    p1.showHand();
+    p1.renderOptions();
     std::cout<< std::endl << "Player 1 Showing the hand"<<std::endl;
     p2.calculateOptions(*magyarDeck);
-    p2.showHand();
+    p2.renderOptions();
+
+    std::cout<<p1.playCard(1)->toString()<<std::endl;
+    std::cout<<p1.playCard(1)->toString()<<std::endl;
+
 }

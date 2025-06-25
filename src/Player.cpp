@@ -20,12 +20,19 @@ void Player::calculateOptions(Deck& deck){
                 {
                     i->second.push_back({
                         "Call 40",
-                        [this](){this->addScore(40);}
+                        [this](){if(this->score>0)
+                                this->addScore(40);
+                            else
+                               this->latentPoints+=40;
+                            }
                     });
                     i->second.push_back({
                         "Call 40 and end the round",
                         [this](){
-                            this->addScore(40);
+                            if(this->score>0)
+                                this->addScore(40);
+                            else
+                               this->latentPoints+=40;
                             this->endRound();
                         }
                     });
@@ -40,12 +47,20 @@ void Player::calculateOptions(Deck& deck){
                 {
                     i->second.push_back({
                         "Call 20",
-                        [this](){this->addScore(20);}
+                        [this](){
+                            if(this->score>0)
+                                this->addScore(20);
+                            else
+                               this->latentPoints+=20;
+                            }
                     });
                     i->second.push_back({
                         "Call 20 and end the round",
                         [this](){
-                            this->addScore(20);
+                            if(this->score>0)
+                                this->addScore(20);
+                            else
+                               this->latentPoints+=20;
                             this->endRound();
                         }
                     });
@@ -54,10 +69,17 @@ void Player::calculateOptions(Deck& deck){
     }
 }
 
-void Player::renderOptions(){
+void Player::renderOptions()const{
     std::cout<<"Here are yout options:"<<std::endl;
     for(Hand::const_iterator i = this->hand.begin(); i!= this->hand.end(); ++i)
     {
+        std::cout<<i->first->toString()<<std::endl;
+        if(i->second.empty())
+            std::cout<<" with no special options"<<std::endl;
+        else{
+            for(std::vector<CardOption>::const_iterator j = i->second.begin(); j!= i->second.end(); ++j)
+                std::cout<<"  - "<<j->description<<std::endl;
+        }
     }
 }
 
@@ -69,12 +91,35 @@ void Player::drawCard(Deck& deck){
     }
 }
 
-void Player::playCard(){
-
+std::shared_ptr<ICard> Player::playCard(const unsigned& cardPosition){
+    auto& cardEntry = hand.at(cardPosition);
+    auto card = cardEntry.first->clone();
+    if(cardEntry.second.empty()){
+        hand.erase(hand.begin() + cardPosition);
+        return card;
+    }
+    else{
+        for(std::vector<CardOption>::iterator i = cardEntry.second.begin(); i!= cardEntry.second.end(); ++i)
+            std::cout<<std::distance(cardEntry.second.begin(),i)+1<<" "<<i->description<<std::endl;
+        size_t option=0;
+        while(true)
+        {
+            std::cin>>option;
+            if(option>0 && option<=cardEntry.second.size()){
+                cardEntry.second.at(option-1).action();
+                break;
+            }
+            else{
+                std::cout<<"Not an option, try again"<<std::endl;
+            }
+        }
+        hand.erase(hand.begin() + cardPosition);
+        return card;
+    }    
 }
-
+//TODO
 void Player::endRound(){
-
+    std::cout<<"END GAME HERE"<<std::endl;
 }
 
 void Player::addScore(const unsigned &points)
@@ -91,17 +136,4 @@ void Player::changeTromf(std::shared_ptr<ICard> card, Deck& deck){
     auto handCopy = card->clone();
     card->changeCard(*copy);
     copy->changeCard(*handCopy);
-}
-
-void Player::showHand() const{
-    for(Hand::const_iterator i = this->hand.begin(); i!= this->hand.end(); ++i)
-    {
-        std::cout<<i->first->toString()<<std::endl;
-        if(i->second.empty())
-            std::cout<<" with no special options"<<std::endl;
-        else{
-            for(std::vector<CardOption>::const_iterator j = i->second.begin(); j!= i->second.end(); ++j)
-                std::cout<<"  - "<<j->description<<std::endl;
-        }
-    }
 }

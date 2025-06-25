@@ -32,16 +32,15 @@ public:
     Player() = delete;
     Player(PlayerType type);
     void calculateOptions(Deck& deck);
-    void renderOptions();
+    void renderOptions() const;
     void drawCard(Deck& deck);
-    void playCard();
+    std::shared_ptr<ICard> playCard(const unsigned& cardPosition);
     void endRound();
     void addScore(const unsigned &points);
     //Tromf is the name given to the color that can take any card. 
     //If the player has the Two of Tromf and he starts a turn, 
     //as long as there are more than 2 cards in the deck, he can change it with his Two of Tromf.
     void changeTromf(std::shared_ptr<ICard> card, Deck& deck);
-    void showHand()const;
 };
 
 #endif

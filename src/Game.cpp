@@ -34,8 +34,8 @@ void Game::run() {
     magyarDeck->printDeck();
 
     std::cout<< std::endl << "Creating a Player"<<std::endl;
-    Player p1(PlayerType::Player);
-    Player p2(PlayerType::NPC);
+    Player p1(PlayerType::Player, [this]() { std::cout<<"ENDING the game"<<std::endl; });
+    Player p2(PlayerType::NPC, [this]() { std::cout<<"ENDING the game"<<std::endl; });
     std::cout<< std::endl << "Drawing cards"<<std::endl;
     p1.drawCard(*magyarDeck);
     p2.drawCard(*magyarDeck);

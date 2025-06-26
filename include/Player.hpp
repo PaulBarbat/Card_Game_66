@@ -28,9 +28,10 @@ private:
     unsigned latentPoints; //Some points can be declared at one point but can only be added whenever the player takes a card.
     Hand hand;
     static constexpr size_t MAX_HAND_SIZE = 5;
+    std::function<void()> endGameCallback;
 public:
     Player() = delete;
-    Player(PlayerType type);
+    Player(PlayerType type,std::function<void()> endGameCallback);
     void calculateOptions(Deck& deck);
     void renderOptions() const;
     void drawCard(Deck& deck);

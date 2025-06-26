@@ -1,6 +1,6 @@
 #include "Player.hpp"
 
-Player::Player(PlayerType type) : type(type), score(0) {}
+Player::Player(PlayerType type, std::function<void()> endGameCallback) : type(type), endGameCallback(endGameCallback), score(0) {}
 
 void Player::calculateOptions(Deck& deck){
     for(Hand::iterator i = this->hand.begin(); i!= this->hand.end(); ++i){
@@ -120,6 +120,7 @@ std::shared_ptr<ICard> Player::playCard(const unsigned& cardPosition){
 //TODO
 void Player::endRound(){
     std::cout<<"END GAME HERE"<<std::endl;
+    endGameCallback();
 }
 
 void Player::addScore(const unsigned &points)

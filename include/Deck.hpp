@@ -6,6 +6,7 @@
 #include <algorithm>
 #include <random>
 #include <iostream>
+#include <iterator>
 #include "ICard.hpp"
 
 class Deck {
@@ -18,6 +19,9 @@ public:
     std::shared_ptr<ICard> drawCard();
     void shuffleDeck();
     void printDeck();
+    std::shared_ptr<ICard> getTromf() const;
+    void changeTromf(ICard& card);
+    void showFirstCard()const;
 };
 
 #endif

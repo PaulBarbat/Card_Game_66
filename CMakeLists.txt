@@ -27,9 +27,10 @@ endif()
 # Add the executable
 add_executable(${EXECUTABLE_NAME}
     main.cpp
-    src/Deck.cpp
     src/CardFactory.cpp
+    src/Deck.cpp
     src/Game.cpp
+    src/Player.cpp
     external/tinyxml2/tinyxml2.cpp)
 
 # Compiler warnings

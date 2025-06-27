@@ -34,3 +34,7 @@ std::shared_ptr<ICard> Deck::getTromf() const{
 void Deck::showFirstCard()const{
     std::cout<<this->deck[currentCard]->toString()<<" position "<<currentCard<<std::endl;
 }
+
+uint32_t Deck::cardsLeft() const{
+    return deck.size()-this->currentCard-1;
+}

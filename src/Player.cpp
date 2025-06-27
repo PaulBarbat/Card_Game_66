@@ -1,15 +1,50 @@
 #include "Player.hpp"
 
-Player::Player(PlayerType type, std::function<void()> endGameCallback) : type(type), endGameCallback(endGameCallback), score(0) {}
+Player::Player(PlayerType type, std::function<void()> endGameCallback) 
+    : type(type), 
+    endGameCallback(endGameCallback), 
+    score(0), 
+    roundsWon(0),
+    latentPoints(0), 
+    hasClosedTheCard(false),
+    hand{} {}
+
+std::shared_ptr<ICard> Player::playHand(Deck& deck){
+    this->calculateOptions(deck);
+    this->renderOptions();
+    size_t option = 0;
+    while(option<=0||option>5)
+    {
+        std::cout<<"Select a card:"<<std::endl;
+        std::cin>>option;
+        if(std::cin.fail()) {
+            std::cin.clear(); // clear error
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // discard bad input
+            std::cout << "Invalid input. Try again.\n";
+            continue;
+        }
+        if(option>0&&option<=5)
+        {
+            auto card=this->playCard(option-1);
+            if(this->hand.size()==5)
+                return this->playHand(deck);
+            return card;
+        }
+        else{
+            std::cout<<"Not an option"<<std::endl;
+        }
+    }
+}
 
 void Player::calculateOptions(Deck& deck){
     for(Hand::iterator i = this->hand.begin(); i!= this->hand.end(); ++i){
+        i->second.clear();
         if(i->first->compareSuite(*deck.getTromf())) 
         {
-            if(i->first->getEasyRank()==2){
+            if(i->first->getEasyRank()==2&&deck.cardsLeft()>=4){
                 i->second.push_back({
                 "Change with the Tromf card "+(*deck.getTromf()).toString(),
-                [this,&deck, card = i->first](){this->changeTromf(card,deck);}
+                [this,&deck, card = i->first](unsigned position){this->changeTromf(card,deck);}
                 });
             }
             else if(i->first->getEasyRank()==3 || i->first->getEasyRank()==4)   
@@ -20,19 +55,21 @@ void Player::calculateOptions(Deck& deck){
                 {
                     i->second.push_back({
                         "Call 40",
-                        [this](){if(this->score>0)
+                        [this](unsigned position){if(this->score>0)
                                 this->addScore(40);
                             else
                                this->latentPoints+=40;
+                            hand.erase(hand.begin() + position);
                             }
                     });
                     i->second.push_back({
                         "Call 40 and end the round",
-                        [this](){
+                        [this](unsigned position){
                             if(this->score>0)
                                 this->addScore(40);
                             else
                                this->latentPoints+=40;
+                            hand.erase(hand.begin() + position);
                             this->endRound();
                         }
                     });
@@ -47,20 +84,22 @@ void Player::calculateOptions(Deck& deck){
                 {
                     i->second.push_back({
                         "Call 20",
-                        [this](){
+                        [this](unsigned position){
                             if(this->score>0)
                                 this->addScore(20);
                             else
                                this->latentPoints+=20;
+                            hand.erase(hand.begin() + position);
                             }
                     });
                     i->second.push_back({
                         "Call 20 and end the round",
-                        [this](){
+                        [this](unsigned position){
                             if(this->score>0)
                                 this->addScore(20);
                             else
                                this->latentPoints+=20;
+                            hand.erase(hand.begin() + position);
                             this->endRound();
                         }
                     });
@@ -85,7 +124,7 @@ void Player::renderOptions()const{
 
 void Player::drawCard(Deck& deck){
     auto card = deck.drawCard();
-    if(card){
+    if(card&&hand.size()<=MAX_HAND_SIZE){
         hand.push_back(std::make_pair(card, std::vector<CardOption>{}));
         //hand.push_back({card, {}});
     }
@@ -106,18 +145,17 @@ std::shared_ptr<ICard> Player::playCard(const unsigned& cardPosition){
         {
             std::cin>>option;
             if(option>0 && option<=cardEntry.second.size()){
-                cardEntry.second.at(option-1).action();
+                cardEntry.second.at(option-1).action(cardPosition);//Normally i would erase the card outside of the lambda but there is an option to do something without playing a card
                 break;
             }
             else{
                 std::cout<<"Not an option, try again"<<std::endl;
             }
         }
-        hand.erase(hand.begin() + cardPosition);
         return card;
     }    
 }
-//TODO
+
 void Player::endRound(){
     std::cout<<"END GAME HERE"<<std::endl;
     endGameCallback();
@@ -126,6 +164,9 @@ void Player::endRound(){
 void Player::addScore(const unsigned &points)
 {
     this->score+=points;
+    this->score+=this->latentPoints;
+    this->latentPoints=0;
+    std::cout<<"Your score is now "<<this->score<<std::endl;
 }
 
 void Player::changeTromf(std::shared_ptr<ICard> card, Deck& deck){
@@ -137,4 +178,31 @@ void Player::changeTromf(std::shared_ptr<ICard> card, Deck& deck){
     auto handCopy = card->clone();
     card->changeCard(*copy);
     copy->changeCard(*handCopy);
+}
+
+size_t Player::getCurrentHandSize()const{
+    return this->hand.size();
+}
+
+bool Player::getHasClosedTheCard()const{
+    return hasClosedTheCard;
+}
+
+unsigned Player::getScore()const{
+    return this->score;
+}
+
+void Player::addRoundsWon(const unsigned &points){
+    this->roundsWon+=points;
+}
+
+unsigned Player::getRoundsWon()const{
+    return this->roundsWon;
+}
+
+void Player::resetPlayerForNewRound(){
+    this->hand.clear();
+    this->score=0;
+    this->hasClosedTheCard=false;
+    this->latentPoints=0;
 }

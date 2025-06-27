@@ -1,7 +1,108 @@
 #include "Game.hpp"
+#include "StartState.hpp"
+#include "ShuffleAndDrawState.hpp"
+#include "PlayHandState.hpp"
+#include "CalculateHandPointsState.hpp"
+#include "GameOverState.hpp"
+
+std::unique_ptr<Player> Game::makePlayer(std::string player){
+    size_t option=0;
+    PlayerType type;
+    while(option>0 && option<3)
+    {
+        std::cout<<"Pick the type of Player "<<player<<std::endl;
+        std::cout<<"1. Real Player"<<std::endl<<"2. NPC"<<std::endl;
+        std::cin>>option;
+        switch(option){
+            case(1):{
+                type=PlayerType::Player;
+                break;
+            };
+            case(2):{
+                type=PlayerType::Player;
+                break;
+            };
+            default:{
+                std::cout<<"Not an option"<<std::endl;
+            }
+        }
+    }
+    return std::make_unique<Player>(type, [this]() { this->setState(std::make_unique<GameOverState>()); });
+}
+
+std::unique_ptr<Deck> Game::makeDeck(){
+    size_t option=0;
+    std::string deckPath="0";
+    DeckType type;
+    while(option>0 && option<3)
+    {
+        std::cout<<"Pick the type of Deck you want to play with"<<std::endl;
+        std::cout<<"1. Classic Deck"<<std::endl<<"2. Magyar Deck"<<std::endl;
+        std::cin>>option;
+        switch(option){
+            case(1):{
+                type=DeckType::Classic;
+                deckPath="resources/Clasic_Cards.xml";
+                break;
+            };
+            case(2):{
+                type=DeckType::Magyar;
+                deckPath="resources/Magyar_Cards.xml";
+                break;
+            };
+            default:{
+                std::cout<<"Not an option"<<std::endl;
+            }
+        }
+    }
+    return std::make_unique<Deck>(type,deckPath);
+}
 
 Game::Game(){
-    std::cout << "This is the Game Constructor"<< std::endl;
+    this->players = {makePlayer("Player 1"),makePlayer("Player 2")};
+    this->deck = makeDeck();
+    
+    setState(std::make_unique<StartState>());
+}
+
+void Game::setState(std::unique_ptr<GameState> newState){
+    this->gameState = std::move(newState);
+    if(gameState) gameState->enter(*this);
+}
+
+void Game::update(){
+    if(gameState) gameState->update(*this);
+}
+
+void Game::setScore(const std::pair<size_t,size_t>& newScore)
+{
+    this->score.first=newScore.first;
+    this->score.second=newScore.second;
+}
+
+void Game::swapPlayerOrder(){
+    std::swap(players.first,players.second);
+}
+
+std::pair<std::shared_ptr<ICard>,std::shared_ptr<ICard>> Game::getCurrentHand() const{
+    return this->currentHand;
+}
+
+void Game::setCurrentHand(std::shared_ptr<ICard> first,std::shared_ptr<ICard> second){
+    this->currentHand=std::make_pair(first,second);
+}
+
+void Game::flushCurrentHand(){
+    this->currentHand.first.reset();
+    this->currentHand.second.reset();
+}
+
+
+void Game::setIsDrawingAllowed(bool newValue){
+    this->isDrawingAllowed=newValue;
+}
+bool Game::getIsDrawingAllowed(){   
+    return this->isDrawingAllowed;
 }
 
 void Game::run() {

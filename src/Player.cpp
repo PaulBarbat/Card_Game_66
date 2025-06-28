@@ -29,7 +29,7 @@ std::shared_ptr<ICard> Player::playHand(Deck& deck, bool isFirst){
         {
             auto card=this->playCard(option-1);
             if(this->hand.size()==5)
-                return this->playHand(deck);
+                return this->playHand(deck, isFirst);
             return card;
         }
         else{

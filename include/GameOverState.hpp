@@ -2,7 +2,6 @@
 #define GAMEOVERSTATE_HPP
 
 #include "GameState.hpp"
-#include "Game.hpp"
 #include <iostream>
 
 class GameOverState : public GameState{

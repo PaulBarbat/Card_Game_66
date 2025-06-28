@@ -1,5 +1,6 @@
 #include "ShuffleAndDrawState.hpp"
 #include "PlayHandState.hpp"
+#include "Game.hpp"
 #include <random>
 
 void ShuffleAndDrawState::enter(Game& game){

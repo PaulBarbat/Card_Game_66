@@ -1,6 +1,7 @@
 #include "CalculateHandPointsState.hpp"
 #include "GameOverState.hpp"
 #include "PlayHandState.hpp"
+#include "Game.hpp"
 
 void CalculateHandPointsState::enter(Game& game){//there probably is a better way to do this
     int compareRank = game.getCurrentHand().first->compareRank(*game.getCurrentHand().second);

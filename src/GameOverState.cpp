@@ -1,5 +1,6 @@
 #include "GameOverState.hpp"
 #include "ShuffleAndDrawState.hpp"
+#include "Game.hpp"
 
 void GameOverState::enter(Game& game){
     if(game.getFirstPlayer().getHasClosedTheCard())

@@ -31,6 +31,11 @@ add_executable(${EXECUTABLE_NAME}
     src/Deck.cpp
     src/Game.cpp
     src/Player.cpp
+    src/StartState.cpp
+    src/ShuffleAndDrawState.cpp
+    src/PlayHandState.cpp
+    CalculateHandPointsState.cpp
+    GameOverState.cpp
     external/tinyxml2/tinyxml2.cpp)
 
 # Compiler warnings

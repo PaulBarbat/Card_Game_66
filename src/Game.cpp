@@ -33,7 +33,7 @@ std::unique_ptr<Player> Game::makePlayer(std::string player){
 std::unique_ptr<Deck> Game::makeDeck(){
     size_t option=0;
     std::string deckPath="0";
-    DeckType type;
+    DeckType type=DeckType::Classic;
     while(option>0 && option<3)
     {
         std::cout<<"Pick the type of Deck you want to play with"<<std::endl;

@@ -2,12 +2,12 @@
 
 Player::Player(PlayerType type, std::function<void()> endGameCallback) 
     : type(type), 
-    endGameCallback(endGameCallback), 
     score(0), 
     roundsWon(0),
     latentPoints(0), 
-    hasClosedTheCard(false),
-    hand{} {}
+    hand{},
+    endGameCallback(endGameCallback), 
+    hasClosedTheCard(false) {}
 
 std::shared_ptr<ICard> Player::playHand(Deck& deck){
     this->calculateOptions(deck);
@@ -44,7 +44,9 @@ void Player::calculateOptions(Deck& deck){
             if(i->first->getEasyRank()==2&&deck.cardsLeft()>=4){
                 i->second.push_back({
                 "Change with the Tromf card "+(*deck.getTromf()).toString(),
-                [this,&deck, card = i->first](unsigned position){this->changeTromf(card,deck);}
+                [this,&deck, card = i->first](unsigned /*position*/){
+                    this->changeTromf(card,deck);
+                    }
                 });
             }
             else if(i->first->getEasyRank()==3 || i->first->getEasyRank()==4)   

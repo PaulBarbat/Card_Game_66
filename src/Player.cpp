@@ -126,8 +126,9 @@ void Player::renderOptions()const{
             std::cout<<" (";
             for(std::vector<CardOption>::const_iterator j = i->second.begin(); j!= i->second.end(); ++j)
                 std::cout<<j->shortDescription<<", ";
-            std::cout<<" )"<<std::endl;
+            std::cout<<")";
         }
+        std::cout<<std::endl;
     }
 }
 

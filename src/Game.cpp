@@ -55,7 +55,7 @@ std::unique_ptr<Deck> Game::makeDeck(){
             }
         }
     }
-    return std::make_unique<Deck>(type,deckPath);
+    return CardFactory::createDeckFromXML(type, deckPath);
 }
 
 Game::Game(){

@@ -2,7 +2,7 @@
 
 using namespace tinyxml2;
 
-std::shared_ptr<Deck> CardFactory::createDeckFromXML(DeckType type, const std::string& path){
+std::unique_ptr<Deck> CardFactory::createDeckFromXML(DeckType type, const std::string& path){
     switch(type){
         case DeckType::Classic:
             return createClassicDeckFromXML(path);
@@ -13,7 +13,7 @@ std::shared_ptr<Deck> CardFactory::createDeckFromXML(DeckType type, const std::s
     }
 }
 
-std::shared_ptr<Deck> CardFactory::createClassicDeckFromXML(const std::string& path){
+std::unique_ptr<Deck> CardFactory::createClassicDeckFromXML(const std::string& path){
     XMLDocument doc;
     Deck deck;
     if(doc.LoadFile(path.c_str()) != XML_SUCCESS)
@@ -66,10 +66,10 @@ std::shared_ptr<Deck> CardFactory::createClassicDeckFromXML(const std::string& p
         //add the card to the deck
         deck.addCard(std::make_shared<Card<ClassicSuite,ClassicRank>>(suite,rank,points));
     }
-    return std::make_shared<Deck>(deck);
+    return std::make_unique<Deck>(deck);
 }
 
-std::shared_ptr<Deck> CardFactory::createMagyarDeckFromXML(const std::string& path){
+std::unique_ptr<Deck> CardFactory::createMagyarDeckFromXML(const std::string& path){
     XMLDocument doc;
     Deck deck;
     
@@ -123,5 +123,5 @@ std::shared_ptr<Deck> CardFactory::createMagyarDeckFromXML(const std::string& pa
         //add the card to the deck
         deck.addCard(std::make_shared<Card<MagyarSuite,MagyarRank>>(suite,rank,points));
     }
-    return std::make_shared<Deck>(deck);
+    return std::make_unique<Deck>(deck);
 }

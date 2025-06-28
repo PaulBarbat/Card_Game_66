@@ -13,7 +13,7 @@ std::shared_ptr<ICard> Player::playHand(Deck& deck){
     this->calculateOptions(deck);
     this->renderOptions();
     size_t option = 0;
-    while(option<=0||option>5)
+    while(true)
     {
         std::cout<<"Select a card:"<<std::endl;
         std::cin>>option;

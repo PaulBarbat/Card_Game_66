@@ -10,8 +10,9 @@ Player::Player(PlayerType type, std::function<void()> endGameCallback, std::stri
     hasClosedTheCard(false),
     name(name) {}
 
-std::shared_ptr<ICard> Player::playHand(Deck& deck){
-    this->calculateOptions(deck);
+std::shared_ptr<ICard> Player::playHand(Deck& deck, bool isFirst){
+    if(isFirst)
+        this->calculateOptions(deck);
     this->renderOptions();
     size_t option = 0;
     while(true)

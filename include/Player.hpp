@@ -35,7 +35,7 @@ private:
 public:
     Player() = delete;
     Player(PlayerType type,std::function<void()> endGameCallback, std::string name);
-    std::shared_ptr<ICard> playHand(Deck& deck);
+    std::shared_ptr<ICard> playHand(Deck& deck, bool isFirst);
     void calculateOptions(Deck& deck);
     void renderOptions() const;
     void drawCard(Deck& deck);

@@ -4,7 +4,7 @@
 
 void PlayHandState::enter(Game& game){
     std::cout<<std::endl<<std::endl<<std::endl;
-    std::cout<<"There are "<<game.getDeck().cardsLeft()<<"Cards left in the deck"<<std::endl<<std::endl;
+    std::cout<<"There are "<<game.getDeck().cardsLeft()<<" cards left in the deck"<<std::endl<<std::endl;
 }
 
 void PlayHandState::update(Game& game){

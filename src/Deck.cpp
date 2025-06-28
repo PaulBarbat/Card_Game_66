@@ -36,5 +36,5 @@ void Deck::showFirstCard()const{
 }
 
 uint32_t Deck::cardsLeft() const{
-    return deck.size()-this->currentCard-1;
+    return deck.size()-this->currentCard;
 }

@@ -45,6 +45,7 @@ void Player::calculateOptions(Deck& deck){
         {
             if(i->first->getEasyRank()==2&&deck.cardsLeft()>=4){
                 i->second.push_back({
+                "Change Tromf",
                 "Change with the Tromf card "+(*deck.getTromf()).toString(),
                 [this,&deck, card = i->first](unsigned /*position*/){
                     this->changeTromf(card,deck);
@@ -58,6 +59,7 @@ void Player::calculateOptions(Deck& deck){
                 && (j->first->getEasyRank()==3||j->first->getEasyRank()==4))// and second card is 3 or 4
                 {
                     i->second.push_back({
+                        "40",
                         "Call 40",
                         [this](unsigned position){if(this->score>0)
                                 this->addScore(40);
@@ -67,6 +69,7 @@ void Player::calculateOptions(Deck& deck){
                             }
                     });
                     i->second.push_back({
+                        "40 and finish",
                         "Call 40 and end the round",
                         [this](unsigned position){
                             if(this->score>0)
@@ -87,6 +90,7 @@ void Player::calculateOptions(Deck& deck){
                 && (j->first->getEasyRank()==3||j->first->getEasyRank()==4))// and second card is 3 or 4
                 {
                     i->second.push_back({
+                        "20",
                         "Call 20",
                         [this](unsigned position){
                             if(this->score>0)
@@ -97,6 +101,7 @@ void Player::calculateOptions(Deck& deck){
                             }
                     });
                     i->second.push_back({
+                        "20 and finish",
                         "Call 20 and end the round",
                         [this](unsigned position){
                             if(this->score>0)
@@ -116,12 +121,12 @@ void Player::renderOptions()const{
     std::cout<<"Here are yout options:"<<std::endl;
     for(Hand::const_iterator i = this->hand.begin(); i!= this->hand.end(); ++i)
     {
-        std::cout<<std::distance(this->hand.begin(),i)+1<<" "<<i->first->toString()<<std::endl;
-        if(i->second.empty())
-            std::cout<<" - with no special options"<<std::endl;
-        else{
+        std::cout<<std::distance(this->hand.begin(),i)+1<<" "<<i->first->toString();
+        if(!i->second.empty()){
+            std::cout<<" (";
             for(std::vector<CardOption>::const_iterator j = i->second.begin(); j!= i->second.end(); ++j)
-                std::cout<<"  - "<<j->description<<std::endl;
+                std::cout<<j->shortDescription<<", ";
+            std::cout<<" )"<<std::endl;
         }
     }
 }
@@ -142,6 +147,7 @@ std::shared_ptr<ICard> Player::playCard(const unsigned& cardPosition){
         return card;
     }
     else{
+        std::cout<<"0 Play the card with no effect"<<std::endl;
         for(std::vector<CardOption>::iterator i = cardEntry.second.begin(); i!= cardEntry.second.end(); ++i)
             std::cout<<std::distance(cardEntry.second.begin(),i)+1<<" "<<i->description<<std::endl;
         size_t option=0;
@@ -151,6 +157,9 @@ std::shared_ptr<ICard> Player::playCard(const unsigned& cardPosition){
             if(option>0 && option<=cardEntry.second.size()){
                 cardEntry.second.at(option-1).action(cardPosition);//Normally i would erase the card outside of the lambda but there is an option to do something without playing a card
                 break;
+            }else if(option ==0)
+            {
+                std::cout<<"Plays the card with no effect"<<std::endl;
             }
             else{
                 std::cout<<"Not an option, try again"<<std::endl;

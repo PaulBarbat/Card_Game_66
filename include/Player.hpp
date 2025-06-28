@@ -15,6 +15,7 @@ enum class PlayerType{
 };
 
 struct CardOption {
+    std::string shortDescription;
     std::string description;//Description of the option. Something like "Play the card as part of 20"
     std::function<void(unsigned position)> action;//Optional. This can be set with a function for example for 2 of Tromf to change it with the Tromf that is down on the deck
 };

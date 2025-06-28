@@ -17,10 +17,10 @@ void CalculateHandPointsState::enter(Game& game){//there probably is a better wa
                 (!game.getCurrentHand().second->compareSuite(*game.getDeck().getTromf()) &&//second card is not tromf
                 compareRank==-1))))//First biger than second
     {
-        std::cout<<"First player takes this hand"<<std::endl;
+        std::cout<<game.getFirstPlayer().getName()<<" takes this hand"<<std::endl;
     }
     else{
-        std::cout<<"Second player takes this hand"<<std::endl;
+        std::cout<<game.getSecondPlayer().getName()<<" takes this hand"<<std::endl;
         game.swapPlayerOrder();//Second player will be the first next turn
     }
     game.getFirstPlayer().addScore(game.getCurrentHand().first->getEasyRank()+game.getCurrentHand().second->getEasyRank());

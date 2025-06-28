@@ -31,9 +31,10 @@ private:
     static constexpr size_t MAX_HAND_SIZE = 5;
     std::function<void()> endGameCallback;
     bool hasClosedTheCard;
+    std::string name;
 public:
     Player() = delete;
-    Player(PlayerType type,std::function<void()> endGameCallback);
+    Player(PlayerType type,std::function<void()> endGameCallback, std::string name);
     std::shared_ptr<ICard> playHand(Deck& deck);
     void calculateOptions(Deck& deck);
     void renderOptions() const;
@@ -51,6 +52,7 @@ public:
     void changeTromf(std::shared_ptr<ICard> card, Deck& deck);
     size_t getCurrentHandSize()const;
     bool getHasClosedTheCard()const;
+    std::string getName() const;
 };
 
 #endif

@@ -1,13 +1,14 @@
 #include "Player.hpp"
 
-Player::Player(PlayerType type, std::function<void()> endGameCallback) 
+Player::Player(PlayerType type, std::function<void()> endGameCallback, std::string name) 
     : type(type), 
     score(0), 
     roundsWon(0),
     latentPoints(0), 
     hand{},
     endGameCallback(endGameCallback), 
-    hasClosedTheCard(false) {}
+    hasClosedTheCard(false),
+    name(name) {}
 
 std::shared_ptr<ICard> Player::playHand(Deck& deck){
     this->calculateOptions(deck);
@@ -114,9 +115,9 @@ void Player::renderOptions()const{
     std::cout<<"Here are yout options:"<<std::endl;
     for(Hand::const_iterator i = this->hand.begin(); i!= this->hand.end(); ++i)
     {
-        std::cout<<i->first->toString()<<std::endl;
+        std::cout<<std::distance(this->hand.begin(),i)+1<<" "<<i->first->toString()<<std::endl;
         if(i->second.empty())
-            std::cout<<" with no special options"<<std::endl;
+            std::cout<<" - with no special options"<<std::endl;
         else{
             for(std::vector<CardOption>::const_iterator j = i->second.begin(); j!= i->second.end(); ++j)
                 std::cout<<"  - "<<j->description<<std::endl;
@@ -207,4 +208,8 @@ void Player::resetPlayerForNewRound(){
     this->score=0;
     this->hasClosedTheCard=false;
     this->latentPoints=0;
+}
+
+std::string Player::getName() const{
+    return this->name;
 }

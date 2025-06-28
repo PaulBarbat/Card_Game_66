@@ -27,7 +27,7 @@ std::unique_ptr<Player> Game::makePlayer(std::string player){
             }
         }
     }
-    return std::make_unique<Player>(type, [this]() { this->setState(std::make_unique<GameOverState>()); });
+    return std::make_unique<Player>(type, [this]() { this->setState(std::make_unique<GameOverState>()); },player);
 }
 
 std::unique_ptr<Deck> Game::makeDeck(){
@@ -59,7 +59,7 @@ std::unique_ptr<Deck> Game::makeDeck(){
 }
 
 Game::Game(){
-    this->players = {makePlayer("Player 1"),makePlayer("Player 2")};
+    this->players = {makePlayer("Paul"),makePlayer("Coco")};
     this->deck = makeDeck();
     
     setState(std::make_unique<StartState>());

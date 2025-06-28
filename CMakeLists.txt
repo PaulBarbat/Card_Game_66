@@ -34,8 +34,8 @@ add_executable(${EXECUTABLE_NAME}
     src/StartState.cpp
     src/ShuffleAndDrawState.cpp
     src/PlayHandState.cpp
-    CalculateHandPointsState.cpp
-    GameOverState.cpp
+    src/CalculateHandPointsState.cpp
+    src/GameOverState.cpp
     external/tinyxml2/tinyxml2.cpp)
 
 # Compiler warnings

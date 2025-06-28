@@ -5,7 +5,7 @@
 
 void CalculateHandPointsState::enter(Game& game){//there probably is a better way to do this
     int compareRank = game.getCurrentHand().first->compareRank(*game.getCurrentHand().second);
-    if(compareRank!=1 && compareRank!=-1) {
+    if(compareRank==-2) {
         std::cout<<"There is an error when comparing ranks "<<compareRank<<std::endl;
         return;
     }
@@ -14,8 +14,7 @@ void CalculateHandPointsState::enter(Game& game){//there probably is a better wa
             compareRank==-1) ||//first biger than second 
         (!game.getCurrentHand().first->compareSuite(*game.getCurrentHand().second) &&//Cards of different Suite 
             (game.getCurrentHand().first->compareSuite(*game.getDeck().getTromf()) || //First card is tromf
-                (!game.getCurrentHand().second->compareSuite(*game.getDeck().getTromf()) &&//second card is not tromf
-                compareRank==-1))))//First biger than second
+                (!game.getCurrentHand().second->compareSuite(*game.getDeck().getTromf())))))//second card is not tromf
     {
         std::cout<<game.getFirstPlayer().getName()<<" takes this hand"<<std::endl;
     }

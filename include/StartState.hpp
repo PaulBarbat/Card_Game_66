@@ -2,7 +2,6 @@
 #define STARTSTATE_HPP
 
 #include "GameState.hpp"
-#include "ShuffleAndDrawState.hpp"
 #include <iostream>
 
 class StartState : public GameState{

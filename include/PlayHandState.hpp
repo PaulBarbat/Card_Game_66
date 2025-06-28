@@ -2,7 +2,6 @@
 #define PLAYHANDSTATE_HPP
 
 #include "GameState.hpp"
-#include "CalculateHandPointsState.hpp"
 #include <iostream>
 
 class PlayHandState : public GameState{

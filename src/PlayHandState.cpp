@@ -1,4 +1,5 @@
 #include "PlayHandState.hpp"
+#include "CalculateHandPointsState.hpp"
 
 void PlayHandState::enter(Game& game){
     game.setCurrentHand(game.getFirstPlayer().playHand(game.getDeck()) , game.getSecondPlayer().playHand(game.getDeck()));

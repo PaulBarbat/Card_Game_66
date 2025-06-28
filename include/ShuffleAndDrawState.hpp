@@ -2,7 +2,6 @@
 #define SHUFFLEANDDRAWSTATE_HPP
 
 #include "GameState.hpp"
-#include "PlayHandState.hpp"
 #include <iostream>
 
 class ShuffleAndDrawState : public GameState{

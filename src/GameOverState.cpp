@@ -1,4 +1,5 @@
 #include "GameOverState.hpp"
+#include "ShuffleAndDrawState.hpp"
 
 void GameOverState::enter(Game& game){
     if(game.getFirstPlayer().getHasClosedTheCard())
@@ -24,6 +25,6 @@ void GameOverState::enter(Game& game){
             game.getSecondPlayer().addRoundsWon(2);
 }
 void GameOverState::update(Game& game){
-    
+    game.setState(std::make_unique<ShuffleAndDrawState>());
 }
 

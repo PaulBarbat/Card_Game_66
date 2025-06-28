@@ -161,6 +161,7 @@ std::shared_ptr<ICard> Player::playCard(const unsigned& cardPosition){
             }else if(option ==0)
             {
                 std::cout<<"Plays the card with no effect"<<std::endl;
+                break;
             }
             else{
                 std::cout<<"Not an option, try again"<<std::endl;

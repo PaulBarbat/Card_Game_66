@@ -11,6 +11,10 @@ Player::Player(PlayerType type, std::function<void()> endGameCallback, std::stri
     name(name) {}
 
 std::shared_ptr<ICard> Player::playHand(Deck& deck, bool isFirst){
+    std::cout<<"Tromf is "<<deck.getTromf()->toString()<<std::endl;
+    std::cout<<"it is "<<this->name<<"'s turn"<<std::endl<<std::endl;
+    for(Hand::iterator i = this->hand.begin(); i!= this->hand.end(); ++i)
+        i->second.clear();
     if(isFirst)
         this->calculateOptions(deck);
     this->renderOptions();
@@ -30,6 +34,7 @@ std::shared_ptr<ICard> Player::playHand(Deck& deck, bool isFirst){
             auto card=this->playCard(option-1);
             if(this->hand.size()==5)
                 return this->playHand(deck, isFirst);
+            std::cout<<this->name<<" played "<<card->toString()<<std::endl;
             return card;
         }
         else{
@@ -40,15 +45,21 @@ std::shared_ptr<ICard> Player::playHand(Deck& deck, bool isFirst){
 
 void Player::calculateOptions(Deck& deck){
     for(Hand::iterator i = this->hand.begin(); i!= this->hand.end(); ++i){
-        i->second.clear();
         if(i->first->compareSuite(*deck.getTromf())) 
         {
             if(i->first->getEasyRank()==2&&deck.cardsLeft()>=4){
                 i->second.push_back({
-                "Change Tromf",
-                "Change with the Tromf card "+(*deck.getTromf()).toString(),
-                [this,&deck, card = i->first](unsigned /*position*/){
-                    this->changeTromf(card,deck);
+                    "Play",
+                    "Play card with no special effect",
+                    [this](unsigned position){
+                        hand.erase(hand.begin() + position);
+                        }
+                });
+                i->second.push_back({
+                    "Change Tromf",
+                    "Change with the Tromf card "+(*deck.getTromf()).toString(),
+                    [this,&deck, card = i->first](unsigned /*position*/){
+                        this->changeTromf(card,deck);
                     }
                 });
             }
@@ -58,6 +69,13 @@ void Player::calculateOptions(Deck& deck){
                 && i->first->getEasyRank() != j->first->getEasyRank()// and ranks are different (first card is 3 or 4)
                 && (j->first->getEasyRank()==3||j->first->getEasyRank()==4))// and second card is 3 or 4
                 {
+                    i->second.push_back({
+                        "Play",
+                        "Play card with no special effect",
+                        [this](unsigned position){
+                            hand.erase(hand.begin() + position);
+                            }
+                    });
                     i->second.push_back({
                         "40",
                         "Call 40",
@@ -89,6 +107,13 @@ void Player::calculateOptions(Deck& deck){
                 && i->first->getEasyRank() != j->first->getEasyRank()// and ranks are different (first card is 3 or 4)
                 && (j->first->getEasyRank()==3||j->first->getEasyRank()==4))// and second card is 3 or 4
                 {
+                    i->second.push_back({
+                        "Play",
+                        "Play card with no special effect",
+                        [this](unsigned position){
+                            hand.erase(hand.begin() + position);
+                            }
+                    });
                     i->second.push_back({
                         "20",
                         "Call 20",

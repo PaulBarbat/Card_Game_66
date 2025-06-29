@@ -8,12 +8,7 @@ void PlayHandState::enter(Game& game){
 }
 
 void PlayHandState::update(Game& game){
-    std::cout<<"Tromf is "<<game.getDeck().getTromf()->toString()<<std::endl;
-    std::cout<<"it is "<<game.getFirstPlayer().getName()<<"'s turn"<<std::endl;
     std::shared_ptr<ICard> first = game.getFirstPlayer().playHand(game.getDeck(),true);
-
-    std::cout<<"Tromf is "<<game.getDeck().getTromf()->toString()<<std::endl;
-    std::cout<<"it is "<<game.getSecondPlayer().getName()<<"'s turn"<<std::endl;
     std::shared_ptr<ICard> second = game.getSecondPlayer().playHand(game.getDeck(),false);
     
     game.setCurrentHand(first,second);

@@ -18,6 +18,10 @@ std::shared_ptr<ICard> Player::playHand(Deck& deck, bool isFirst){
     if(isFirst)
         this->calculateOptions(deck);
     this->renderOptions(this->hand);
+    if(isFirst)    {
+        std::cout<<hand.size()+1<<" Close the card "<<std::endl;
+        std::cout<<hand.size()+2<<" That is enough for me(close the round)"<<std::endl;
+    }
     size_t option = 0;
     while(true)
     {
@@ -39,6 +43,12 @@ std::shared_ptr<ICard> Player::playHand(Deck& deck, bool isFirst){
                 return this->playHand(deck, isFirst);
             std::cout<<this->name<<" played "<<card->toString()<<std::endl;
             return card;
+        }
+        else if(isFirst && option==size+1){
+            this->hasClosedTheCard=true;
+        }
+        else if(isFirst && option==size+2){
+            this->endRound();
         }
         else{
             std::cout<<"Not an option"<<std::endl;

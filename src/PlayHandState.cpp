@@ -11,6 +11,8 @@ void PlayHandState::enter(Game& game){
 
 void PlayHandState::update(Game& game){
     std::shared_ptr<ICard> first = game.getFirstPlayer().playHand(game.getDeck(),true);
+    if(game.getFirstPlayer().getHasClosedTheCard())
+        game.setIsDrawingAllowed(false);
     std::shared_ptr<ICard> second;
     if(game.getIsDrawingAllowed()){
         second = game.getSecondPlayer().playHand(game.getDeck(),false);

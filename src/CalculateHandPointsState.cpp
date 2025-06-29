@@ -27,8 +27,6 @@ void CalculateHandPointsState::enter(Game& game){//there probably is a better wa
 }
 
 void CalculateHandPointsState::update(Game& game){
-    if(game.getDeck().cardsLeft()==0)
-        game.setIsDrawingAllowed(false);
     if(game.getIsDrawingAllowed()){
         game.getFirstPlayer().drawCard(game.getDeck());
         game.getSecondPlayer().drawCard(game.getDeck());

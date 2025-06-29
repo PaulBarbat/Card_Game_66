@@ -210,7 +210,7 @@ void Player::calculateOptions(Deck& deck){
 }
 
 void Player::renderOptions(const Hand& hand)const{
-    std::cout<<"Here are yout options:"<<std::endl;
+    std::cout<<this->name<<", here are your options:"<<std::endl;
     for(Hand::const_iterator i = hand.cbegin(); i!= hand.cend(); ++i)
     {
         std::cout<<std::distance(hand.cbegin(),i)+1<<" "<<i->first->toString();
@@ -240,7 +240,6 @@ std::shared_ptr<ICard> Player::playCard(const unsigned& cardPosition,Hand& hand)
         return card;
     }
     else{
-        std::cout<<"0 Play the card with no effect"<<std::endl;
         for(std::vector<CardOption>::iterator i = cardEntry.second.begin(); i!= cardEntry.second.end(); ++i)
             std::cout<<std::distance(cardEntry.second.begin(),i)+1<<" "<<i->description<<std::endl;
         size_t option=0;
@@ -249,10 +248,6 @@ std::shared_ptr<ICard> Player::playCard(const unsigned& cardPosition,Hand& hand)
             std::cin>>option;
             if(option>0 && option<=cardEntry.second.size()){
                 cardEntry.second.at(option-1).action(cardPosition);//Normally i would erase the card outside of the lambda but there is an option to do something without playing a card
-                break;
-            }else if(option ==0)
-            {
-                std::cout<<"Plays the card with no effect"<<std::endl;
                 break;
             }
             else{

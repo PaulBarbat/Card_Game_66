@@ -36,24 +36,25 @@ private:
 public:
     Player() = delete;
     Player(PlayerType type,std::function<void()> endGameCallback, std::string name);
-    std::shared_ptr<ICard> playHand(Deck& deck, bool isFirst);
-    void calculateOptions(Deck& deck);
-    void renderOptions() const;
     void drawCard(Deck& deck);
-    std::shared_ptr<ICard> playCard(const unsigned& cardPosition);
+    void calculateOptions(Deck& deck);
+    void renderOptions(const Hand& hand) const;
+    std::shared_ptr<ICard> playHand(Deck& deck, bool isFirst);
+    std::shared_ptr<ICard> playFilteredHand(Deck& deck, bool isFirst, const std::shared_ptr<ICard> &card);
+    std::shared_ptr<ICard> playCard(const unsigned& cardPosition, Hand& hand);
     void endRound();
     void addScore(const unsigned &points);
     unsigned getScore()const;
     void addRoundsWon(const unsigned &points);
     unsigned getRoundsWon()const;
     void resetPlayerForNewRound();
+    std::string getName() const;
+    size_t getCurrentHandSize()const;
+    bool getHasClosedTheCard()const;
+    void changeTromf(std::shared_ptr<ICard> card, Deck& deck);
     //Tromf is the name given to the color that can take any card. 
     //If the player has the Two of Tromf and he starts a turn, 
     //as long as there are more than 2 cards in the deck, he can change it with his Two of Tromf.
-    void changeTromf(std::shared_ptr<ICard> card, Deck& deck);
-    size_t getCurrentHandSize()const;
-    bool getHasClosedTheCard()const;
-    std::string getName() const;
 };
 
 #endif

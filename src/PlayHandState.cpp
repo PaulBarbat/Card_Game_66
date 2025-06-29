@@ -9,7 +9,12 @@ void PlayHandState::enter(Game& game){
 
 void PlayHandState::update(Game& game){
     std::shared_ptr<ICard> first = game.getFirstPlayer().playHand(game.getDeck(),true);
-    std::shared_ptr<ICard> second = game.getSecondPlayer().playHand(game.getDeck(),false);
+    std::shared_ptr<ICard> second;
+    if(game.getIsDrawingAllowed()){
+        second = game.getSecondPlayer().playHand(game.getDeck(),false);
+    }else{
+        second = game.getSecondPlayer().playFilteredHand(game.getDeck(),false, first);
+    }
     
     game.setCurrentHand(first,second);
     game.setState(std::make_unique<CalculateHandPointsState>());

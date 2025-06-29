@@ -17,7 +17,7 @@ std::shared_ptr<ICard> Player::playHand(Deck& deck, bool isFirst){
         i->second.clear();
     if(isFirst)
         this->calculateOptions(deck);
-    this->renderOptions();
+    this->renderOptions(this->hand);
     size_t option = 0;
     while(true)
     {
@@ -29,9 +29,12 @@ std::shared_ptr<ICard> Player::playHand(Deck& deck, bool isFirst){
             std::cout << "Invalid input. Try again.\n";
             continue;
         }
-        if(option>0&&option<=5)
+
+        size_t size=this->hand.size();
+
+        if(option>0&&option<=size)
         {
-            auto card=this->playCard(option-1);
+            auto card=this->playCard(option-1, this->hand);
             if(this->hand.size()==5)
                 return this->playHand(deck, isFirst);
             std::cout<<this->name<<" played "<<card->toString()<<std::endl;
@@ -39,6 +42,70 @@ std::shared_ptr<ICard> Player::playHand(Deck& deck, bool isFirst){
         }
         else{
             std::cout<<"Not an option"<<std::endl;
+        }
+    }
+}
+
+std::shared_ptr<ICard> Player::playFilteredHand(Deck& deck, bool isFirst, const std::shared_ptr<ICard> &card){
+    Hand filteredHand;
+    std::vector<uint8_t> reserves;
+    //i need to make cards of the same suit as card parameter a priority
+    //but i also need to memorize the position of tromfs if there are any
+    //in case i don t have cards of the same suit as card parameter
+    //using vector<uint8> for small memory size and to avoid keeping track of index
+    for(Hand::iterator i = this->hand.begin(); i!= this->hand.end(); ++i)
+    {
+        int index = std::distance(this->hand.begin(),i);
+        if(i->first->compareSuite(*card))
+            filteredHand.push_back(std::make_pair(i->first,std::vector<CardOption>{{
+                    "Play",
+                    "Play card with no special effect",
+                    [this,index](unsigned){
+                        hand.erase(this->hand.begin()+index);
+                        }}}));
+        else if(i->first->compareSuite(*deck.getTromf()))
+            reserves.push_back(index);
+    }
+    
+    if(filteredHand.size()==0 && reserves.size()!=0)
+    {
+        for(uint8_t i : reserves)
+        {
+            filteredHand.push_back(std::make_pair(this->hand.at(i).first->clone(),std::vector<CardOption>{{
+                    "Play",
+                    "Play card with no special effect",
+                    [this,i](unsigned){
+                        hand.erase(this->hand.begin()+i);
+                        }}}));
+        }
+    }
+
+    if(filteredHand.size()==0){
+        return this->playHand(deck,isFirst);
+    }
+    else
+    {
+        renderOptions(filteredHand);
+        size_t option = 0;
+        while(true)
+        {
+            std::cout<<"Select a card:"<<std::endl;
+            std::cin>>option;
+            if(std::cin.fail()) {
+                std::cin.clear(); // clear error
+                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // discard bad input
+                std::cout << "Invalid input. Try again.\n";
+                continue;
+            }
+            if(option>0&&option<=filteredHand.size())
+            {
+                auto card=this->playCard(option-1, filteredHand);
+                std::cout<<this->name<<" played "<<card->toString()<<std::endl;
+                return card;
+            }
+            else{
+                std::cout<<"Not an option"<<std::endl;
+            }
         }
     }
 }
@@ -142,11 +209,11 @@ void Player::calculateOptions(Deck& deck){
     }
 }
 
-void Player::renderOptions()const{
+void Player::renderOptions(const Hand& hand)const{
     std::cout<<"Here are yout options:"<<std::endl;
-    for(Hand::const_iterator i = this->hand.begin(); i!= this->hand.end(); ++i)
+    for(Hand::const_iterator i = hand.cbegin(); i!= hand.cend(); ++i)
     {
-        std::cout<<std::distance(this->hand.begin(),i)+1<<" "<<i->first->toString();
+        std::cout<<std::distance(hand.cbegin(),i)+1<<" "<<i->first->toString();
         if(!i->second.empty()){
             std::cout<<" (";
             for(std::vector<CardOption>::const_iterator j = i->second.begin(); j!= i->second.end(); ++j)
@@ -165,7 +232,7 @@ void Player::drawCard(Deck& deck){
     }
 }
 
-std::shared_ptr<ICard> Player::playCard(const unsigned& cardPosition){
+std::shared_ptr<ICard> Player::playCard(const unsigned& cardPosition,Hand& hand){
     auto& cardEntry = hand.at(cardPosition);
     auto card = cardEntry.first->clone();
     if(cardEntry.second.empty()){

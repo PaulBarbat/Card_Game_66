@@ -4,11 +4,11 @@
 #include <random>
 
 void ShuffleAndDrawState::enter(Game& game){
-    game.getDeck().shuffleDeck();
-    game.getDeck().shuffleDeck();
-    game.getDeck().shuffleDeck();
-    game.getDeck().shuffleDeck();
-    game.getDeck().shuffleDeck();
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_int_distribution<> dist(1, 20);
+    for(int i=0;i<=dist(gen);i++)
+        game.getDeck().shuffleDeck();
     game.setIsDrawingAllowed(true);
     game.getFirstPlayer().resetPlayerForNewRound();
     game.getSecondPlayer().resetPlayerForNewRound();

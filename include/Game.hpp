@@ -22,7 +22,6 @@ public:
     std::pair<std::shared_ptr<ICard>,std::shared_ptr<ICard>> getCurrentHand() const;
     void setCurrentHand(std::shared_ptr<ICard> first,std::shared_ptr<ICard> second);
     void flushCurrentHand();
-    void setScore(const std::pair<size_t,size_t>& newScore);
     void setIsDrawingAllowed(bool newValue);
     bool getIsDrawingAllowed();
 
@@ -31,7 +30,6 @@ public:
 private:
     std::pair<std::unique_ptr<Player> ,std::unique_ptr<Player> > players;
     std::unique_ptr<Deck> deck;
-    std::pair<size_t,size_t> score;
     std::pair<std::shared_ptr<ICard>,std::shared_ptr<ICard>> currentHand;
 
     std::unique_ptr<GameState> gameState;

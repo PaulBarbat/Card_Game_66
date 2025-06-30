@@ -10,6 +10,8 @@ void ShuffleAndDrawState::enter(Game& game){
     game.getDeck().shuffleDeck();
     game.getDeck().shuffleDeck();
     game.setIsDrawingAllowed(true);
+    game.getFirstPlayer().resetPlayerForNewRound();
+    game.getSecondPlayer().resetPlayerForNewRound();
 }
 
 void ShuffleAndDrawState::update(Game& game){

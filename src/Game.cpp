@@ -74,12 +74,6 @@ void Game::update(){
     if(gameState) gameState->update(*this);
 }
 
-void Game::setScore(const std::pair<size_t,size_t>& newScore)
-{
-    this->score.first=newScore.first;
-    this->score.second=newScore.second;
-}
-
 void Game::swapPlayerOrder(){
     std::swap(players.first,players.second);
 }

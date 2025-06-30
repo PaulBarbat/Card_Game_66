@@ -3,6 +3,7 @@
 #include "Game.hpp"
 
 void GameOverState::enter(Game& game){
+    std::cout<<"GAME OVER STATE"<<std::endl;
     int pointsWon=0;
     if(game.getFirstPlayer().getHasClosedTheCard()&&game.getFirstPlayer().getScore()<66){
         game.swapPlayerOrder();

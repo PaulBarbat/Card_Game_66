@@ -19,8 +19,8 @@ std::shared_ptr<ICard> Player::playHand(Deck& deck, bool isFirst){
         this->calculateOptions(deck);
     this->renderOptions(this->hand);
     if(isFirst)    {
-        std::cout<<hand.size()+1<<" Close the card "<<std::endl;
-        std::cout<<hand.size()+2<<" That is enough for me(close the round)"<<std::endl;
+        std::cout<<hand.size()+1<<" That is enough for me(close the round)"<<std::endl;
+        std::cout<<hand.size()+2<<" Close the card "<<std::endl;
     }
     size_t option = 0;
     while(true)
@@ -45,10 +45,11 @@ std::shared_ptr<ICard> Player::playHand(Deck& deck, bool isFirst){
             return card;
         }
         else if(isFirst && option==size+1){
-            this->hasClosedTheCard=true;
-        }
-        else if(isFirst && option==size+2){
             this->endRound();
+        }
+        else if(isFirst && option==size+2 && !this->hasClosedTheCard){
+            this->hasClosedTheCard=true;
+            this->renderOptions(this->hand);
         }
         else{
             std::cout<<"Not an option"<<std::endl;
@@ -68,8 +69,8 @@ std::shared_ptr<ICard> Player::playFilteredHand(Deck& deck, bool isFirst, const 
         int index = std::distance(this->hand.begin(),i);
         if(i->first->compareSuite(*card))
             filteredHand.push_back(std::make_pair(i->first,std::vector<CardOption>{{
-                    "Play",
-                    "Play card with no special effect",
+                    "",
+                    "",
                     [this,index](unsigned){
                         hand.erase(this->hand.begin()+index);
                         }}}));
@@ -82,8 +83,8 @@ std::shared_ptr<ICard> Player::playFilteredHand(Deck& deck, bool isFirst, const 
         for(uint8_t i : reserves)
         {
             filteredHand.push_back(std::make_pair(this->hand.at(i).first->clone(),std::vector<CardOption>{{
-                    "Play",
-                    "Play card with no special effect",
+                    "",
+                    "",
                     [this,i](unsigned){
                         hand.erase(this->hand.begin()+i);
                         }}}));
@@ -109,7 +110,7 @@ std::shared_ptr<ICard> Player::playFilteredHand(Deck& deck, bool isFirst, const 
             }
             if(option>0&&option<=filteredHand.size())
             {
-                auto card=this->playCard(option-1, filteredHand);
+                auto card=this->playCard(option-1, filteredHand, true);
                 std::cout<<this->name<<" played "<<card->toString()<<std::endl;
                 return card;
             }
@@ -242,7 +243,7 @@ void Player::drawCard(Deck& deck){
     }
 }
 
-std::shared_ptr<ICard> Player::playCard(const unsigned& cardPosition,Hand& hand){
+std::shared_ptr<ICard> Player::playCard(const unsigned& cardPosition,Hand& hand, bool isFilteredHand){
     auto& cardEntry = hand.at(cardPosition);
     auto card = cardEntry.first->clone();
     if(cardEntry.second.empty()){
@@ -250,20 +251,26 @@ std::shared_ptr<ICard> Player::playCard(const unsigned& cardPosition,Hand& hand)
         return card;
     }
     else{
-        for(std::vector<CardOption>::iterator i = cardEntry.second.begin(); i!= cardEntry.second.end(); ++i)
-            std::cout<<std::distance(cardEntry.second.begin(),i)+1<<" "<<i->description<<std::endl;
-        size_t option=0;
-        while(true)
-        {
-            std::cin>>option;
-            if(option>0 && option<=cardEntry.second.size()){
-                cardEntry.second.at(option-1).action(cardPosition);//Normally i would erase the card outside of the lambda but there is an option to do something without playing a card
-                break;
-            }
-            else{
-                std::cout<<"Not an option, try again"<<std::endl;
+        if(!isFilteredHand){
+            for(std::vector<CardOption>::iterator i = cardEntry.second.begin(); i!= cardEntry.second.end(); ++i)
+                std::cout<<std::distance(cardEntry.second.begin(),i)+1<<" "<<i->description<<std::endl;
+            size_t option=0;
+            while(true)
+            {
+                std::cin>>option;
+                if(option>0 && option<=cardEntry.second.size()){
+                    cardEntry.second.at(option-1).action(cardPosition);//Normally i would erase the card outside of the lambda but there is an option to do something without playing a card
+                    break;
+                }
+                else{
+                    std::cout<<"Not an option, try again"<<std::endl;
+                }
             }
         }
+        else{
+            cardEntry.second.at(0).action(cardPosition);
+        }
+        
         return card;
     }    
 }

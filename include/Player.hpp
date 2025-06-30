@@ -41,7 +41,7 @@ public:
     void renderOptions(const Hand& hand) const;
     std::shared_ptr<ICard> playHand(Deck& deck, bool isFirst);
     std::shared_ptr<ICard> playFilteredHand(Deck& deck, bool isFirst, const std::shared_ptr<ICard> &card);
-    std::shared_ptr<ICard> playCard(const unsigned& cardPosition, Hand& hand);
+    std::shared_ptr<ICard> playCard(const unsigned& cardPosition, Hand& hand,bool isFilteredHand=false);
     void endRound();
     void addScore(const unsigned &points);
     unsigned getScore()const;

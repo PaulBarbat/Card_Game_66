@@ -4,360 +4,360 @@
         <Suite>Ghinda</Suite>
         <Rank>Doi</Rank>
         <Grid>
-            <Row>/‾‾‾‾‾‾‾‾‾‾‾‾‾‾\\</Row>
+            <Row>/--------------\</Row>
             <Row>|  ____      2 |</Row>
             <Row>| (____)       |</Row>
             <Row>| |    |       |</Row>
-            <Row>|  \\__/        |</Row>
+            <Row>|  \__/        |</Row>
             <Row>|______________|</Row>
             <Row>|       Ghinda |</Row>
             <Row>|        ____  |</Row>
             <Row>|       (____) |</Row>
             <Row>|       |    | |</Row>
-            <Row>| 2      \\__/  |</Row>
-            <Row>\\______________/</Row>
+            <Row>| 2      \__/  |</Row>
+            <Row>\--------------/</Row>
         </Grid>
     </Card>
     <Card>
         <Suite>Ghinda</Suite>
         <Rank>Trei</Rank>
         <Grid>
-            <Row>/‾‾‾‾‾‾‾‾‾‾‾‾‾‾\\</Row>
+            <Row>/--------------\</Row>
             <Row>|  ____      3 |</Row>
             <Row>| (____)       |</Row>
             <Row>| |    |       |</Row>
-            <Row>|  \\__/        |</Row>
+            <Row>|  \__/        |</Row>
             <Row>|______________|</Row>
             <Row>|       Ghinda |</Row>
             <Row>|        ____  |</Row>
             <Row>|       (____) |</Row>
             <Row>|       |    | |</Row>
-            <Row>| 3      \\__/  |</Row>
-            <Row>\\______________/</Row>
+            <Row>| 3      \__/  |</Row>
+            <Row>\--------------/</Row>
         </Grid>
     </Card>
     <Card>
         <Suite>Ghinda</Suite>
         <Rank>Cal</Rank>
         <Grid>
-            <Row>/‾‾‾‾‾‾‾‾‾‾‾‾‾‾\\</Row>
+            <Row>/--------------\</Row>
             <Row>|  ____      4 |</Row>
             <Row>| (____)       |</Row>
             <Row>| |    |       |</Row>
-            <Row>|  \\__/        |</Row>
+            <Row>|  \__/        |</Row>
             <Row>|______________|</Row>
             <Row>|       Ghinda |</Row>
             <Row>|        ____  |</Row>
             <Row>|       (____) |</Row>
             <Row>|       |    | |</Row>
-            <Row>| 4      \\__/  |</Row>
-            <Row>\\______________/</Row>
+            <Row>| 4      \__/  |</Row>
+            <Row>\--------------/</Row>
         </Grid>
     </Card>
     <Card>
         <Suite>Ghinda</Suite>
         <Rank>Craita</Rank>
         <Grid>
-            <Row>/‾‾‾‾‾‾‾‾‾‾‾‾‾‾\\</Row>
+            <Row>/--------------\</Row>
             <Row>|  ____     10 |</Row>
             <Row>| (____)       |</Row>
             <Row>| |    |       |</Row>
-            <Row>|  \\__/        |</Row>
+            <Row>|  \__/        |</Row>
             <Row>|______________|</Row>
             <Row>|       Ghinda |</Row>
             <Row>|        ____  |</Row>
             <Row>|       (____) |</Row>
             <Row>|       |    | |</Row>
-            <Row>| 10     \\__/  |</Row>
-            <Row>\\______________/</Row>
+            <Row>| 10     \__/  |</Row>
+            <Row>\--------------/</Row>
         </Grid>
     </Card>
     <Card>
         <Suite>Ghinda</Suite>
         <Rank>Tuz</Rank>
         <Grid>
-            <Row>/‾‾‾‾‾‾‾‾‾‾‾‾‾‾\\</Row>
+            <Row>/--------------\</Row>
             <Row>|  ____     11 |</Row>
             <Row>| (____)       |</Row>
             <Row>| |    |       |</Row>
-            <Row>|  \\__/        |</Row>
+            <Row>|  \__/        |</Row>
             <Row>|______________|</Row>
             <Row>|       Ghinda |</Row>
             <Row>|        ____  |</Row>
             <Row>|       (____) |</Row>
             <Row>|       |    | |</Row>
-            <Row>| 11     \\__/  |</Row>
-            <Row>\\______________/</Row>
+            <Row>| 11     \__/  |</Row>
+            <Row>\--------------/</Row>
         </Grid>
     </Card>
     <Card>
         <Suite>Rosu</Suite>
         <Rank>Doi</Rank>
         <Grid>
-            <Row>/‾‾‾‾‾‾‾‾‾‾‾‾‾‾\\</Row>
+            <Row>/--------------\</Row>
             <Row>|  _  _      2 |</Row>
-            <Row>| ( \\/ )       |</Row>
-            <Row>|  \\  /        |</Row>
-            <Row>|   \\/         |</Row>
+            <Row>| ( \/ )       |</Row>
+            <Row>|  \  /        |</Row>
+            <Row>|   \/         |</Row>
             <Row>|______________|</Row>
             <Row>|        Rosu  |</Row>
             <Row>|        _  _  |</Row>
-            <Row>|       ( \\/ ) |</Row>
-            <Row>|        \\  /  |</Row>
-            <Row>| 2       \\/   |</Row>
-            <Row>\\______________/</Row>
+            <Row>|       ( \/ ) |</Row>
+            <Row>|        \  /  |</Row>
+            <Row>| 2       \/   |</Row>
+            <Row>\--------------/</Row>
         </Grid>
     </Card>
     <Card>
         <Suite>Rosu</Suite>
         <Rank>Trei</Rank>
         <Grid>
-            <Row>/‾‾‾‾‾‾‾‾‾‾‾‾‾‾\\</Row>
+            <Row>/--------------\</Row>
             <Row>|  _  _      3 |</Row>
-            <Row>| ( \\/ )       |</Row>
-            <Row>|  \\  /        |</Row>
-            <Row>|   \\/         |</Row>
+            <Row>| ( \/ )       |</Row>
+            <Row>|  \  /        |</Row>
+            <Row>|   \/         |</Row>
             <Row>|______________|</Row>
             <Row>|        Rosu  |</Row>
             <Row>|        _  _  |</Row>
-            <Row>|       ( \\/ ) |</Row>
-            <Row>|        \\  /  |</Row>
-            <Row>| 3       \\/   |</Row>
-            <Row>\\______________/</Row>
+            <Row>|       ( \/ ) |</Row>
+            <Row>|        \  /  |</Row>
+            <Row>| 3       \/   |</Row>
+            <Row>\--------------/</Row>
         </Grid>
     </Card>
     <Card>
         <Suite>Rosu</Suite>
         <Rank>Cal</Rank>
         <Grid>
-            <Row>/‾‾‾‾‾‾‾‾‾‾‾‾‾‾\\</Row>
+            <Row>/--------------\</Row>
             <Row>|  _  _      4 |</Row>
-            <Row>| ( \\/ )       |</Row>
-            <Row>|  \\  /        |</Row>
-            <Row>|   \\/         |</Row>
+            <Row>| ( \/ )       |</Row>
+            <Row>|  \  /        |</Row>
+            <Row>|   \/         |</Row>
             <Row>|______________|</Row>
             <Row>|        Rosu  |</Row>
             <Row>|        _  _  |</Row>
-            <Row>|       ( \\/ ) |</Row>
-            <Row>|        \\  /  |</Row>
-            <Row>| 4       \\/   |</Row>
-            <Row>\\______________/</Row>
+            <Row>|       ( \/ ) |</Row>
+            <Row>|        \  /  |</Row>
+            <Row>| 4       \/   |</Row>
+            <Row>\--------------/</Row>
         </Grid>
     </Card>
     <Card>
         <Suite>Rosu</Suite>
         <Rank>Craita</Rank>
         <Grid>
-            <Row>/‾‾‾‾‾‾‾‾‾‾‾‾‾‾\\</Row>
+            <Row>/--------------\</Row>
             <Row>|  _  _     10 |</Row>
-            <Row>| ( \\/ )       |</Row>
-            <Row>|  \\  /        |</Row>
-            <Row>|   \\/         |</Row>
+            <Row>| ( \/ )       |</Row>
+            <Row>|  \  /        |</Row>
+            <Row>|   \/         |</Row>
             <Row>|______________|</Row>
             <Row>|        Rosu  |</Row>
             <Row>|        _  _  |</Row>
-            <Row>|       ( \\/ ) |</Row>
-            <Row>|        \\  /  |</Row>
-            <Row>| 10      \\/   |</Row>
-            <Row>\\______________/</Row>
+            <Row>|       ( \/ ) |</Row>
+            <Row>|        \  /  |</Row>
+            <Row>| 10      \/   |</Row>
+            <Row>\--------------/</Row>
         </Grid>
     </Card>
     <Card>
         <Suite>Rosu</Suite>
         <Rank>Tuz</Rank>
         <Grid>
-            <Row>/‾‾‾‾‾‾‾‾‾‾‾‾‾‾\\</Row>
+            <Row>/--------------\</Row>
             <Row>|  _  _     11 |</Row>
-            <Row>| ( \\/ )       |</Row>
-            <Row>|  \\  /        |</Row>
-            <Row>|   \\/         |</Row>
+            <Row>| ( \/ )       |</Row>
+            <Row>|  \  /        |</Row>
+            <Row>|   \/         |</Row>
             <Row>|______________|</Row>
             <Row>|        Rosu  |</Row>
             <Row>|        _  _  |</Row>
-            <Row>|       ( \\/ ) |</Row>
-            <Row>|        \\  /  |</Row>
-            <Row>| 11      \\/   |</Row>
-            <Row>\\______________/</Row>
+            <Row>|       ( \/ ) |</Row>
+            <Row>|        \  /  |</Row>
+            <Row>| 11      \/   |</Row>
+            <Row>\--------------/</Row>
         </Grid>
     </Card>
     <Card>
         <Suite>Bata</Suite>
         <Rank>Doi</Rank>
         <Grid>
-            <Row>/‾‾‾‾‾‾‾‾‾‾‾‾‾‾\\</Row>
+            <Row>/--------------\</Row>
             <Row>|            2 |</Row>
-            <Row>|  /¯¤¯\\       |</Row>
+            <Row>|  /-O-\       |</Row>
             <Row>| (_____)      |</Row>
-            <Row>|  \\_¤_/       |</Row>
+            <Row>|  \_O_/       |</Row>
             <Row>|______________|</Row>
             <Row>|        Bata  |</Row>
             <Row>|              |</Row>
-            <Row>|       /¯¤¯\\  |</Row>
+            <Row>|       /-O-\  |</Row>
             <Row>|      (_____) |</Row>
-            <Row>| 2     \\_¤_/  |</Row>
-            <Row>\\______________/</Row>
+            <Row>| 2     \_O_/  |</Row>
+            <Row>\--------------/</Row>
         </Grid>
     </Card>
     <Card>
         <Suite>Bata</Suite>
         <Rank>Trei</Rank>
         <Grid>
-            <Row>/‾‾‾‾‾‾‾‾‾‾‾‾‾‾\\</Row>
+            <Row>/--------------\</Row>
             <Row>|            3 |</Row>
-            <Row>|  /¯¤¯\\       |</Row>
+            <Row>|  /-O-\       |</Row>
             <Row>| (_____)      |</Row>
-            <Row>|  \\_¤_/       |</Row>
+            <Row>|  \_O_/       |</Row>
             <Row>|______________|</Row>
             <Row>|        Bata  |</Row>
             <Row>|              |</Row>
-            <Row>|       /¯¤¯\\  |</Row>
+            <Row>|       /-O-\  |</Row>
             <Row>|      (_____) |</Row>
-            <Row>| 3     \\_¤_/  |</Row>
-            <Row>\\______________/</Row>
+            <Row>| 3     \_O_/  |</Row>
+            <Row>\--------------/</Row>
         </Grid>
     </Card>
     <Card>
         <Suite>Bata</Suite>
         <Rank>Cal</Rank>
         <Grid>
-            <Row>/‾‾‾‾‾‾‾‾‾‾‾‾‾‾\\</Row>
+            <Row>/--------------\</Row>
             <Row>|            4 |</Row>
-            <Row>|  /¯¤¯\\       |</Row>
+            <Row>|  /-O-\       |</Row>
             <Row>| (_____)      |</Row>
-            <Row>|  \\_¤_/       |</Row>
+            <Row>|  \_O_/       |</Row>
             <Row>|______________|</Row>
             <Row>|        Bata  |</Row>
             <Row>|              |</Row>
-            <Row>|       /¯¤¯\\  |</Row>
+            <Row>|       /-O-\  |</Row>
             <Row>|      (_____) |</Row>
-            <Row>| 4     \\_¤_/  |</Row>
-            <Row>\\______________/</Row>
+            <Row>| 4     \_O_/  |</Row>
+            <Row>\--------------/</Row>
         </Grid>
     </Card>
     <Card>
         <Suite>Bata</Suite>
         <Rank>Craita</Rank>
         <Grid>
-            <Row>/‾‾‾‾‾‾‾‾‾‾‾‾‾‾\\</Row>
+            <Row>/--------------\</Row>
             <Row>|           10 |</Row>
-            <Row>|  /¯¤¯\\       |</Row>
+            <Row>|  /-O-\       |</Row>
             <Row>| (_____)      |</Row>
-            <Row>|  \\_¤_/       |</Row>
+            <Row>|  \_O_/       |</Row>
             <Row>|______________|</Row>
             <Row>|        Bata  |</Row>
             <Row>|              |</Row>
-            <Row>|       /¯¤¯\\  |</Row>
+            <Row>|       /-O-\  |</Row>
             <Row>|      (_____) |</Row>
-            <Row>| 10    \\_¤_/  |</Row>
-            <Row>\\______________/</Row>
+            <Row>| 10    \_O_/  |</Row>
+            <Row>\--------------/</Row>
         </Grid>
     </Card>
     <Card>
         <Suite>Bata</Suite>
         <Rank>Tuz</Rank>
         <Grid>
-            <Row>/‾‾‾‾‾‾‾‾‾‾‾‾‾‾\\</Row>
+            <Row>/--------------\</Row>
             <Row>|           11 |</Row>
-            <Row>|  /¯¤¯\\       |</Row>
+            <Row>|  /-O-\       |</Row>
             <Row>| (_____)      |</Row>
-            <Row>|  \\_¤_/       |</Row>
+            <Row>|  \_O_/       |</Row>
             <Row>|______________|</Row>
             <Row>|        Bata  |</Row>
             <Row>|              |</Row>
-            <Row>|       /¯¤¯\\  |</Row>
+            <Row>|       /-O-\  |</Row>
             <Row>|      (_____) |</Row>
-            <Row>| 11    \\_¤_/  |</Row>
-            <Row>\\______________/</Row>
+            <Row>| 11    \_O_/  |</Row>
+            <Row>\--------------/</Row>
         </Grid>
     </Card>
     <Card>
         <Suite>Verde</Suite>
         <Rank>Doi</Rank>
         <Grid>
-            <Row>/‾‾‾‾‾‾‾‾‾‾‾‾‾‾\\</Row>
+            <Row>/--------------\</Row>
             <Row>|            2 |</Row>
-            <Row>| «^^^»        |</Row>
+            <Row>| <^^^>        |</Row>
             <Row>| )Y Y(        |</Row>
-            <Row>| \\_¥_/        |</Row>
+            <Row>| \_Y_/        |</Row>
             <Row>|______________|</Row>
             <Row>|       Verde  |</Row>
             <Row>|              |</Row>
-            <Row>|        «^^^» |</Row>
+            <Row>|        <^^^> |</Row>
             <Row>|        )Y Y( |</Row>
-            <Row>| 2      \\_¥_/ |</Row>
-            <Row>\\______________/</Row>
+            <Row>| 2      \_Y_/ |</Row>
+            <Row>\--------------/</Row>
         </Grid>
     </Card>
     <Card>
         <Suite>Verde</Suite>
         <Rank>Trei</Rank>
         <Grid>
-            <Row>/‾‾‾‾‾‾‾‾‾‾‾‾‾‾\\</Row>
+            <Row>/--------------\</Row>
             <Row>|            3 |</Row>
-            <Row>| «^^^»        |</Row>
+            <Row>| <^^^>        |</Row>
             <Row>| )Y Y(        |</Row>
-            <Row>| \\_¥_/        |</Row>
+            <Row>| \_Y_/        |</Row>
             <Row>|______________|</Row>
             <Row>|       Verde  |</Row>
             <Row>|              |</Row>
-            <Row>|        «^^^» |</Row>
+            <Row>|        <^^^> |</Row>
             <Row>|        )Y Y( |</Row>
-            <Row>| 3      \\_¥_/ |</Row>
-            <Row>\\______________/</Row>
+            <Row>| 3      \_Y_/ |</Row>
+            <Row>\--------------/</Row>
         </Grid>
     </Card>
     <Card>
         <Suite>Verde</Suite>
         <Rank>Cal</Rank>
         <Grid>
-            <Row>/‾‾‾‾‾‾‾‾‾‾‾‾‾‾\\</Row>
+            <Row>/--------------\</Row>
             <Row>|            4 |</Row>
-            <Row>| «^^^»        |</Row>
+            <Row>| <^^^>        |</Row>
             <Row>| )Y Y(        |</Row>
-            <Row>| \\_¥_/        |</Row>
+            <Row>| \_Y_/        |</Row>
             <Row>|______________|</Row>
             <Row>|       Verde  |</Row>
             <Row>|              |</Row>
-            <Row>|        «^^^» |</Row>
+            <Row>|        <^^^> |</Row>
             <Row>|        )Y Y( |</Row>
-            <Row>| 4      \\_¥_/ |</Row>
-            <Row>\\______________/</Row>
+            <Row>| 4      \_Y_/ |</Row>
+            <Row>\--------------/</Row>
         </Grid>
     </Card>
     <Card>
         <Suite>Verde</Suite>
         <Rank>Craita</Rank>
         <Grid>
-            <Row>/‾‾‾‾‾‾‾‾‾‾‾‾‾‾\\</Row>
+            <Row>/--------------\</Row>
             <Row>|           10 |</Row>
-            <Row>| «^^^»        |</Row>
+            <Row>| <^^^>        |</Row>
             <Row>| )Y Y(        |</Row>
-            <Row>| \\_¥_/        |</Row>
+            <Row>| \_Y_/        |</Row>
             <Row>|______________|</Row>
             <Row>|       Verde  |</Row>
             <Row>|              |</Row>
-            <Row>|        «^^^» |</Row>
+            <Row>|        <^^^> |</Row>
             <Row>|        )Y Y( |</Row>
-            <Row>| 10     \\_¥_/ |</Row>
-            <Row>\\______________/</Row>
+            <Row>| 10     \_Y_/ |</Row>
+            <Row>\--------------/</Row>
         </Grid>
     </Card>
     <Card>
         <Suite>Verde</Suite>
         <Rank>Tuz</Rank>
         <Grid>
-            <Row>/‾‾‾‾‾‾‾‾‾‾‾‾‾‾\\</Row>
+            <Row>/--------------\</Row>
             <Row>|           11 |</Row>
-            <Row>| «^^^»        |</Row>
+            <Row>| <^^^>        |</Row>
             <Row>| )Y Y(        |</Row>
-            <Row>| \\_¥_/        |</Row>
+            <Row>| \_Y_/        |</Row>
             <Row>|______________|</Row>
             <Row>|       Verde  |</Row>
             <Row>|              |</Row>
-            <Row>|        «^^^» |</Row>
+            <Row>|        <^^^> |</Row>
             <Row>|        )Y Y( |</Row>
-            <Row>| 11     \\_¥_/ |</Row>
-            <Row>\\______________/</Row>
+            <Row>| 11     \_Y_/ |</Row>
+            <Row>\--------------/</Row>
         </Grid>
     </Card>
 </Deck>

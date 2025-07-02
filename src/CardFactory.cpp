@@ -93,15 +93,15 @@ std::unique_ptr<Deck> CardFactory::createMagyarDeckFromXML(const std::string& pa
         std::string suiteStr = card->FirstChildElement("Suite")->GetText();
         std::string rankStr = card->FirstChildElement("Rank")->GetText();
         auto* grid = card->FirstChildElement("Grid");
-        if(!root)
+        if(!root){
             throw std::runtime_error("Missing <Grid> Element "+path);
-        std::cout<<"RIght before i read the rows"<<std::endl;
-        int a;
-        std::cin>>a;
+            std::cin.get();
+        }
         for(auto* row = grid->FirstChildElement("Row"); row; row = row->NextSiblingElement("Row")){
-            if(!row)
+            if(!row)            {
                 throw std::runtime_error("Missing <Row> Element "+path);
-                std::cin>>a;
+                std::cin.get();
+            }    
             if(row->GetText())
                 gridVector.push_back(row->GetText());
         }

@@ -27,7 +27,7 @@ std::unique_ptr<Player> Game::makePlayer(std::string player){
             }
         }
     }
-    return std::make_unique<Player>(type, [this]() { this->setState(std::make_unique<GameOverState>()); }, [this](bool isFirst,Hand& hand, bool isFilteredHand) { this->render(isFirst,hand); },player);
+    return std::make_unique<Player>(type, [this]() { this->setState(std::make_unique<GameOverState>()); }, [this](bool isFirst,Hand& hand) { this->render(isFirst,hand); },player);
 }
 
 std::unique_ptr<Deck> Game::makeDeck(){

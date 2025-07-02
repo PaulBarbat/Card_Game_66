@@ -106,26 +106,26 @@ void Game::render(bool isFirst,Hand& hand){
     if(isFirst)
     {
         std::cout<<getFirstPlayer().getName()<<"                                                     Over All Score"<<std::endl;
-        std::cout<<"Points: "<<getFirstPlayer().getScore()<<"                                             "<<getFirstPlayer().getName()<<" "<<getFirstPlayer().getRoundsWon()<<" : "<<getSecondPlayer().getRoundsWon()<<" "<<getSecondPlayer().getRoundsWon()<<std::endl<<std::endl;
+        std::cout<<"Points: "<<getFirstPlayer().getScore()<<"                                             "<<getFirstPlayer().getName()<<" "<<getFirstPlayer().getRoundsWon()<<" : "<<getSecondPlayer().getRoundsWon()<<" "<<getSecondPlayer().getName()<<std::endl<<std::endl;
     } 
     else{
         std::cout<<getSecondPlayer().getName()<<"                                                     Over All Score"<<std::endl;
-        std::cout<<"Points: "<<getSecondPlayer().getScore()<<"                                             "<<getFirstPlayer().getName()<<" "<<getFirstPlayer().getRoundsWon()<<" : "<<getSecondPlayer().getRoundsWon()<<" "<<getSecondPlayer().getRoundsWon()<<std::endl<<std::endl;
+        std::cout<<"Points: "<<getSecondPlayer().getScore()<<"                                             "<<getFirstPlayer().getName()<<" "<<getFirstPlayer().getRoundsWon()<<" : "<<getSecondPlayer().getRoundsWon()<<" "<<getSecondPlayer().getName()<<std::endl<<std::endl;
     }
     std::cout<<"                                                          Deck: "<<getDeck().cardsLeft()<<" Cards Left"<<std::endl;
     std::cout<<"                                                                Tromf"<<std::endl;
     std::cout<<"                                                           "<<deck->getTromf()->toString(tromfCounter++)<<std::endl;
     std::cout<<"                                    "<<(isFirst ? "Play a card": "Played Card")<<"            "<<deck->getTromf()->toString(tromfCounter++)<<std::endl;
     std::cout<<"                                                           "<<deck->getTromf()->toString(tromfCounter++)<<std::endl;
-    std::cout<<"                                    "<<(isFirst ? "                ": getCurrentHand().first->toString(playedCardCounter++))<<"         "<<deck->getTromf()->toString(tromfCounter++)<<std::endl;
-    std::cout<<"                                    "<<(isFirst ? "                ": getCurrentHand().first->toString(playedCardCounter++))<<"         "<<deck->getTromf()->toString(tromfCounter++)<<std::endl;
-    std::cout<<"                                    "<<(isFirst ? "                ": getCurrentHand().first->toString(playedCardCounter++))<<"         "<<deck->getTromf()->toString(tromfCounter++)<<std::endl;
-    std::cout<<"                                    "<<(isFirst ? "                ": getCurrentHand().first->toString(playedCardCounter++))<<"         "<<deck->getTromf()->toString(tromfCounter++)<<std::endl;
-    std::cout<<"                                    "<<(isFirst ? "                ": getCurrentHand().first->toString(playedCardCounter++))<<"         "<<deck->getTromf()->toString(tromfCounter++)<<std::endl;
-    std::cout<<"                                    "<<(isFirst ? "                ": getCurrentHand().first->toString(playedCardCounter++))<<"         "<<deck->getTromf()->toString(tromfCounter++)<<std::endl;
-    std::cout<<"                                    "<<(isFirst ? "                ": getCurrentHand().first->toString(playedCardCounter++))<<"         "<<deck->getTromf()->toString(tromfCounter++)<<std::endl;
-    std::cout<<"                                    "<<(isFirst ? "                ": getCurrentHand().first->toString(playedCardCounter++))<<"         "<<deck->getTromf()->toString(tromfCounter++)<<std::endl;
-    std::cout<<"                                    "<<(isFirst ? "                ": getCurrentHand().first->toString(playedCardCounter++))<<"         "<<deck->getTromf()->toString(tromfCounter++)<<std::endl;
+    std::cout<<"                                    "<<(isFirst ? "                ": getCurrentHand().first->toString(playedCardCounter++))<<"       "<<deck->getTromf()->toString(tromfCounter++)<<std::endl;
+    std::cout<<"                                    "<<(isFirst ? "                ": getCurrentHand().first->toString(playedCardCounter++))<<"       "<<deck->getTromf()->toString(tromfCounter++)<<std::endl;
+    std::cout<<"                                    "<<(isFirst ? "                ": getCurrentHand().first->toString(playedCardCounter++))<<"       "<<deck->getTromf()->toString(tromfCounter++)<<std::endl;
+    std::cout<<"                                    "<<(isFirst ? "                ": getCurrentHand().first->toString(playedCardCounter++))<<"       "<<deck->getTromf()->toString(tromfCounter++)<<std::endl;
+    std::cout<<"                                    "<<(isFirst ? "                ": getCurrentHand().first->toString(playedCardCounter++))<<"       "<<deck->getTromf()->toString(tromfCounter++)<<std::endl;
+    std::cout<<"                                    "<<(isFirst ? "                ": getCurrentHand().first->toString(playedCardCounter++))<<"       "<<deck->getTromf()->toString(tromfCounter++)<<std::endl;
+    std::cout<<"                                    "<<(isFirst ? "                ": getCurrentHand().first->toString(playedCardCounter++))<<"       "<<deck->getTromf()->toString(tromfCounter++)<<std::endl;
+    std::cout<<"                                    "<<(isFirst ? "                ": getCurrentHand().first->toString(playedCardCounter++))<<"       "<<deck->getTromf()->toString(tromfCounter++)<<std::endl;
+    std::cout<<"                                    "<<(isFirst ? "                ": getCurrentHand().first->toString(playedCardCounter++))<<"       "<<deck->getTromf()->toString(tromfCounter++)<<std::endl;
     std::cout<<"                                    "<<(isFirst ? "                ": getCurrentHand().first->toString(playedCardCounter++))<<std::endl;
     std::cout<<"                                    "<<(isFirst ? "                ": getCurrentHand().first->toString(playedCardCounter++))<<std::endl;
     std::cout<<"                                    "<<(isFirst ? "                ": getCurrentHand().first->toString(playedCardCounter++))<<std::endl;
@@ -142,11 +142,11 @@ void Game::render(bool isFirst,Hand& hand){
     std::string content = "";
     int padding = 0;
     if(isFirst){
-        for(int i=1;i<=hand.size();i++){
+        for(int i=0;i<hand.size();i++){
             if(hand.at(i).second.empty())
-                std::cout<<"       "<<i<<"         ";
+                std::cout<<"       "<<i+1<<"         ";
             else{
-                content = std::to_string(i) + ".";
+                content = std::to_string(i+1) + ".";
                 for(std::vector<CardOption>::const_iterator j = hand.at(i).second.begin()+1; j!= hand.at(i).second.end(); ++j){
                     content+=j->shortDescription;
                     if(j!=hand.at(i).second.end())

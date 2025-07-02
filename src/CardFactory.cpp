@@ -92,7 +92,7 @@ std::unique_ptr<Deck> CardFactory::createMagyarDeckFromXML(const std::string& pa
     for(auto* card = root->FirstChildElement("Card"); card; card = card->NextSiblingElement("Card")){
         std::string suiteStr = card->FirstChildElement("Suite")->GetText();
         std::string rankStr = card->FirstChildElement("Rank")->GetText();
-        auto* grid = doc.FirstChildElement("Grid");
+        auto* grid = card->FirstChildElement("Grid");
         if(!root)
             throw std::runtime_error("Missing <Grid> Element "+path);
         std::cout<<"RIght before i read the rows"<<std::endl;
@@ -141,6 +141,7 @@ std::unique_ptr<Deck> CardFactory::createMagyarDeckFromXML(const std::string& pa
 
         //add the card to the deck
         deck.addCard(std::make_shared<Card<MagyarSuite,MagyarRank>>(suite,rank,points,gridVector));
+        gridVector.clear();
     }
     return std::make_unique<Deck>(deck);
 }

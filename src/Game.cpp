@@ -167,7 +167,8 @@ void Game::render(bool isFirst,Hand& hand){
             std::cout<<"       "<<i<<"         ";
     if(isFirst){
         std::cout<<hand.size()+1<<". That is enough for me(close the round)"<<std::endl;
-        std::cout<<hand.size()+2<<". Close the card"<<std::endl;
+        if(isDrawingAllowed)
+            std::cout<<hand.size()+2<<". Close the card"<<std::endl;
     }
 }
 void Game::run() {

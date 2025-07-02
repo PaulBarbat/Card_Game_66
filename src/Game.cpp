@@ -67,7 +67,10 @@ Game::Game(){
 
 void Game::setState(std::unique_ptr<GameState> newState){
     this->gameState = std::move(newState);
-    if(gameState) gameState->enter(*this);
+    if(gameState){
+        gameState->enter(*this);
+        gameState->update(*this);
+    } 
 }
 
 void Game::update(){

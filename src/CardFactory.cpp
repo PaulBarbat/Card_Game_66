@@ -95,7 +95,13 @@ std::unique_ptr<Deck> CardFactory::createMagyarDeckFromXML(const std::string& pa
         auto* grid = doc.FirstChildElement("Grid");
         if(!root)
             throw std::runtime_error("Missing <Grid> Element "+path);
+        std::cout<<"RIght before i read the rows"<<std::endl;
+        int a;
+        std::cin>>a;
         for(auto* row = grid->FirstChildElement("Row"); row; row = row->NextSiblingElement("Row")){
+            if(!row)
+                throw std::runtime_error("Missing <Row> Element "+path);
+                std::cin>>a;
             if(row->GetText())
                 gridVector.push_back(row->GetText());
         }

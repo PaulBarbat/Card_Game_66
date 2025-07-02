@@ -54,6 +54,7 @@ public:
         this->suite = other->suite;
         this->rank = other->rank;
         this->points = other->points;
+        this->displayGrid = other->displayGrid;
     }
 
     std::shared_ptr<ICard> clone() const {

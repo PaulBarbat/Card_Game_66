@@ -103,6 +103,7 @@ void Game::render(bool isFirst,Hand& hand){
     int tromfCounter=0;
     int playedCardCounter=0;
     std::cout<<std::endl<<std::endl<<std::endl<<std::endl<<std::endl<<std::endl<<std::endl<<std::endl<<std::endl<<std::endl<<std::endl<<std::endl<<std::endl<<std::endl<<std::endl<<std::endl<<std::endl<<std::endl;
+    std::cout<<isFirst<<std::endl;
     if(isFirst)
     {
         std::cout<<getFirstPlayer().getName()<<"                                                     Over All Score"<<std::endl;

@@ -27,7 +27,7 @@ std::shared_ptr<ICard> Player::playHand(Deck& deck, bool isFirst){
     while(true)
     {
         // std::cout<<"Select a card:"<<std::endl;
-        renderCallback(true, hand);
+        renderCallback(isFirst, hand);
         std::cin>>option;
         if(std::cin.fail()) {
             std::cin.clear(); // clear error

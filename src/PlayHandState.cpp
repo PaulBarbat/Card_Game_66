@@ -5,14 +5,13 @@
 void PlayHandState::enter(Game& game){
     if(game.getDeck().cardsLeft()==0)
         game.setIsDrawingAllowed(false);
-    std::cout<<std::endl<<std::endl<<std::endl;
-    std::cout<<"There are "<<game.getDeck().cardsLeft()<<" cards left in the deck"<<std::endl<<std::endl;
 }
 
 void PlayHandState::update(Game& game){
     std::shared_ptr<ICard> first = game.getFirstPlayer().playHand(game.getDeck(),true);
     if(game.getFirstPlayer().getHasClosedTheCard())
         game.setIsDrawingAllowed(false);
+    game.setCurrentHand(first,nullptr);
     std::shared_ptr<ICard> second;
     if(game.getIsDrawingAllowed()){
         second = game.getSecondPlayer().playHand(game.getDeck(),false);

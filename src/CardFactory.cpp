@@ -16,6 +16,7 @@ std::unique_ptr<Deck> CardFactory::createDeckFromXML(DeckType type, const std::s
 std::unique_ptr<Deck> CardFactory::createClassicDeckFromXML(const std::string& path){
     XMLDocument doc;
     Deck deck;
+    std::vector<std::string> gridVector;
     if(doc.LoadFile(path.c_str()) != XML_SUCCESS)
         throw std::runtime_error("Failed to load XML from file "+path);
 
@@ -28,7 +29,13 @@ std::unique_ptr<Deck> CardFactory::createClassicDeckFromXML(const std::string& p
     for(auto* card = root->FirstChildElement("Card"); card; card = card->NextSiblingElement("Card")){
         std::string suiteStr = card->FirstChildElement("Suite")->GetText();
         std::string rankStr = card->FirstChildElement("Rank")->GetText();
-        
+        auto* grid = doc.FirstChildElement("Grid");
+        if(!root)
+            throw std::runtime_error("Missing <Grid> Element "+path);
+        for(auto* row = grid->FirstChildElement("Row"); row; row = row->NextSiblingElement("Row")){
+            if(row->GetText())
+                gridVector.push_back(row->GetText());
+        }
         ClassicSuite suite;
         ClassicRank rank;
         unsigned points=0;
@@ -64,7 +71,7 @@ std::unique_ptr<Deck> CardFactory::createClassicDeckFromXML(const std::string& p
         else throw std::runtime_error("Invalid rank: " + rankStr);
         
         //add the card to the deck
-        deck.addCard(std::make_shared<Card<ClassicSuite,ClassicRank>>(suite,rank,points));
+        deck.addCard(std::make_shared<Card<ClassicSuite,ClassicRank>>(suite,rank,points,gridVector));
     }
     return std::make_unique<Deck>(deck);
 }
@@ -72,20 +79,26 @@ std::unique_ptr<Deck> CardFactory::createClassicDeckFromXML(const std::string& p
 std::unique_ptr<Deck> CardFactory::createMagyarDeckFromXML(const std::string& path){
     XMLDocument doc;
     Deck deck;
-    
+        std::vector<std::string> gridVector;
     if(doc.LoadFile(path.c_str()) != XML_SUCCESS)
         throw std::runtime_error("Failed to load XML from file "+path);
-    
+
     //Getting the root of the Deck
     auto* root = doc.FirstChildElement("Deck");
     if(!root)
         throw std::runtime_error("Missing <Deck> Element "+path);
-    
+     
     //Getting all elements in Deck
     for(auto* card = root->FirstChildElement("Card"); card; card = card->NextSiblingElement("Card")){
         std::string suiteStr = card->FirstChildElement("Suite")->GetText();
         std::string rankStr = card->FirstChildElement("Rank")->GetText();
-
+        auto* grid = doc.FirstChildElement("Grid");
+        if(!root)
+            throw std::runtime_error("Missing <Grid> Element "+path);
+        for(auto* row = grid->FirstChildElement("Row"); row; row = row->NextSiblingElement("Row")){
+            if(row->GetText())
+                gridVector.push_back(row->GetText());
+        }
         MagyarSuite suite;
         MagyarRank rank;
         unsigned points=0;
@@ -121,7 +134,7 @@ std::unique_ptr<Deck> CardFactory::createMagyarDeckFromXML(const std::string& pa
         else throw std::runtime_error("Invalid rank: " + rankStr);
 
         //add the card to the deck
-        deck.addCard(std::make_shared<Card<MagyarSuite,MagyarRank>>(suite,rank,points));
+        deck.addCard(std::make_shared<Card<MagyarSuite,MagyarRank>>(suite,rank,points,gridVector));
     }
     return std::make_unique<Deck>(deck);
 }

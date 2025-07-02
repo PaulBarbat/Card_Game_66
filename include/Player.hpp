@@ -31,11 +31,12 @@ private:
     Hand hand;
     static constexpr size_t MAX_HAND_SIZE = 5;
     std::function<void()> endGameCallback;
+    std::function<void(bool isFirst,Hand& hand)> renderCallback;
     bool hasClosedTheCard;
     std::string name;
 public:
     Player() = delete;
-    Player(PlayerType type,std::function<void()> endGameCallback, std::string name);
+    Player(PlayerType type,std::function<void()> endGameCallback, std::function<void(bool isFirst,Hand& hand)> renderCallback, std::string name);
     void drawCard(Deck& deck);
     void calculateOptions(Deck& deck);
     void renderOptions(const Hand& hand) const;

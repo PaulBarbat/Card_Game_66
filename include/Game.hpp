@@ -24,6 +24,7 @@ public:
     void flushCurrentHand();
     void setIsDrawingAllowed(bool newValue);
     bool getIsDrawingAllowed();
+    void render(bool isFirst,Hand& hand);
 
     void update();
 

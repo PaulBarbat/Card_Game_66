@@ -27,7 +27,7 @@ std::unique_ptr<Player> Game::makePlayer(std::string player){
             }
         }
     }
-    return std::make_unique<Player>(type, [this]() { this->setState(std::make_unique<GameOverState>()); },player);
+    return std::make_unique<Player>(type, [this]() { this->setState(std::make_unique<GameOverState>()); }, [this](bool isFirst,Hand& hand, bool isFilteredHand) { this->render(isFirst,hand,isFilteredHand); },player);
 }
 
 std::unique_ptr<Deck> Game::makeDeck(){
@@ -99,6 +99,73 @@ bool Game::getIsDrawingAllowed(){
     return this->isDrawingAllowed;
 }
 
+void Game::render(bool isFirst,Hand& hand){
+    int tromfCounter=0;
+    int playedCardCounter=0;
+    std::cout<<std::endl<<std::endl<<std::endl<<std::endl<<std::endl<<std::endl<<std::endl<<std::endl<<std::endl<<std::endl<<std::endl<<std::endl<<std::endl<<std::endl<<std::endl<<std::endl<<std::endl<<std::endl;
+    if(isFirst)
+    {
+        std::cout<<getFirstPlayer().getName()<<"                                                     Over All Score"<<std::endl;
+        std::cout<<"Points: "<<getFirstPlayer().getScore()<<"                                             "<<getFirstPlayer().getName()<<" "<<getFirstPlayer().getRoundsWon()<<" : "<<getSecondPlayer().getRoundsWon()<<" "<<getSecondPlayer().getRoundsWon()<<std::endl<<std::endl;
+    } 
+    else{
+        std::cout<<getSecondPlayer().getName()<<"                                                     Over All Score"<<std::endl;
+        std::cout<<"Points: "<<getSecondPlayer().getScore()<<"                                             "<<getFirstPlayer().getName()<<" "<<getFirstPlayer().getRoundsWon()<<" : "<<getSecondPlayer().getRoundsWon()<<" "<<getSecondPlayer().getRoundsWon()<<std::endl<<std::endl;
+    }
+    std::cout<<"                                                          Deck: "<<getDeck().cardsLeft()<<" Cards Left"<<std::endl;
+    std::cout<<"                                                                Tromf"<<std::endl;
+    std::cout<<"                                                           "<<deck->getTromf()->toString(tromfCounter++)<<std::endl;
+    std::cout<<"                                    "<<(isFirst ? "Play a card": "Played Card")<<"            "<<deck->getTromf()->toString(tromfCounter++)<<std::endl;
+    std::cout<<"                                                           "<<deck->getTromf()->toString(tromfCounter++)<<std::endl;
+    std::cout<<"                                    "<<(isFirst ? "                ": getCurrentHand().first->toString(playedCardCounter++))<<"         "<<deck->getTromf()->toString(tromfCounter++)<<std::endl;
+    std::cout<<"                                    "<<(isFirst ? "                ": getCurrentHand().first->toString(playedCardCounter++))<<"         "<<deck->getTromf()->toString(tromfCounter++)<<std::endl;
+    std::cout<<"                                    "<<(isFirst ? "                ": getCurrentHand().first->toString(playedCardCounter++))<<"         "<<deck->getTromf()->toString(tromfCounter++)<<std::endl;
+    std::cout<<"                                    "<<(isFirst ? "                ": getCurrentHand().first->toString(playedCardCounter++))<<"         "<<deck->getTromf()->toString(tromfCounter++)<<std::endl;
+    std::cout<<"                                    "<<(isFirst ? "                ": getCurrentHand().first->toString(playedCardCounter++))<<"         "<<deck->getTromf()->toString(tromfCounter++)<<std::endl;
+    std::cout<<"                                    "<<(isFirst ? "                ": getCurrentHand().first->toString(playedCardCounter++))<<"         "<<deck->getTromf()->toString(tromfCounter++)<<std::endl;
+    std::cout<<"                                    "<<(isFirst ? "                ": getCurrentHand().first->toString(playedCardCounter++))<<"         "<<deck->getTromf()->toString(tromfCounter++)<<std::endl;
+    std::cout<<"                                    "<<(isFirst ? "                ": getCurrentHand().first->toString(playedCardCounter++))<<"         "<<deck->getTromf()->toString(tromfCounter++)<<std::endl;
+    std::cout<<"                                    "<<(isFirst ? "                ": getCurrentHand().first->toString(playedCardCounter++))<<"         "<<deck->getTromf()->toString(tromfCounter++)<<std::endl;
+    std::cout<<"                                    "<<(isFirst ? "                ": getCurrentHand().first->toString(playedCardCounter++))<<std::endl;
+    std::cout<<"                                    "<<(isFirst ? "                ": getCurrentHand().first->toString(playedCardCounter++))<<std::endl;
+    std::cout<<"                                    "<<(isFirst ? "                ": getCurrentHand().first->toString(playedCardCounter++))<<std::endl;
+    std::cout<<std::endl<<std::endl<<std::endl;
+    //This implementation right now is made for card representations that are 12 rows deep
+    for(int i=0; i<12;i++)
+    {
+        for(const auto& card : hand)
+        {
+            std::cout<<card.first->toString(i)<<" ";
+        }
+        std::cout<<std::endl;
+    }
+    std::string content = "";
+    int padding = 0;
+    if(isFirst){
+        for(int i=1;i<=hand.size();i++){
+            if(hand.at(i).second.empty())
+                std::cout<<"       "<<i<<"         ";
+            else{
+                content = std::to_string(i) + ".";
+                for(std::vector<CardOption>::const_iterator j = hand.at(i).second.begin()+1; j!= hand.at(i).second.end(); ++j){
+                    content+=j->shortDescription;
+                    if(j!=hand.at(i).second.end())
+                        content+=",";
+                }
+                padding = (16 - content.size())/2;
+                std::cout<<std::string(padding, ' ')<<content<<std::string(padding, ' ');
+            }
+        }
+        std::cout<<std::endl<<"Other Options"<<std::endl;
+    }
+    else
+        for(int i=1;i<=hand.size();i++)
+            std::cout<<"       "<<i<<"         ";
+    if(isFirst){
+        std::cout<<hand.size()+1<<". That is enough for me(close the round)"<<std::endl;
+        std::cout<<hand.size()+2<<". Close the card"<<std::endl;
+    }
+}
 void Game::run() {
     // std::cout<<"Creating a Classic Deck"<<std::endl;
     // std::shared_ptr<Deck> classicDeck = CardFactory::createDeckFromXML(DeckType::Classic, "resources/Clasic_Cards.xml");

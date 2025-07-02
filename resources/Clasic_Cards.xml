@@ -3,81 +3,361 @@
     <Card>
         <Suite>Spades</Suite>
         <Rank>Two</Rank>
+        <Grid>
+            <Row>/‾‾‾‾‾‾‾‾‾‾‾‾‾‾\\</Row>
+            <Row>|  _  _      4 |</Row>
+            <Row>| ( \\/ )       |</Row>
+            <Row>|  \\  /        |</Row>
+            <Row>|   \\/         |</Row>
+            <Row>|______________|</Row>
+            <Row>|        Rosu  |</Row>
+            <Row>|        _  _  |</Row>
+            <Row>|       ( \\/ ) |</Row>
+            <Row>|        \\  /  |</Row>
+            <Row>| 4       \\/   |</Row>
+            <Row>\\______________/</Row>
+        </Grid>
     </Card>
     <Card>
         <Suite>Spades</Suite>
         <Rank>Three</Rank>
+        <Grid>
+            <Row>/‾‾‾‾‾‾‾‾‾‾‾‾‾‾\\</Row>
+            <Row>|  _  _      4 |</Row>
+            <Row>| ( \\/ )       |</Row>
+            <Row>|  \\  /        |</Row>
+            <Row>|   \\/         |</Row>
+            <Row>|______________|</Row>
+            <Row>|        Rosu  |</Row>
+            <Row>|        _  _  |</Row>
+            <Row>|       ( \\/ ) |</Row>
+            <Row>|        \\  /  |</Row>
+            <Row>| 4       \\/   |</Row>
+            <Row>\\______________/</Row>
+        </Grid>
     </Card>
     <Card>
         <Suite>Spades</Suite>
         <Rank>Four</Rank>
+        <Grid>
+            <Row>/‾‾‾‾‾‾‾‾‾‾‾‾‾‾\\</Row>
+            <Row>|  _  _      4 |</Row>
+            <Row>| ( \\/ )       |</Row>
+            <Row>|  \\  /        |</Row>
+            <Row>|   \\/         |</Row>
+            <Row>|______________|</Row>
+            <Row>|        Rosu  |</Row>
+            <Row>|        _  _  |</Row>
+            <Row>|       ( \\/ ) |</Row>
+            <Row>|        \\  /  |</Row>
+            <Row>| 4       \\/   |</Row>
+            <Row>\\______________/</Row>
+        </Grid>
     </Card>
     <Card>
         <Suite>Spades</Suite>
         <Rank>Ten</Rank>
+        <Grid>
+            <Row>/‾‾‾‾‾‾‾‾‾‾‾‾‾‾\\</Row>
+            <Row>|  _  _      4 |</Row>
+            <Row>| ( \\/ )       |</Row>
+            <Row>|  \\  /        |</Row>
+            <Row>|   \\/         |</Row>
+            <Row>|______________|</Row>
+            <Row>|        Rosu  |</Row>
+            <Row>|        _  _  |</Row>
+            <Row>|       ( \\/ ) |</Row>
+            <Row>|        \\  /  |</Row>
+            <Row>| 4       \\/   |</Row>
+            <Row>\\______________/</Row>
+        </Grid>
     </Card>
     <Card>
         <Suite>Spades</Suite>
         <Rank>Ace</Rank>
+        <Grid>
+            <Row>/‾‾‾‾‾‾‾‾‾‾‾‾‾‾\\</Row>
+            <Row>|  _  _      4 |</Row>
+            <Row>| ( \\/ )       |</Row>
+            <Row>|  \\  /        |</Row>
+            <Row>|   \\/         |</Row>
+            <Row>|______________|</Row>
+            <Row>|        Rosu  |</Row>
+            <Row>|        _  _  |</Row>
+            <Row>|       ( \\/ ) |</Row>
+            <Row>|        \\  /  |</Row>
+            <Row>| 4       \\/   |</Row>
+            <Row>\\______________/</Row>
+        </Grid>
     </Card>
     <Card>
         <Suite>Hearts</Suite>
         <Rank>Two</Rank>
+        <Grid>
+            <Row>/‾‾‾‾‾‾‾‾‾‾‾‾‾‾\\</Row>
+            <Row>|  _  _      4 |</Row>
+            <Row>| ( \\/ )       |</Row>
+            <Row>|  \\  /        |</Row>
+            <Row>|   \\/         |</Row>
+            <Row>|______________|</Row>
+            <Row>|        Rosu  |</Row>
+            <Row>|        _  _  |</Row>
+            <Row>|       ( \\/ ) |</Row>
+            <Row>|        \\  /  |</Row>
+            <Row>| 4       \\/   |</Row>
+            <Row>\\______________/</Row>
+        </Grid>
     </Card>
     <Card>
         <Suite>Hearts</Suite>
         <Rank>Three</Rank>
+        <Grid>
+            <Row>/‾‾‾‾‾‾‾‾‾‾‾‾‾‾\\</Row>
+            <Row>|  _  _      4 |</Row>
+            <Row>| ( \\/ )       |</Row>
+            <Row>|  \\  /        |</Row>
+            <Row>|   \\/         |</Row>
+            <Row>|______________|</Row>
+            <Row>|        Rosu  |</Row>
+            <Row>|        _  _  |</Row>
+            <Row>|       ( \\/ ) |</Row>
+            <Row>|        \\  /  |</Row>
+            <Row>| 4       \\/   |</Row>
+            <Row>\\______________/</Row>
+        </Grid>
     </Card>
     <Card>
         <Suite>Hearts</Suite>
         <Rank>Four</Rank>
+        <Grid>
+            <Row>/‾‾‾‾‾‾‾‾‾‾‾‾‾‾\\</Row>
+            <Row>|  _  _      4 |</Row>
+            <Row>| ( \\/ )       |</Row>
+            <Row>|  \\  /        |</Row>
+            <Row>|   \\/         |</Row>
+            <Row>|______________|</Row>
+            <Row>|        Rosu  |</Row>
+            <Row>|        _  _  |</Row>
+            <Row>|       ( \\/ ) |</Row>
+            <Row>|        \\  /  |</Row>
+            <Row>| 4       \\/   |</Row>
+            <Row>\\______________/</Row>
+        </Grid>
     </Card>
     <Card>
         <Suite>Hearts</Suite>
         <Rank>Ten</Rank>
+        <Grid>
+            <Row>/‾‾‾‾‾‾‾‾‾‾‾‾‾‾\\</Row>
+            <Row>|  _  _      4 |</Row>
+            <Row>| ( \\/ )       |</Row>
+            <Row>|  \\  /        |</Row>
+            <Row>|   \\/         |</Row>
+            <Row>|______________|</Row>
+            <Row>|        Rosu  |</Row>
+            <Row>|        _  _  |</Row>
+            <Row>|       ( \\/ ) |</Row>
+            <Row>|        \\  /  |</Row>
+            <Row>| 4       \\/   |</Row>
+            <Row>\\______________/</Row>
+        </Grid>
     </Card>
     <Card>
         <Suite>Hearts</Suite>
         <Rank>Ace</Rank>
+        <Grid>
+            <Row>/‾‾‾‾‾‾‾‾‾‾‾‾‾‾\\</Row>
+            <Row>|  _  _      4 |</Row>
+            <Row>| ( \\/ )       |</Row>
+            <Row>|  \\  /        |</Row>
+            <Row>|   \\/         |</Row>
+            <Row>|______________|</Row>
+            <Row>|        Rosu  |</Row>
+            <Row>|        _  _  |</Row>
+            <Row>|       ( \\/ ) |</Row>
+            <Row>|        \\  /  |</Row>
+            <Row>| 4       \\/   |</Row>
+            <Row>\\______________/</Row>
+        </Grid>
     </Card>
     <Card>
         <Suite>Diamonds</Suite>
         <Rank>Two</Rank>
+        <Grid>
+            <Row>/‾‾‾‾‾‾‾‾‾‾‾‾‾‾\\</Row>
+            <Row>|  _  _      4 |</Row>
+            <Row>| ( \\/ )       |</Row>
+            <Row>|  \\  /        |</Row>
+            <Row>|   \\/         |</Row>
+            <Row>|______________|</Row>
+            <Row>|        Rosu  |</Row>
+            <Row>|        _  _  |</Row>
+            <Row>|       ( \\/ ) |</Row>
+            <Row>|        \\  /  |</Row>
+            <Row>| 4       \\/   |</Row>
+            <Row>\\______________/</Row>
+        </Grid>
     </Card>
     <Card>
         <Suite>Diamonds</Suite>
         <Rank>Three</Rank>
+        <Grid>
+            <Row>/‾‾‾‾‾‾‾‾‾‾‾‾‾‾\\</Row>
+            <Row>|  _  _      4 |</Row>
+            <Row>| ( \\/ )       |</Row>
+            <Row>|  \\  /        |</Row>
+            <Row>|   \\/         |</Row>
+            <Row>|______________|</Row>
+            <Row>|        Rosu  |</Row>
+            <Row>|        _  _  |</Row>
+            <Row>|       ( \\/ ) |</Row>
+            <Row>|        \\  /  |</Row>
+            <Row>| 4       \\/   |</Row>
+            <Row>\\______________/</Row>
+        </Grid>
     </Card>
     <Card>
         <Suite>Diamonds</Suite>
         <Rank>Four</Rank>
+        <Grid>
+            <Row>/‾‾‾‾‾‾‾‾‾‾‾‾‾‾\\</Row>
+            <Row>|  _  _      4 |</Row>
+            <Row>| ( \\/ )       |</Row>
+            <Row>|  \\  /        |</Row>
+            <Row>|   \\/         |</Row>
+            <Row>|______________|</Row>
+            <Row>|        Rosu  |</Row>
+            <Row>|        _  _  |</Row>
+            <Row>|       ( \\/ ) |</Row>
+            <Row>|        \\  /  |</Row>
+            <Row>| 4       \\/   |</Row>
+            <Row>\\______________/</Row>
+        </Grid>
     </Card>
     <Card>
         <Suite>Diamonds</Suite>
         <Rank>Ten</Rank>
+        <Grid>
+            <Row>/‾‾‾‾‾‾‾‾‾‾‾‾‾‾\\</Row>
+            <Row>|  _  _      4 |</Row>
+            <Row>| ( \\/ )       |</Row>
+            <Row>|  \\  /        |</Row>
+            <Row>|   \\/         |</Row>
+            <Row>|______________|</Row>
+            <Row>|        Rosu  |</Row>
+            <Row>|        _  _  |</Row>
+            <Row>|       ( \\/ ) |</Row>
+            <Row>|        \\  /  |</Row>
+            <Row>| 4       \\/   |</Row>
+            <Row>\\______________/</Row>
+        </Grid>
     </Card>
     <Card>
         <Suite>Diamonds</Suite>
         <Rank>Ace</Rank>
+        <Grid>
+            <Row>/‾‾‾‾‾‾‾‾‾‾‾‾‾‾\\</Row>
+            <Row>|  _  _      4 |</Row>
+            <Row>| ( \\/ )       |</Row>
+            <Row>|  \\  /        |</Row>
+            <Row>|   \\/         |</Row>
+            <Row>|______________|</Row>
+            <Row>|        Rosu  |</Row>
+            <Row>|        _  _  |</Row>
+            <Row>|       ( \\/ ) |</Row>
+            <Row>|        \\  /  |</Row>
+            <Row>| 4       \\/   |</Row>
+            <Row>\\______________/</Row>
+        </Grid>
     </Card>
     <Card>
         <Suite>Clubs</Suite>
         <Rank>Two</Rank>
+        <Grid>
+            <Row>/‾‾‾‾‾‾‾‾‾‾‾‾‾‾\\</Row>
+            <Row>|  _  _      4 |</Row>
+            <Row>| ( \\/ )       |</Row>
+            <Row>|  \\  /        |</Row>
+            <Row>|   \\/         |</Row>
+            <Row>|______________|</Row>
+            <Row>|        Rosu  |</Row>
+            <Row>|        _  _  |</Row>
+            <Row>|       ( \\/ ) |</Row>
+            <Row>|        \\  /  |</Row>
+            <Row>| 4       \\/   |</Row>
+            <Row>\\______________/</Row>
+        </Grid>
     </Card>
     <Card>
         <Suite>Clubs</Suite>
         <Rank>Three</Rank>
+        <Grid>
+            <Row>/‾‾‾‾‾‾‾‾‾‾‾‾‾‾\\</Row>
+            <Row>|  _  _      4 |</Row>
+            <Row>| ( \\/ )       |</Row>
+            <Row>|  \\  /        |</Row>
+            <Row>|   \\/         |</Row>
+            <Row>|______________|</Row>
+            <Row>|        Rosu  |</Row>
+            <Row>|        _  _  |</Row>
+            <Row>|       ( \\/ ) |</Row>
+            <Row>|        \\  /  |</Row>
+            <Row>| 4       \\/   |</Row>
+            <Row>\\______________/</Row>
+        </Grid>
     </Card>
     <Card>
         <Suite>Clubs</Suite>
         <Rank>Four</Rank>
+        <Grid>
+            <Row>/‾‾‾‾‾‾‾‾‾‾‾‾‾‾\\</Row>
+            <Row>|  _  _      4 |</Row>
+            <Row>| ( \\/ )       |</Row>
+            <Row>|  \\  /        |</Row>
+            <Row>|   \\/         |</Row>
+            <Row>|______________|</Row>
+            <Row>|        Rosu  |</Row>
+            <Row>|        _  _  |</Row>
+            <Row>|       ( \\/ ) |</Row>
+            <Row>|        \\  /  |</Row>
+            <Row>| 4       \\/   |</Row>
+            <Row>\\______________/</Row>
+        </Grid>
     </Card>
     <Card>
         <Suite>Clubs</Suite>
         <Rank>Ten</Rank>
+        <Grid>
+            <Row>/‾‾‾‾‾‾‾‾‾‾‾‾‾‾\\</Row>
+            <Row>|  _  _      4 |</Row>
+            <Row>| ( \\/ )       |</Row>
+            <Row>|  \\  /        |</Row>
+            <Row>|   \\/         |</Row>
+            <Row>|______________|</Row>
+            <Row>|        Rosu  |</Row>
+            <Row>|        _  _  |</Row>
+            <Row>|       ( \\/ ) |</Row>
+            <Row>|        \\  /  |</Row>
+            <Row>| 4       \\/   |</Row>
+            <Row>\\______________/</Row>
+        </Grid>
     </Card>
     <Card>
         <Suite>Clubs</Suite>
         <Rank>Ace</Rank>
+        <Grid>
+            <Row>/‾‾‾‾‾‾‾‾‾‾‾‾‾‾\\</Row>
+            <Row>|  _  _      4 |</Row>
+            <Row>| ( \\/ )       |</Row>
+            <Row>|  \\  /        |</Row>
+            <Row>|   \\/         |</Row>
+            <Row>|______________|</Row>
+            <Row>|        Rosu  |</Row>
+            <Row>|        _  _  |</Row>
+            <Row>|       ( \\/ ) |</Row>
+            <Row>|        \\  /  |</Row>
+            <Row>| 4       \\/   |</Row>
+            <Row>\\______________/</Row>
+        </Grid>
     </Card>
 </Deck>

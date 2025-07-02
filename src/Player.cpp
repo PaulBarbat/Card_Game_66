@@ -1,31 +1,33 @@
 #include "Player.hpp"
 
-Player::Player(PlayerType type, std::function<void()> endGameCallback, std::string name) 
+Player::Player(PlayerType type, std::function<void()> endGameCallback, std::function<void(bool isFirst,Hand& hand)> renderCallback, std::string name) 
     : type(type), 
     score(0), 
     roundsWon(0),
     latentPoints(0), 
     hand{},
-    endGameCallback(endGameCallback), 
+    endGameCallback(endGameCallback),
+    renderCallback(renderCallback), 
     hasClosedTheCard(false),
     name(name) {}
 
 std::shared_ptr<ICard> Player::playHand(Deck& deck, bool isFirst){
-    std::cout<<"Tromf is "<<deck.getTromf()->toString()<<std::endl;
-    std::cout<<"it is "<<this->name<<"'s turn"<<std::endl<<std::endl;
+    // std::cout<<"Tromf is "<<deck.getTromf()->toString()<<std::endl;
+    // std::cout<<"it is "<<this->name<<"'s turn"<<std::endl<<std::endl;
     for(Hand::iterator i = this->hand.begin(); i!= this->hand.end(); ++i)
         i->second.clear();
     if(isFirst)
         this->calculateOptions(deck);
-    this->renderOptions(this->hand);
-    if(isFirst)    {
-        std::cout<<hand.size()+1<<" That is enough for me(close the round)"<<std::endl;
-        std::cout<<hand.size()+2<<" Close the card "<<std::endl;
-    }
+    // this->renderOptions(this->hand);
+    // if(isFirst)    {
+    //     std::cout<<hand.size()+1<<" That is enough for me(close the round)"<<std::endl;
+    //     std::cout<<hand.size()+2<<" Close the card "<<std::endl;
+    // }
     size_t option = 0;
     while(true)
     {
-        std::cout<<"Select a card:"<<std::endl;
+        // std::cout<<"Select a card:"<<std::endl;
+        renderCallback(true, hand);
         std::cin>>option;
         if(std::cin.fail()) {
             std::cin.clear(); // clear error
@@ -100,7 +102,7 @@ std::shared_ptr<ICard> Player::playFilteredHand(Deck& deck, bool isFirst, const 
         size_t option = 0;
         while(true)
         {
-            std::cout<<"Select a card:"<<std::endl;
+            renderCallback(isFirst, filteredHand);
             std::cin>>option;
             if(std::cin.fail()) {
                 std::cin.clear(); // clear error
@@ -165,7 +167,7 @@ void Player::calculateOptions(Deck& deck){
                             }
                     });
                     i->second.push_back({
-                        "40 and finish",
+                        "40 END",
                         "Call 40 and end the round",
                         [this](unsigned position){
                             if(this->score>0)
@@ -204,7 +206,7 @@ void Player::calculateOptions(Deck& deck){
                             }
                     });
                     i->second.push_back({
-                        "20 and finish",
+                        "20 END",
                         "Call 20 and end the round",
                         [this](unsigned position){
                             if(this->score>0)
@@ -285,7 +287,6 @@ void Player::addScore(const unsigned &points)
     this->score+=points;
     this->score+=this->latentPoints;
     this->latentPoints=0;
-    std::cout<<"Your score is now "<<this->score<<std::endl;
 }
 
 void Player::changeTromf(std::shared_ptr<ICard> card, Deck& deck){
@@ -297,6 +298,7 @@ void Player::changeTromf(std::shared_ptr<ICard> card, Deck& deck){
     auto handCopy = card->clone();
     card->changeCard(*copy);
     copy->changeCard(*handCopy);
+    renderCallback(true,hand);
 }
 
 size_t Player::getCurrentHandSize()const{

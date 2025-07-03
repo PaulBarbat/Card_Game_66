@@ -22,6 +22,7 @@ public:
     std::shared_ptr<ICard> getTromf() const;
     void changeTromf(ICard& card);
     void showFirstCard()const;
+    uint32_t cardsLeft() const;
 };
 
 #endif

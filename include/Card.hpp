@@ -12,16 +12,20 @@ private:
     SuiteType suite;
     RankType rank;
     unsigned points;
+    std::vector<std::string> displayGrid;
 
     template <typename S, typename R>
     friend class Card;
 public:
     Card()=delete;
 
-    Card(SuiteType suite, RankType rank, unsigned points): suite(suite), rank(rank), points(points){}
+    Card(SuiteType suite, RankType rank, unsigned points, std::vector<std::string> grid): suite(suite), rank(rank), points(points), displayGrid(grid){}
 
     std::string toString() const override {
         return rankToString(rank)+suiteToString(suite);
+    }
+    std::string toString(int row) const override {
+        return displayGrid.at(row);
     }
 
     bool compareSuite(const ICard& card)const{
@@ -50,6 +54,7 @@ public:
         this->suite = other->suite;
         this->rank = other->rank;
         this->points = other->points;
+        this->displayGrid = other->displayGrid;
     }
 
     std::shared_ptr<ICard> clone() const {

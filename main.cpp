@@ -1,6 +1,9 @@
 #include "Game.hpp"
 
 int main(){
+    std::cout<<"Welcome to CardGame66"<<std::endl;
+    std::cout<<"Once you press any key the game will start"<<std::endl;
+    std::cin.get();
     Game game;
     game.run();
 

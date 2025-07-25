@@ -4,9 +4,17 @@ project(Card_Game_66)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+#find packages for SDL2
+find_package(SDL2 REQUIRED)
+find_package(SDL2_image REQUIRED)
+find_package(SDL2_ttf REQUIRED)
+
 # Include directories
 include_directories(include)
 include_directories(external/tinyxml2)
+include_directories(${SDL2_INCLUDE_DIRS} ${SDL2_IMAGE_INCLUDE_DIRS} ${SDL2_TTF_INCLUDE_DIRS})
+
+set(CMAKE_TOOLCHAIN_FILE "path/to/vcpkg/scripts/buildsystems/vcpkg.cmake" CACHE STRING "")
 
 # Read version from Version.txt
 file(READ "${CMAKE_SOURCE_DIR}/Version.txt" VERSION_STRING)
@@ -23,6 +31,7 @@ if(WIN32)
 else()
     set(EXECUTABLE_NAME "Card_Game_66-${VERSION_STRING}-${PLATFORM_NAME}")
 endif()
+
 
 # Add the executable
 add_executable(${EXECUTABLE_NAME}

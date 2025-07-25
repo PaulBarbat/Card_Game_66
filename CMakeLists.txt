@@ -4,36 +4,37 @@ project(Card_Game_66)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-#find packages for SDL2
-find_package(SDL2 REQUIRED)
-find_package(SDL2_image REQUIRED)
-find_package(SDL2_ttf REQUIRED)
-
-# Include directories
-include_directories(include)
-include_directories(external/tinyxml2)
-include_directories(${SDL2_INCLUDE_DIRS} ${SDL2_IMAGE_INCLUDE_DIRS} ${SDL2_TTF_INCLUDE_DIRS})
-
-set(CMAKE_TOOLCHAIN_FILE "path/to/vcpkg/scripts/buildsystems/vcpkg.cmake" CACHE STRING "")
+# Determine platform name (Linux/Windows)
+if(NOT DEFINED PLATFORM_NAME)
+    if(WIN32)
+        set(PLATFORM_NAME "Windows")
+    elseif(UNIX)
+        set(PLATFORM_NAME "Linux")
+    else()
+        set(PLATFORM_NAME "Unknown")
+    endif()
+endif()
 
 # Read version from Version.txt
 file(READ "${CMAKE_SOURCE_DIR}/Version.txt" VERSION_STRING)
 string(STRIP "${VERSION_STRING}" VERSION_STRING)
 
-# Platform name passed from command line
-if(NOT DEFINED PLATFORM_NAME)
-    set(PLATFORM_NAME "unknown")
-endif()
+# Executable name
+set(EXECUTABLE_NAME "Card_Game_66-${VERSION_STRING}-${PLATFORM_NAME}")
 
-# Set executable name
-if(WIN32)
-    set(EXECUTABLE_NAME "Card_Game_66-${VERSION_STRING}-${PLATFORM_NAME}")
-else()
-    set(EXECUTABLE_NAME "Card_Game_66-${VERSION_STRING}-${PLATFORM_NAME}")
-endif()
+# TinyXML include
+include_directories(include external/tinyxml2)
 
+# SDL2 includes for both Linux and Windows
+find_package(SDL2 REQUIRED)
+find_package(SDL2_image REQUIRED)
+find_package(SDL2_ttf REQUIRED)
 
-# Add the executable
+include_directories(${SDL2_INCLUDE_DIRS})
+include_directories(${SDL2_IMAGE_INCLUDE_DIRS})
+include_directories(${SDL2_TTF_INCLUDE_DIRS})
+
+# Main game executable
 add_executable(${EXECUTABLE_NAME}
     main.cpp
     src/CardFactory.cpp
@@ -46,6 +47,13 @@ add_executable(${EXECUTABLE_NAME}
     src/CalculateHandPointsState.cpp
     src/GameOverState.cpp
     external/tinyxml2/tinyxml2.cpp)
+
+# Viewer tool (optional)
+add_executable(Card_Viewer CardViewer.cpp)
+
+# Link libraries
+target_link_libraries(${EXECUTABLE_NAME} SDL2 SDL2_image SDL2_ttf)
+target_link_libraries(Card_Viewer SDL2 SDL2_image SDL2_ttf)
 
 # Compiler warnings
 target_compile_options(${EXECUTABLE_NAME} PRIVATE -Wall -Wextra -Wpedantic)

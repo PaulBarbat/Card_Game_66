@@ -53,9 +53,20 @@ add_executable(Card_Viewer CardViewer.cpp)
 
 # --- Platform-specific linking ---
 if(PLATFORM_NAME STREQUAL "Windows")
+    # Use include/link directories defined by toolchain file
+    include_directories(
+        ${SDL2_PATH}/include/SDL2
+        ${SDL2_IMAGE_PATH}/include/SDL2
+        ${SDL2_TTF_PATH}/include/SDL2
+    )
+    link_directories(
+        ${SDL2_PATH}/lib
+        ${SDL2_IMAGE_PATH}/lib
+        ${SDL2_TTF_PATH}/lib
+    )
+
     target_link_libraries(${EXECUTABLE_NAME} mingw32 SDL2main SDL2 SDL2_image SDL2_ttf)
     target_link_libraries(Card_Viewer mingw32 SDL2main SDL2 SDL2_image SDL2_ttf)
-
     # --- Only copy DLLs if building natively on Windows ---
     if(CMAKE_HOST_SYSTEM_NAME STREQUAL "Windows")
         file(GLOB_RECURSE SDL2_DLLS

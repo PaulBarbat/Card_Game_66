@@ -56,13 +56,18 @@ if(PLATFORM_NAME STREQUAL "Windows")
     target_link_libraries(${EXECUTABLE_NAME} mingw32 SDL2main SDL2 SDL2_image SDL2_ttf)
     target_link_libraries(Card_Viewer mingw32 SDL2main SDL2 SDL2_image SDL2_ttf)
 
-    # Copy SDL2 DLLs after build
+    # DLL copy logic: adjust to actual external structure
+    get_filename_component(SOURCE_DIR "${CMAKE_SOURCE_DIR}" ABSOLUTE)
+    set(SDL2_DLL_DIR         "${SOURCE_DIR}/external/SDL2-devel-2.32.8-mingw/SDL2-2.32.8/x86_64-w64-mingw32/bin")
+    set(SDL2_IMAGE_DLL_DIR   "${SOURCE_DIR}/external/SDL2_image-devel-2.8.8-mingw/SDL2_image-2.8.8/x86_64-w64-mingw32/bin")
+    set(SDL2_TTF_DLL_DIR     "${SOURCE_DIR}/external/SDL2_ttf-devel-2.24.0-mingw/SDL2_ttf-2.24.0/x86_64-w64-mingw32/bin")
+
     foreach(TARGET_NAME IN ITEMS ${EXECUTABLE_NAME} Card_Viewer)
         add_custom_command(TARGET ${TARGET_NAME} POST_BUILD
             COMMAND ${CMAKE_COMMAND} -E copy_if_different
-                ${SDL2_ROOT}/SDL2/x86_64-w64-mingw32/bin/SDL2.dll
-                ${SDL2_ROOT}/SDL2_image/x86_64-w64-mingw32/bin/SDL2_image.dll
-                ${SDL2_ROOT}/SDL2_ttf/x86_64-w64-mingw32/bin/SDL2_ttf.dll
+                ${SDL2_DLL_DIR}/SDL2.dll
+                ${SDL2_IMAGE_DLL_DIR}/SDL2_image.dll
+                ${SDL2_TTF_DLL_DIR}/SDL2_ttf.dll
                 $<TARGET_FILE_DIR:${TARGET_NAME}>
         )
     endforeach()

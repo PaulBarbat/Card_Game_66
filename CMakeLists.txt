@@ -20,7 +20,7 @@ file(READ "${CMAKE_SOURCE_DIR}/Version.txt" VERSION_STRING)
 string(STRIP "${VERSION_STRING}" VERSION_STRING)
 set(EXECUTABLE_NAME "Card_Game_66-${VERSION_STRING}-${PLATFORM_NAME}")
 
-# --- Include paths ---
+# --- Common includes ---
 include_directories(include external/tinyxml2)
 
 # --- Linux configuration ---
@@ -29,9 +29,6 @@ if(PLATFORM_NAME STREQUAL "Linux")
     pkg_check_modules(SDL2 REQUIRED sdl2)
     pkg_check_modules(SDL2_IMAGE REQUIRED SDL2_image)
     pkg_check_modules(SDL2_TTF REQUIRED SDL2_ttf)
-
-    include_directories(${SDL2_INCLUDE_DIRS} ${SDL2_IMAGE_INCLUDE_DIRS} ${SDL2_TTF_INCLUDE_DIRS})
-    link_libraries(${SDL2_LIBRARIES} ${SDL2_IMAGE_LIBRARIES} ${SDL2_TTF_LIBRARIES})
 endif()
 
 # --- Add Executables ---
@@ -51,22 +48,28 @@ add_executable(${EXECUTABLE_NAME}
 
 add_executable(Card_Viewer CardViewer.cpp)
 
-# --- Platform-specific linking ---
+# --- Platform-specific configuration ---
 if(PLATFORM_NAME STREQUAL "Windows")
-    # Use include/link directories defined by toolchain file
-    include_directories(
+    # Set SDL2 paths and libraries for Windows builds
+    set(WINDOWS_SDL2_INCLUDES
         ${SDL2_PATH}/include/SDL2
         ${SDL2_IMAGE_PATH}/include/SDL2
         ${SDL2_TTF_PATH}/include/SDL2
     )
+    set(WINDOWS_SDL2_LIBS mingw32 SDL2main SDL2 SDL2_image SDL2_ttf)
+
+    target_include_directories(${EXECUTABLE_NAME} PRIVATE ${WINDOWS_SDL2_INCLUDES})
+    target_include_directories(Card_Viewer PRIVATE ${WINDOWS_SDL2_INCLUDES})
+
+    target_link_libraries(${EXECUTABLE_NAME} ${WINDOWS_SDL2_LIBS})
+    target_link_libraries(Card_Viewer ${WINDOWS_SDL2_LIBS})
+
     link_directories(
         ${SDL2_PATH}/lib
         ${SDL2_IMAGE_PATH}/lib
         ${SDL2_TTF_PATH}/lib
     )
 
-    target_link_libraries(${EXECUTABLE_NAME} mingw32 SDL2main SDL2 SDL2_image SDL2_ttf)
-    target_link_libraries(Card_Viewer mingw32 SDL2main SDL2 SDL2_image SDL2_ttf)
     # --- Only copy DLLs if building natively on Windows ---
     if(CMAKE_HOST_SYSTEM_NAME STREQUAL "Windows")
         file(GLOB_RECURSE SDL2_DLLS
@@ -90,8 +93,18 @@ if(PLATFORM_NAME STREQUAL "Windows")
         endforeach()
     endif()
 else()  # Linux
-    target_link_libraries(${EXECUTABLE_NAME} SDL2 SDL2_image SDL2_ttf)
-    target_link_libraries(Card_Viewer SDL2 SDL2_image SDL2_ttf)
+    include_directories(${SDL2_INCLUDE_DIRS} ${SDL2_IMAGE_INCLUDE_DIRS} ${SDL2_TTF_INCLUDE_DIRS})
+
+    target_link_libraries(${EXECUTABLE_NAME}
+        ${SDL2_LIBRARIES}
+        ${SDL2_IMAGE_LIBRARIES}
+        ${SDL2_TTF_LIBRARIES}
+    )
+    target_link_libraries(Card_Viewer
+        ${SDL2_LIBRARIES}
+        ${SDL2_IMAGE_LIBRARIES}
+        ${SDL2_TTF_LIBRARIES}
+    )
 endif()
 
 # --- Compiler warnings ---

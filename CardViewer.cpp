@@ -6,7 +6,7 @@
 #include <string>
 
 int main(){
-    const std::string image_path = "resources/cards/acorn-ace.png"
+    const std::string imagePath = "resources/cards/acorn-ace.png";
 
     //initialize SDL2 core video system
     if(SDL_Init(SDL_INIT_VIDEO) !=0){
@@ -53,7 +53,7 @@ int main(){
     }
 
     //Load the PNG card image into an SDL surface
-    SDL_Surface* surface = IMG_Load(image_path.c_str());
+    SDL_Surface* surface = IMG_Load(imagePath.c_str());
 
     if(!surface){
         std::cerr << "Image Load Error: " << IMG_GetError() << "\n";
@@ -61,10 +61,10 @@ int main(){
     }
 
     //Convert the surface to a GPU-optimized texture
-    SDL_Texture* card_texture = SDL_CreateTextureFromSurface(renderer, surface);
+    SDL_Texture* cardTexture = SDL_CreateTextureFromSurface(renderer, surface);
     SDL_FreeSurface(surface); //No longer needed after creating the texture
 
-    if(!card_texture){
+    if(!cardTexture){
         std::cerr<< "Texture Creation Error: "<< SDL_GetError() <<"\n";
         return 1;
     }
@@ -91,7 +91,7 @@ int main(){
     //Main event loop
     while(running){
         //Handle all pending events
-        while(SDL_PoolEvent(&e)) {
+        while(SDL_PollEvent(&e)) {
             if(e.type == SDL_QUIT){
                 running = false;
             }

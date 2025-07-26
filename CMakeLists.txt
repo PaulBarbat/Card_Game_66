@@ -56,26 +56,28 @@ if(PLATFORM_NAME STREQUAL "Windows")
     target_link_libraries(${EXECUTABLE_NAME} mingw32 SDL2main SDL2 SDL2_image SDL2_ttf)
     target_link_libraries(Card_Viewer mingw32 SDL2main SDL2 SDL2_image SDL2_ttf)
 
-    # Automatically locate DLLs and copy after build
-    file(GLOB_RECURSE SDL2_DLLS
-        "${CMAKE_SOURCE_DIR}/external/*/x86_64-w64-mingw32/bin/SDL2.dll"
-        "${CMAKE_SOURCE_DIR}/external/*/x86_64-w64-mingw32/bin/SDL2_image.dll"
-        "${CMAKE_SOURCE_DIR}/external/*/x86_64-w64-mingw32/bin/SDL2_ttf.dll"
-    )
+    # --- Only copy DLLs if building natively on Windows ---
+    if(CMAKE_HOST_SYSTEM_NAME STREQUAL "Windows")
+        file(GLOB_RECURSE SDL2_DLLS
+            "${CMAKE_SOURCE_DIR}/external/*/x86_64-w64-mingw32/bin/SDL2.dll"
+            "${CMAKE_SOURCE_DIR}/external/*/x86_64-w64-mingw32/bin/SDL2_image.dll"
+            "${CMAKE_SOURCE_DIR}/external/*/x86_64-w64-mingw32/bin/SDL2_ttf.dll"
+        )
 
-    if(NOT SDL2_DLLS)
-        message(FATAL_ERROR "Could not find required SDL2 DLLs under external/.")
-    endif()
+        if(NOT SDL2_DLLS)
+            message(FATAL_ERROR "Could not find required SDL2 DLLs under external/.")
+        endif()
 
-    foreach(TARGET_NAME IN ITEMS ${EXECUTABLE_NAME} Card_Viewer)
-        foreach(DLL_PATH IN LISTS SDL2_DLLS)
-            add_custom_command(TARGET ${TARGET_NAME} POST_BUILD
-                COMMAND ${CMAKE_COMMAND} -E copy_if_different
-                    "${DLL_PATH}"
-                    $<TARGET_FILE_DIR:${TARGET_NAME}>
-            )
+        foreach(TARGET_NAME IN ITEMS ${EXECUTABLE_NAME} Card_Viewer)
+            foreach(DLL_PATH IN LISTS SDL2_DLLS)
+                add_custom_command(TARGET ${TARGET_NAME} POST_BUILD
+                    COMMAND ${CMAKE_COMMAND} -E copy_if_different
+                        "${DLL_PATH}"
+                        $<TARGET_FILE_DIR:${TARGET_NAME}>
+                )
+            endforeach()
         endforeach()
-    endforeach()
+    endif()
 else()  # Linux
     target_link_libraries(${EXECUTABLE_NAME} SDL2 SDL2_image SDL2_ttf)
     target_link_libraries(Card_Viewer SDL2 SDL2_image SDL2_ttf)

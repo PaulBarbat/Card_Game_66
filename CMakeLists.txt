@@ -149,3 +149,16 @@ target_compile_options(${EXECUTABLE_NAME} PRIVATE -Wall -Wextra -Wpedantic)
 
 # --- Install target (optional) ---
 install(TARGETS ${EXECUTABLE_NAME} DESTINATION bin)
+
+if(WIN32 OR CMAKE_SYSTEM_NAME STREQUAL "Windows")
+    set(SDL2_DLL "${CMAKE_SOURCE_DIR}/external/SDL2-devel-2.32.8-mingw/SDL2-2.32.8/x86_64-w64-mingw32/bin/SDL2.dll")
+    set(SDL2_IMAGE_DLL "${CMAKE_SOURCE_DIR}/external/SDL2_image-devel-2.8.8-mingw/SDL2_image-2.8.8/x86_64-w64-mingw32/bin/SDL2_image.dll")
+    set(SDL2_TTF_DLL "${CMAKE_SOURCE_DIR}/external/SDL2_ttf-devel-2.24.0-mingw/SDL2_ttf-2.24.0/x86_64-w64-mingw32/bin/SDL2_ttf.dll")
+
+    add_custom_command(TARGET Card_Viewer POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different ${SDL2_DLL} $<TARGET_FILE_DIR:Card_Viewer>
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different ${SDL2_IMAGE_DLL} $<TARGET_FILE_DIR:Card_Viewer>
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different ${SDL2_TTF_DLL} $<TARGET_FILE_DIR:Card_Viewer>
+        COMMENT "Copying SDL2 DLLs for Windows target"
+    )
+endif()

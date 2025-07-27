@@ -61,9 +61,9 @@ elseif(CMAKE_HOST_SYSTEM_NAME STREQUAL "Linux" AND CMAKE_SYSTEM_NAME STREQUAL "W
     endforeach()
 
     set(SDL2_INCLUDE_DIRS
-        ${SDL2_PATH}/include
-        ${SDL2_IMAGE_PATH}/include
-        ${SDL2_TTF_PATH}/include
+        ${SDL2_PATH}/include/SDL2
+        ${SDL2_IMAGE_PATH}/include/SDL2
+        ${SDL2_TTF_PATH}/include/SDL2
     )
     set(SDL2_LIBRARY_DIRS
         ${SDL2_PATH}/lib
@@ -93,9 +93,9 @@ elseif(CMAKE_HOST_SYSTEM_NAME STREQUAL "Windows" AND CMAKE_SYSTEM_NAME STREQUAL 
     endforeach()
 
     set(SDL2_INCLUDE_DIRS
-        ${SDL2_PATH}/include
-        ${SDL2_IMAGE_PATH}/include
-        ${SDL2_TTF_PATH}/include
+        ${SDL2_PATH}/include/SDL2
+        ${SDL2_IMAGE_PATH}/include/SDL2
+        ${SDL2_TTF_PATH}/include/SDL2
     )
     set(SDL2_LIBRARY_DIRS
         ${SDL2_PATH}/lib

@@ -56,25 +56,36 @@ if(PLATFORM_NAME STREQUAL "Windows")
         set(SDL2_IMAGE_PATH "${CMAKE_SOURCE_DIR}/external/SDL2_image-devel-2.8.8-mingw/SDL2_image-2.8.8/x86_64-w64-mingw32")
         set(SDL2_TTF_PATH "${CMAKE_SOURCE_DIR}/external/SDL2_ttf-devel-2.24.0-mingw/SDL2_ttf-2.24.0/x86_64-w64-mingw32")
     endif()
-    # Set SDL2 paths and libraries for Windows builds
-    set(WINDOWS_SDL2_INCLUDES
+
+    # Include and link directories (must be here, not in toolchain file)
+    include_directories(
         ${SDL2_PATH}/include/SDL2
         ${SDL2_IMAGE_PATH}/include/SDL2
         ${SDL2_TTF_PATH}/include/SDL2
     )
-    set(WINDOWS_SDL2_LIBS mingw32 SDL2main SDL2 SDL2_image SDL2_ttf)
-
-    target_include_directories(${EXECUTABLE_NAME} PRIVATE ${WINDOWS_SDL2_INCLUDES})
-    target_include_directories(Card_Viewer PRIVATE ${WINDOWS_SDL2_INCLUDES})
-
-    target_link_libraries(${EXECUTABLE_NAME} ${WINDOWS_SDL2_LIBS})
-    target_link_libraries(Card_Viewer ${WINDOWS_SDL2_LIBS})
 
     link_directories(
         ${SDL2_PATH}/lib
         ${SDL2_IMAGE_PATH}/lib
         ${SDL2_TTF_PATH}/lib
     )
+
+    # Link libraries
+    set(WINDOWS_SDL2_LIBS mingw32 SDL2main SDL2 SDL2_image SDL2_ttf)
+
+    target_include_directories(${EXECUTABLE_NAME} PRIVATE
+        ${SDL2_PATH}/include/SDL2
+        ${SDL2_IMAGE_PATH}/include/SDL2
+        ${SDL2_TTF_PATH}/include/SDL2
+    )
+    target_include_directories(Card_Viewer PRIVATE
+        ${SDL2_PATH}/include/SDL2
+        ${SDL2_IMAGE_PATH}/include/SDL2
+        ${SDL2_TTF_PATH}/include/SDL2
+    )
+
+    target_link_libraries(${EXECUTABLE_NAME} ${WINDOWS_SDL2_LIBS})
+    target_link_libraries(Card_Viewer ${WINDOWS_SDL2_LIBS})
 
     # --- Only copy DLLs if building natively on Windows ---
     if(CMAKE_HOST_SYSTEM_NAME STREQUAL "Windows")
@@ -98,6 +109,7 @@ if(PLATFORM_NAME STREQUAL "Windows")
             endforeach()
         endforeach()
     endif()
+
 else()  # Linux
     include_directories(${SDL2_INCLUDE_DIRS} ${SDL2_IMAGE_INCLUDE_DIRS} ${SDL2_TTF_INCLUDE_DIRS})
 

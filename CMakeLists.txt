@@ -29,10 +29,22 @@ if(PLATFORM_NAME STREQUAL "Linux")
     pkg_check_modules(SDL2 REQUIRED sdl2)
     pkg_check_modules(SDL2_IMAGE REQUIRED SDL2_image)
     pkg_check_modules(SDL2_TTF REQUIRED SDL2_ttf)
+
+    include_directories(
+        ${SDL2_INCLUDE_DIRS}
+        ${SDL2_IMAGE_INCLUDE_DIRS}
+        ${SDL2_TTF_INCLUDE_DIRS}
+    )
+
+    link_libraries(
+        ${SDL2_LIBRARIES}
+        ${SDL2_IMAGE_LIBRARIES}
+        ${SDL2_TTF_LIBRARIES}
+    )
 endif()
 
-# --- Add Executables ---
-add_executable(${EXECUTABLE_NAME}
+# --- Source files ---
+set(SOURCES
     main.cpp
     src/CardFactory.cpp
     src/Deck.cpp
@@ -46,22 +58,24 @@ add_executable(${EXECUTABLE_NAME}
     external/tinyxml2/tinyxml2.cpp
 )
 
+# --- Add executables ---
+add_executable(${EXECUTABLE_NAME} ${SOURCES})
 add_executable(Card_Viewer CardViewer.cpp)
 
-# --- Platform-specific configuration ---
+# --- Windows configuration ---
 if(PLATFORM_NAME STREQUAL "Windows")
-    # Fallback: define SDL2 paths if not already defined (e.g. from toolchain)
+    # Use these paths defined by toolchain or fallback
     if(NOT DEFINED SDL2_PATH)
         set(SDL2_PATH "${CMAKE_SOURCE_DIR}/external/SDL2-devel-2.32.8-mingw/SDL2-2.32.8/x86_64-w64-mingw32")
         set(SDL2_IMAGE_PATH "${CMAKE_SOURCE_DIR}/external/SDL2_image-devel-2.8.8-mingw/SDL2_image-2.8.8/x86_64-w64-mingw32")
         set(SDL2_TTF_PATH "${CMAKE_SOURCE_DIR}/external/SDL2_ttf-devel-2.24.0-mingw/SDL2_ttf-2.24.0/x86_64-w64-mingw32")
     endif()
 
-    # Include and link directories (must be here, not in toolchain file)
+    # --- Include and lib directories ---
     include_directories(
-        ${SDL2_PATH}/include/SDL2
-        ${SDL2_IMAGE_PATH}/include/SDL2
-        ${SDL2_TTF_PATH}/include/SDL2
+        ${SDL2_PATH}/include
+        ${SDL2_IMAGE_PATH}/include
+        ${SDL2_TTF_PATH}/include
     )
 
     link_directories(
@@ -70,34 +84,25 @@ if(PLATFORM_NAME STREQUAL "Windows")
         ${SDL2_TTF_PATH}/lib
     )
 
-    # Link libraries
-    set(WINDOWS_SDL2_LIBS mingw32 SDL2main SDL2 SDL2_image SDL2_ttf)
-
-    target_include_directories(${EXECUTABLE_NAME} PRIVATE
-        ${SDL2_PATH}/include/SDL2
-        ${SDL2_IMAGE_PATH}/include/SDL2
-        ${SDL2_TTF_PATH}/include/SDL2
-    )
-    target_include_directories(Card_Viewer PRIVATE
-        ${SDL2_PATH}/include/SDL2
-        ${SDL2_IMAGE_PATH}/include/SDL2
-        ${SDL2_TTF_PATH}/include/SDL2
+    # --- Link with SDL2 static libraries ---
+    set(WINDOWS_SDL2_LIBS
+        mingw32
+        SDL2main
+        SDL2
+        SDL2_image
+        SDL2_ttf
     )
 
     target_link_libraries(${EXECUTABLE_NAME} ${WINDOWS_SDL2_LIBS})
     target_link_libraries(Card_Viewer ${WINDOWS_SDL2_LIBS})
 
-    # --- Only copy DLLs if building natively on Windows ---
+    # --- Copy DLLs only when building on native Windows host ---
     if(CMAKE_HOST_SYSTEM_NAME STREQUAL "Windows")
         file(GLOB_RECURSE SDL2_DLLS
             "${CMAKE_SOURCE_DIR}/external/*/x86_64-w64-mingw32/bin/SDL2.dll"
             "${CMAKE_SOURCE_DIR}/external/*/x86_64-w64-mingw32/bin/SDL2_image.dll"
             "${CMAKE_SOURCE_DIR}/external/*/x86_64-w64-mingw32/bin/SDL2_ttf.dll"
         )
-
-        if(NOT SDL2_DLLS)
-            message(FATAL_ERROR "Could not find required SDL2 DLLs under external/.")
-        endif()
 
         foreach(TARGET_NAME IN ITEMS ${EXECUTABLE_NAME} Card_Viewer)
             foreach(DLL_PATH IN LISTS SDL2_DLLS)
@@ -109,24 +114,11 @@ if(PLATFORM_NAME STREQUAL "Windows")
             endforeach()
         endforeach()
     endif()
-
-else()  # Linux
-    include_directories(${SDL2_INCLUDE_DIRS} ${SDL2_IMAGE_INCLUDE_DIRS} ${SDL2_TTF_INCLUDE_DIRS})
-
-    target_link_libraries(${EXECUTABLE_NAME}
-        ${SDL2_LIBRARIES}
-        ${SDL2_IMAGE_LIBRARIES}
-        ${SDL2_TTF_LIBRARIES}
-    )
-    target_link_libraries(Card_Viewer
-        ${SDL2_LIBRARIES}
-        ${SDL2_IMAGE_LIBRARIES}
-        ${SDL2_TTF_LIBRARIES}
-    )
 endif()
 
 # --- Compiler warnings ---
 target_compile_options(${EXECUTABLE_NAME} PRIVATE -Wall -Wextra -Wpedantic)
+target_compile_options(Card_Viewer PRIVATE -Wall -Wextra -Wpedantic)
 
 # --- Install (optional) ---
 install(TARGETS ${EXECUTABLE_NAME} DESTINATION bin)

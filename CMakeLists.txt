@@ -4,47 +4,116 @@ project(Card_Game_66)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-# --- Detect platform name ---
-if(NOT DEFINED PLATFORM_NAME)
-    if(WIN32)
-        set(PLATFORM_NAME "Windows")
-    elseif(UNIX)
-        set(PLATFORM_NAME "Linux")
-    else()
-        set(PLATFORM_NAME "Unknown")
-    endif()
+# --- Read version number safely ---
+if(EXISTS "${CMAKE_SOURCE_DIR}/Version.txt")
+    file(READ "${CMAKE_SOURCE_DIR}/Version.txt" VERSION_STRING)
+    string(STRIP "${VERSION_STRING}" VERSION_STRING)
+else()
+    set(VERSION_STRING "0.0.0")
 endif()
 
-# --- Read version from Version.txt ---
-file(READ "${CMAKE_SOURCE_DIR}/Version.txt" VERSION_STRING)
-string(STRIP "${VERSION_STRING}" VERSION_STRING)
-set(EXECUTABLE_NAME "Card_Game_66-${VERSION_STRING}-${PLATFORM_NAME}")
+set(EXECUTABLE_NAME "Card_Game_66-${VERSION_STRING}")
 
 # --- Common includes ---
-include_directories(include external/tinyxml2)
+set(PROJECT_COMMON_INCLUDES
+    ${CMAKE_SOURCE_DIR}/include
+    ${CMAKE_SOURCE_DIR}/external/tinyxml2
+)
 
-# --- Linux configuration ---
-if(PLATFORM_NAME STREQUAL "Linux")
+# --- Platform detection ---
+message(STATUS "Host platform: ${CMAKE_HOST_SYSTEM_NAME}")
+message(STATUS "Target platform: ${CMAKE_SYSTEM_NAME}")
+message(STATUS "Cross compiling: ${CMAKE_CROSSCOMPILING}")
+
+set(SDL2_INCLUDE_DIRS "")
+set(SDL2_LIBRARY_DIRS "")
+set(SDL2_LIBS "")
+
+# --- Platform-specific SDL2 config ---
+if(CMAKE_HOST_SYSTEM_NAME STREQUAL "Linux" AND CMAKE_SYSTEM_NAME STREQUAL "Linux")
+    # Native Linux build
     find_package(PkgConfig REQUIRED)
     pkg_check_modules(SDL2 REQUIRED sdl2)
     pkg_check_modules(SDL2_IMAGE REQUIRED SDL2_image)
     pkg_check_modules(SDL2_TTF REQUIRED SDL2_ttf)
 
-    include_directories(
+    set(SDL2_INCLUDE_DIRS
         ${SDL2_INCLUDE_DIRS}
         ${SDL2_IMAGE_INCLUDE_DIRS}
         ${SDL2_TTF_INCLUDE_DIRS}
     )
-
-    link_libraries(
+    set(SDL2_LIBS
         ${SDL2_LIBRARIES}
         ${SDL2_IMAGE_LIBRARIES}
         ${SDL2_TTF_LIBRARIES}
     )
+
+elseif(CMAKE_HOST_SYSTEM_NAME STREQUAL "Linux" AND CMAKE_SYSTEM_NAME STREQUAL "Windows")
+    # Cross-compiling on Linux for Windows
+    set(SDL2_PATH        "${CMAKE_SOURCE_DIR}/external/SDL2-devel-2.32.8-mingw/SDL2-2.32.8/x86_64-w64-mingw32")
+    set(SDL2_IMAGE_PATH  "${CMAKE_SOURCE_DIR}/external/SDL2_image-devel-2.8.8-mingw/SDL2_image-2.8.8/x86_64-w64-mingw32")
+    set(SDL2_TTF_PATH    "${CMAKE_SOURCE_DIR}/external/SDL2_ttf-devel-2.24.0-mingw/SDL2_ttf-2.24.0/x86_64-w64-mingw32")
+
+    foreach(path ${SDL2_PATH} ${SDL2_IMAGE_PATH} ${SDL2_TTF_PATH})
+        if(NOT EXISTS "${path}/lib")
+            message(FATAL_ERROR "Missing SDL library directory: ${path}/lib")
+        endif()
+    endforeach()
+
+    set(SDL2_INCLUDE_DIRS
+        ${SDL2_PATH}/include
+        ${SDL2_IMAGE_PATH}/include
+        ${SDL2_TTF_PATH}/include
+    )
+    set(SDL2_LIBRARY_DIRS
+        ${SDL2_PATH}/lib
+        ${SDL2_IMAGE_PATH}/lib
+        ${SDL2_TTF_PATH}/lib
+    )
+    set(SDL2_LIBS
+        -lmingw32
+        -lSDL2main
+        -lSDL2
+        -lSDL2_image
+        -lSDL2_ttf
+        -lkernel32 -luser32 -lgdi32 -lwinspool -lshell32
+        -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32
+    )
+
+elseif(CMAKE_HOST_SYSTEM_NAME STREQUAL "Windows" AND CMAKE_SYSTEM_NAME STREQUAL "Windows")
+    # Native Windows build
+    set(SDL2_PATH        "${CMAKE_SOURCE_DIR}/external/SDL2")
+    set(SDL2_IMAGE_PATH  "${CMAKE_SOURCE_DIR}/external/SDL2_image")
+    set(SDL2_TTF_PATH    "${CMAKE_SOURCE_DIR}/external/SDL2_ttf")
+
+    foreach(path ${SDL2_PATH} ${SDL2_IMAGE_PATH} ${SDL2_TTF_PATH})
+        if(NOT EXISTS "${path}/lib")
+            message(FATAL_ERROR "Missing SDL library directory: ${path}/lib")
+        endif()
+    endforeach()
+
+    set(SDL2_INCLUDE_DIRS
+        ${SDL2_PATH}/include
+        ${SDL2_IMAGE_PATH}/include
+        ${SDL2_TTF_PATH}/include
+    )
+    set(SDL2_LIBRARY_DIRS
+        ${SDL2_PATH}/lib
+        ${SDL2_IMAGE_PATH}/lib
+        ${SDL2_TTF_PATH}/lib
+    )
+    set(SDL2_LIBS
+        SDL2main
+        SDL2
+        SDL2_image
+        SDL2_ttf
+    )
+else()
+    message(FATAL_ERROR "Unsupported host/target platform combination.")
 endif()
 
-# --- Source files ---
-set(SOURCES
+# --- Add Executables ---
+add_executable(${EXECUTABLE_NAME}
     main.cpp
     src/CardFactory.cpp
     src/Deck.cpp
@@ -58,67 +127,25 @@ set(SOURCES
     external/tinyxml2/tinyxml2.cpp
 )
 
-# --- Add executables ---
-add_executable(${EXECUTABLE_NAME} ${SOURCES})
-add_executable(Card_Viewer CardViewer.cpp)
+add_executable(Card_Viewer
+    CardViewer.cpp
+)
 
-# --- Windows configuration ---
-if(PLATFORM_NAME STREQUAL "Windows")
-    # Use these paths defined by toolchain or fallback
-    if(NOT DEFINED SDL2_PATH)
-        set(SDL2_PATH "${CMAKE_SOURCE_DIR}/external/SDL2-devel-2.32.8-mingw/SDL2-2.32.8/x86_64-w64-mingw32")
-        set(SDL2_IMAGE_PATH "${CMAKE_SOURCE_DIR}/external/SDL2_image-devel-2.8.8-mingw/SDL2_image-2.8.8/x86_64-w64-mingw32")
-        set(SDL2_TTF_PATH "${CMAKE_SOURCE_DIR}/external/SDL2_ttf-devel-2.24.0-mingw/SDL2_ttf-2.24.0/x86_64-w64-mingw32")
-    endif()
+# --- Apply include paths ---
+target_include_directories(${EXECUTABLE_NAME} PRIVATE ${PROJECT_COMMON_INCLUDES} ${SDL2_INCLUDE_DIRS})
+target_include_directories(Card_Viewer PRIVATE ${PROJECT_COMMON_INCLUDES} ${SDL2_INCLUDE_DIRS})
 
-    # --- Include and lib directories ---
-    include_directories(
-        ${SDL2_PATH}/include
-        ${SDL2_IMAGE_PATH}/include
-        ${SDL2_TTF_PATH}/include
-    )
-
-    link_directories(
-        ${SDL2_PATH}/lib
-        ${SDL2_IMAGE_PATH}/lib
-        ${SDL2_TTF_PATH}/lib
-    )
-
-    # --- Link with SDL2 static libraries ---
-    set(WINDOWS_SDL2_LIBS
-        mingw32
-        SDL2main
-        SDL2
-        SDL2_image
-        SDL2_ttf
-    )
-
-    target_link_libraries(${EXECUTABLE_NAME} ${WINDOWS_SDL2_LIBS})
-    target_link_libraries(Card_Viewer ${WINDOWS_SDL2_LIBS})
-
-    # --- Copy DLLs only when building on native Windows host ---
-    if(CMAKE_HOST_SYSTEM_NAME STREQUAL "Windows")
-        file(GLOB_RECURSE SDL2_DLLS
-            "${CMAKE_SOURCE_DIR}/external/*/x86_64-w64-mingw32/bin/SDL2.dll"
-            "${CMAKE_SOURCE_DIR}/external/*/x86_64-w64-mingw32/bin/SDL2_image.dll"
-            "${CMAKE_SOURCE_DIR}/external/*/x86_64-w64-mingw32/bin/SDL2_ttf.dll"
-        )
-
-        foreach(TARGET_NAME IN ITEMS ${EXECUTABLE_NAME} Card_Viewer)
-            foreach(DLL_PATH IN LISTS SDL2_DLLS)
-                add_custom_command(TARGET ${TARGET_NAME} POST_BUILD
-                    COMMAND ${CMAKE_COMMAND} -E copy_if_different
-                        "${DLL_PATH}"
-                        $<TARGET_FILE_DIR:${TARGET_NAME}>
-                )
-            endforeach()
-        endforeach()
-    endif()
+# --- Apply library paths and linking ---
+if(SDL2_LIBRARY_DIRS)
+    target_link_directories(${EXECUTABLE_NAME} PRIVATE ${SDL2_LIBRARY_DIRS})
+    target_link_directories(Card_Viewer PRIVATE ${SDL2_LIBRARY_DIRS})
 endif()
+
+target_link_libraries(${EXECUTABLE_NAME} PRIVATE ${SDL2_LIBS})
+target_link_libraries(Card_Viewer PRIVATE ${SDL2_LIBS})
 
 # --- Compiler warnings ---
 target_compile_options(${EXECUTABLE_NAME} PRIVATE -Wall -Wextra -Wpedantic)
-target_compile_options(Card_Viewer PRIVATE -Wall -Wextra -Wpedantic)
 
-# --- Install (optional) ---
+# --- Install target (optional) ---
 install(TARGETS ${EXECUTABLE_NAME} DESTINATION bin)

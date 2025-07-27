@@ -50,6 +50,12 @@ add_executable(Card_Viewer CardViewer.cpp)
 
 # --- Platform-specific configuration ---
 if(PLATFORM_NAME STREQUAL "Windows")
+    # Fallback: define SDL2 paths if not already defined (e.g. from toolchain)
+    if(NOT DEFINED SDL2_PATH)
+        set(SDL2_PATH "${CMAKE_SOURCE_DIR}/external/SDL2-devel-2.32.8-mingw/SDL2-2.32.8/x86_64-w64-mingw32")
+        set(SDL2_IMAGE_PATH "${CMAKE_SOURCE_DIR}/external/SDL2_image-devel-2.8.8-mingw/SDL2_image-2.8.8/x86_64-w64-mingw32")
+        set(SDL2_TTF_PATH "${CMAKE_SOURCE_DIR}/external/SDL2_ttf-devel-2.24.0-mingw/SDL2_ttf-2.24.0/x86_64-w64-mingw32")
+    endif()
     # Set SDL2 paths and libraries for Windows builds
     set(WINDOWS_SDL2_INCLUDES
         ${SDL2_PATH}/include/SDL2

@@ -81,10 +81,12 @@ elseif(CMAKE_HOST_SYSTEM_NAME STREQUAL "Linux" AND CMAKE_SYSTEM_NAME STREQUAL "W
     )
 
 elseif(CMAKE_HOST_SYSTEM_NAME STREQUAL "Windows" AND CMAKE_SYSTEM_NAME STREQUAL "Windows")
-    # Native Windows build
-    set(SDL2_PATH        "${CMAKE_SOURCE_DIR}/external/SDL2")
-    set(SDL2_IMAGE_PATH  "${CMAKE_SOURCE_DIR}/external/SDL2_image")
-    set(SDL2_TTF_PATH    "${CMAKE_SOURCE_DIR}/external/SDL2_ttf")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -static-libstdc++ -static-libgcc")
+
+    # Native Windows build (MinGW static libs with .a extensions)
+    set(SDL2_PATH        "${CMAKE_SOURCE_DIR}/external/SDL2-devel-2.32.8-mingw/SDL2-2.32.8/x86_64-w64-mingw32")
+    set(SDL2_IMAGE_PATH  "${CMAKE_SOURCE_DIR}/external/SDL2_image-devel-2.8.8-mingw/SDL2_image-2.8.8/x86_64-w64-mingw32")
+    set(SDL2_TTF_PATH    "${CMAKE_SOURCE_DIR}/external/SDL2_ttf-devel-2.24.0-mingw/SDL2_ttf-2.24.0/x86_64-w64-mingw32")
 
     foreach(path ${SDL2_PATH} ${SDL2_IMAGE_PATH} ${SDL2_TTF_PATH})
         if(NOT EXISTS "${path}/lib")
@@ -102,12 +104,18 @@ elseif(CMAKE_HOST_SYSTEM_NAME STREQUAL "Windows" AND CMAKE_SYSTEM_NAME STREQUAL 
         ${SDL2_IMAGE_PATH}/lib
         ${SDL2_TTF_PATH}/lib
     )
+    # Use full path to .a libs instead of -l flags or .lib files
     set(SDL2_LIBS
-        SDL2main
-        SDL2
-        SDL2_image
-        SDL2_ttf
+        "${SDL2_PATH}/lib/libSDL2.a"
+        "${SDL2_PATH}/lib/libSDL2main.a"
+        "${SDL2_IMAGE_PATH}/lib/libSDL2_image.a"
+        "${SDL2_TTF_PATH}/lib/libSDL2_ttf.a"
+        winmm
+        rpcrt4
+        kernel32 user32 gdi32 winspool shell32 ole32 oleaut32 uuid comdlg32 advapi32
+        setupapi imm32 version
     )
+
 else()
     message(FATAL_ERROR "Unsupported host/target platform combination.")
 endif()
@@ -160,5 +168,9 @@ if(WIN32 OR CMAKE_SYSTEM_NAME STREQUAL "Windows")
         COMMAND ${CMAKE_COMMAND} -E copy_if_different ${SDL2_IMAGE_DLL} $<TARGET_FILE_DIR:Card_Viewer>
         COMMAND ${CMAKE_COMMAND} -E copy_if_different ${SDL2_TTF_DLL} $<TARGET_FILE_DIR:Card_Viewer>
         COMMENT "Copying SDL2 DLLs for Windows target"
+        COMMAND ${CMAKE_COMMAND} -E copy_directory
+            "${CMAKE_SOURCE_DIR}/resources"
+            "$<TARGET_FILE_DIR:Card_Game_66-0.0.1>/resources"
+        COMMENT "Copying resources to build folder"
     )
 endif()

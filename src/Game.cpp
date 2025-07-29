@@ -146,7 +146,7 @@ void Game::render(bool isFirst,Hand& hand){
     std::string content = "";
     int padding = 0;
     if(isFirst){
-        for(int i=0;i<hand.size();i++){
+        for(size_t i=0;i<hand.size();i++){
             if(hand.at(i).second.empty())
                 std::cout<<"       "<<i+1<<"         ";
             else{
@@ -163,7 +163,7 @@ void Game::render(bool isFirst,Hand& hand){
         std::cout<<std::endl<<"Other Options"<<std::endl;
     }
     else
-        for(int i=1;i<=hand.size();i++)
+        for(size_t i=1;i<=hand.size();i++)
             std::cout<<"       "<<i<<"         ";
     if(isFirst){
         std::cout<<hand.size()+1<<". That is enough for me(close the round)"<<std::endl;

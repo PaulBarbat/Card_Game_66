@@ -1,9 +1,9 @@
-#include "CalculateHandPointsState.hpp"
-#include "GameOverState.hpp"
-#include "PlayHandState.hpp"
+#include "StateCalculateHandPoints.hpp"
+#include "StateGameOver.hpp"
+#include "StatePlayHand.hpp"
 #include "Game.hpp"
 
-void CalculateHandPointsState::enter(Game& game){//there probably is a better way to do this
+void StateCalculateHandPoints::enter(Game& game){//there probably is a better way to do this
     int compareRank = game.getCurrentHand().first->compareRank(*game.getCurrentHand().second);
     if(compareRank==-2) {
         std::cout<<"There is an error when comparing ranks "<<compareRank<<std::endl;
@@ -26,14 +26,14 @@ void CalculateHandPointsState::enter(Game& game){//there probably is a better wa
     game.flushCurrentHand();
 }
 
-void CalculateHandPointsState::update(Game& game){
+void StateCalculateHandPoints::update(Game& game){
     if(game.getIsDrawingAllowed()){
         game.getFirstPlayer().drawCard(game.getDeck());
         game.getSecondPlayer().drawCard(game.getDeck());
     }
     if(game.getFirstPlayer().getCurrentHandSize()==0)
-        game.setState(std::make_unique<GameOverState>());
+        game.setState(std::make_unique<StateGameOver>());
     else
-        game.setState(std::make_unique<PlayHandState>());
+        game.setState(std::make_unique<StatePlayHand>());
 }
 

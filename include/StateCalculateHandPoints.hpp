@@ -1,10 +1,10 @@
 #ifndef CALCULATEHANDPOINTSSTATE_HPP
 #define CALCULATEHANDPOINTSSTATE_HPP
 
-#include "GameState.hpp"
+#include "StateGame.hpp"
 #include <iostream>
 
-class CalculateHandPointsState : public GameState{
+class StateCalculateHandPoints : public StateGame{
 public:
     void enter(Game& game) override;
     void update(Game& game) override;

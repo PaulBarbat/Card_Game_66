@@ -9,41 +9,40 @@
 template <typename SuiteType, typename RankType>
 class Card : public ICard{
 private:
-    SuiteType suite;
-    RankType rank;
-    unsigned points;
-    std::vector<std::string> displayGrid;
+    SuiteType m_suite;
+    RankType m_rank;
+    unsigned m_points;
 
     template <typename S, typename R>
     friend class Card;
 public:
     Card()=delete;
 
-    Card(SuiteType suite, RankType rank, unsigned points, std::vector<std::string> grid): suite(suite), rank(rank), points(points), displayGrid(grid){}
+    Card(SuiteType suite, RankType rank, unsigned points): m_suite(suite), m_rank(rank), m_points(points){}
 
     std::string toString() const override {
-        return rankToString(rank)+suiteToString(suite);
+        return rankToString(m_rank)+suiteToString(m_suite);
     }
     std::string toString(int row) const override {
-        return displayGrid.at(row);
+        return display.at(row);
     }
 
     bool compareSuite(const ICard& card)const{
         auto* other = dynamic_cast<const Card<SuiteType, RankType>*>(&card);
         if (!other) return false; 
-        return other->suite==this->suite;
+        return other->suite==m_suite;
     }
 
     int compareRank(const ICard& card)const{
         auto* other = dynamic_cast<const Card<SuiteType, RankType>*>(&card);
         if(!other) return -2;//to know that there is an Error
-        if(other->rank==this->rank) return 0;//0 return code means ranks are equal
-        else if(other->rank < this->rank) return -1;//-1 return code means parameter rank is lower than the current rank
+        if(other->rank==m_rank) return 0;//0 return code means ranks are equal
+        else if(other->rank < m_rank) return -1;//-1 return code means parameter rank is lower than the current rank
         else return 1;//1 return code means parameter rank is higher than the current rank
     }
 
     unsigned getEasyRank() const{
-        return static_cast<unsigned>(rank);
+        return static_cast<unsigned>(m_rank);
     }
 
     void changeCard(const ICard& card){
@@ -51,10 +50,9 @@ public:
         if(!other){
             throw std::invalid_argument("Incompatible card type");
         }
-        this->suite = other->suite;
-        this->rank = other->rank;
-        this->points = other->points;
-        this->displayGrid = other->displayGrid;
+        m_suite = other->suite;
+        m_rank = other->rank;
+        m_points = other->points;
     }
 
     std::shared_ptr<ICard> clone() const {

@@ -1,9 +1,9 @@
-#include "ShuffleAndDrawState.hpp"
-#include "PlayHandState.hpp"
+#include "StateShuffleAndDraw.hpp"
+#include "StatePlayHand.hpp"
 #include "Game.hpp"
 #include <random>
 
-void ShuffleAndDrawState::enter(Game& game){
+void StateShuffleAndDraw::enter(Game& game){
     std::random_device rd;
     std::mt19937 gen(rd());
     std::uniform_int_distribution<> dist(1, 20);
@@ -14,7 +14,7 @@ void ShuffleAndDrawState::enter(Game& game){
     game.getSecondPlayer().resetPlayerForNewRound();
 }
 
-void ShuffleAndDrawState::update(Game& game){
+void StateShuffleAndDraw::update(Game& game){
     game.getFirstPlayer().drawCard(game.getDeck());
     game.getFirstPlayer().drawCard(game.getDeck());
     game.getFirstPlayer().drawCard(game.getDeck());
@@ -26,6 +26,6 @@ void ShuffleAndDrawState::update(Game& game){
     game.getSecondPlayer().drawCard(game.getDeck());
     game.getSecondPlayer().drawCard(game.getDeck());
 
-    game.setState(std::make_unique<PlayHandState>());
+    game.setState(std::make_unique<StatePlayHand>());
 }
 

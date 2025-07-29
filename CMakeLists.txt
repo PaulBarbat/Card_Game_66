@@ -120,24 +120,18 @@ else()
     message(FATAL_ERROR "Unsupported host/target platform combination.")
 endif()
 
-# --- Add Executables ---
-add_executable(${EXECUTABLE_NAME}
-    main.cpp
-    src/CardFactory.cpp
-    src/Deck.cpp
-    src/Game.cpp
-    src/Player.cpp
-    src/StartState.cpp
-    src/ShuffleAndDrawState.cpp
-    src/PlayHandState.cpp
-    src/CalculateHandPointsState.cpp
-    src/GameOverState.cpp
-    external/tinyxml2/tinyxml2.cpp
+# Gather source files
+file(GLOB GAME_SOURCES
+    "${CMAKE_SOURCE_DIR}/src/*.cpp"
+    "${CMAKE_SOURCE_DIR}/external/tinyxml2/*.cpp"
+    "${CMAKE_SOURCE_DIR}/main.cpp"
 )
 
-add_executable(Card_Viewer
-    CardViewer.cpp
-)
+# Create the game executable
+add_executable(${EXECUTABLE_NAME} ${GAME_SOURCES})
+
+# Viewer (single file, so no need to glob)
+add_executable(Card_Viewer CardViewer.cpp)
 
 # --- Apply include paths ---
 target_include_directories(${EXECUTABLE_NAME} PRIVATE ${PROJECT_COMMON_INCLUDES} ${SDL2_INCLUDE_DIRS})

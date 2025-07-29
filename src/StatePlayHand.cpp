@@ -1,13 +1,13 @@
-#include "PlayHandState.hpp"
-#include "CalculateHandPointsState.hpp"
+#include "StatePlayHand.hpp"
+#include "StateCalculateHandPoints.hpp"
 #include "Game.hpp"
 
-void PlayHandState::enter(Game& game){
+void StatePlayHand::enter(Game& game){
     if(game.getDeck().cardsLeft()==0)
         game.setIsDrawingAllowed(false);
 }
 
-void PlayHandState::update(Game& game){
+void StatePlayHand::update(Game& game){
     std::shared_ptr<ICard> first = game.getFirstPlayer().playHand(game.getDeck(),true);
     if(game.getFirstPlayer().getHasClosedTheCard())
         game.setIsDrawingAllowed(false);
@@ -20,6 +20,6 @@ void PlayHandState::update(Game& game){
     }
     
     game.setCurrentHand(first,second);
-    game.setState(std::make_unique<CalculateHandPointsState>());
+    game.setState(std::make_unique<StateCalculateHandPoints>());
 }
 

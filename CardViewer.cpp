@@ -35,7 +35,7 @@ int main(){
         std::cin.get();
         return 1;
     }
-
+    
     //Create window 1000x600
     SDL_Window* window = SDL_CreateWindow(
         "Card Viewer",   //title

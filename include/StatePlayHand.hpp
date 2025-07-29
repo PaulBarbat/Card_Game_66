@@ -1,10 +1,10 @@
 #ifndef PLAYHANDSTATE_HPP
 #define PLAYHANDSTATE_HPP
 
-#include "GameState.hpp"
+#include "StateGame.hpp"
 #include <iostream>
 
-class PlayHandState : public GameState{
+class StatePlayHand : public StateGame{
 public:
     void enter(Game& game) override;
     void update(Game& game) override;

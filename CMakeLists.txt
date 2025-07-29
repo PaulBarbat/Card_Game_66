@@ -170,7 +170,7 @@ if(WIN32 OR CMAKE_SYSTEM_NAME STREQUAL "Windows")
         COMMENT "Copying SDL2 DLLs for Windows target"
         COMMAND ${CMAKE_COMMAND} -E copy_directory
             "${CMAKE_SOURCE_DIR}/resources"
-            "$<TARGET_FILE_DIR:$EXECUTABLE_NAME>/resources"
+            "$<TARGET_FILE_DIR:${EXECUTABLE_NAME}>/resources"
         COMMENT "Copying resources to build folder"
     )
 endif()

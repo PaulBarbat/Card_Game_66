@@ -23,21 +23,18 @@ public:
     std::string toString() const override {
         return rankToString(m_rank)+suiteToString(m_suite);
     }
-    std::string toString(int row) const override {
-        return display.at(row);
-    }
 
     bool compareSuite(const ICard& card)const{
         auto* other = dynamic_cast<const Card<SuiteType, RankType>*>(&card);
         if (!other) return false; 
-        return other->suite==m_suite;
+        return other->m_suite==m_suite;
     }
 
     int compareRank(const ICard& card)const{
         auto* other = dynamic_cast<const Card<SuiteType, RankType>*>(&card);
         if(!other) return -2;//to know that there is an Error
-        if(other->rank==m_rank) return 0;//0 return code means ranks are equal
-        else if(other->rank < m_rank) return -1;//-1 return code means parameter rank is lower than the current rank
+        if(other->m_rank==m_rank) return 0;//0 return code means ranks are equal
+        else if(other->m_rank < m_rank) return -1;//-1 return code means parameter rank is lower than the current rank
         else return 1;//1 return code means parameter rank is higher than the current rank
     }
 
@@ -50,9 +47,9 @@ public:
         if(!other){
             throw std::invalid_argument("Incompatible card type");
         }
-        m_suite = other->suite;
-        m_rank = other->rank;
-        m_points = other->points;
+        m_suite = other->m_suite;
+        m_rank = other->m_rank;
+        m_points = other->m_points;
     }
 
     std::shared_ptr<ICard> clone() const {

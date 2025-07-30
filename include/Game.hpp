@@ -26,8 +26,7 @@ struct GameContext{
 
 class Game{
 public:
-    Game();
-    GameContext createContext();
+    Game(SDL_Window* window, SDL_Renderer* renderer, TTF_Font* font);
     void setState(std::unique_ptr<StateGame> newState);
     void run();
 
@@ -43,6 +42,7 @@ public:
     void flushCurrentHand();
     void setIsDrawingAllowed(bool newValue);
     bool getIsDrawingAllowed();
+    void loadTexture(const CardID& id,const std::string& path);
     void render(bool isFirst,Hand& hand);
 
     void update();
@@ -52,7 +52,7 @@ private:
     std::unique_ptr<Deck> m_deck;
     std::pair<std::shared_ptr<ICard>,std::shared_ptr<ICard>> m_currentHand;
     GameContext m_context;
-    std::unordered_map<CardID, SDL_Texture*, CardHash, CardEqual> cardTextures;
+    std::unordered_map<CardID, SDL_Texture*, CardHash, CardEqual> m_cardTextures;
 
     std::unique_ptr<StateGame> m_gameState;
 

@@ -16,26 +16,26 @@ int main(){
 
     //initialize SDL2 core video system
     if(SDL_Init(SDL_INIT_VIDEO) !=0){
-        std::cin.get();
+        
         std::cerr << "SDL_Init Error: "<<SDL_GetError() << "\n";
-        std::cin.get();
+        
         return 1;
     }
 
     //Initialize SDL2_Image with PNG suppoty
     if(!(IMG_Init(IMG_INIT_PNG) & IMG_INIT_PNG)){
         std::cerr << "IMG_Init Error: "<<IMG_GetError() << "\n";
-        std::cin.get();
+        
         return 1;
     }
 
     //Initialize SDL2_ttf for text rendering
     if(TTF_Init() != 0) {
         std::cerr << "TTF_Init Error: "<<TTF_GetError() << "\n";
-        std::cin.get();
+        
         return 1;
     }
-
+    
     //Create window 1000x600
     SDL_Window* window = SDL_CreateWindow(
         "Card Viewer",   //title
@@ -48,7 +48,7 @@ int main(){
 
     if(!window){
         std::cerr << "Window creation error: "<<SDL_GetError() << "\n";
-        std::cin.get();
+        
         return 1;
     }
 
@@ -60,7 +60,7 @@ int main(){
     if(!renderer)
     {
         std::cerr << "Renderer creation Error: " << SDL_GetError() << "\n";
-        std::cin.get();
+        
         return 1;
     }
 
@@ -69,7 +69,7 @@ int main(){
 
     if(!surface){
         std::cerr << "Image Load Error: " << IMG_GetError() << "\n";
-        std::cin.get();
+        
         return 1;
     }
 
@@ -79,7 +79,7 @@ int main(){
 
     if(!cardTexture){
         std::cerr<< "Texture Creation Error: "<< SDL_GetError() <<"\n";
-        std::cin.get();
+        
         return 1;
     }
 
@@ -87,7 +87,7 @@ int main(){
     TTF_Font* font = TTF_OpenFont("resources/dejavu-fonts-ttf-2.37/ttf/DejaVuSans.ttf", 24);
     if(!font){
         std::cerr << "Font Load Error: " << TTF_GetError() << "\n";
-        std::cin.get();
+        
         return 1;
     }
 
@@ -166,7 +166,7 @@ int main(){
     IMG_Quit();
     SDL_Quit();
 
-    std::cin.get();
+    
 
     return 0;
 }

@@ -1,9 +1,17 @@
 #include "Game.hpp"
-#include "StartState.hpp"
-#include "ShuffleAndDrawState.hpp"
-#include "PlayHandState.hpp"
-#include "CalculateHandPointsState.hpp"
-#include "GameOverState.hpp"
+#include "StateStart.hpp"
+#include "StateShuffleAndDraw.hpp"
+#include "StatePlayHand.hpp"
+#include "StateCalculateHandPoints.hpp"
+#include "StateGameOver.hpp"
+#include "Deck.hpp"
+#include "Card.hpp"
+#include "SuiteAndRank.hpp"
+#include "tinyxml2.h"
+
+#include <typeinfo>
+
+using namespace tinyxml2;
 
 std::unique_ptr<Player> Game::makePlayer(std::string player){
     size_t option=0;
@@ -27,207 +35,268 @@ std::unique_ptr<Player> Game::makePlayer(std::string player){
             }
         }
     }
-    return std::make_unique<Player>(type, [this]() { this->setState(std::make_unique<GameOverState>()); }, [this](bool isFirst,Hand& hand) { this->render(isFirst,hand); },player);
+    return std::make_unique<Player>(type, [this]() { this->setState(std::make_unique<StateGameOver>()); }, [this](bool isFirst,Hand& hand) { this->render(isFirst,hand); },player);
 }
 
 std::unique_ptr<Deck> Game::makeDeck(){
-    size_t option=0;
-    std::string deckPath="0";
-    DeckType type=DeckType::Classic;
-    while(option<1 || option>2)
-    {
-        std::cout<<"Pick the type of Deck you want to play with"<<std::endl;
-        std::cout<<"1. Classic Deck"<<std::endl<<"2. Magyar Deck"<<std::endl;
-        std::cin>>option;
-        switch(option){
-            case(1):{
-                type=DeckType::Classic;
-                deckPath="resources/Clasic_Cards.xml";
-                break;
-            };
-            case(2):{
-                type=DeckType::Magyar;
-                deckPath="resources/Magyar_Cards.xml";
-                break;
-            };
-            default:{
-                std::cout<<"Not an option"<<std::endl;
-            }
-        }
+    std::string path="resources/Visual_Cards.xml";
+    XMLDocument doc;
+    Deck m_deck;
+    if(doc.LoadFile(path.c_str()) != XML_SUCCESS)
+        throw std::runtime_error("Failed to load XML from file "+path);
+
+    //Getting the root of the Deck
+    auto* root = doc.FirstChildElement("Deck");
+    if(!root)
+        throw std::runtime_error("Missing <Deck> Element "+path);
+     
+    //Getting all elements in Deck
+    for(auto* card = root->FirstChildElement("Card"); card; card = card->NextSiblingElement("Card")){
+        std::string suiteStr = card->FirstChildElement("Suite")->GetText();
+        std::string rankStr = card->FirstChildElement("Rank")->GetText();
+        std::string path = card->FirstChildElement("Path")->GetText();
+        MagyarSuite suite;
+        MagyarRank rank;
+        unsigned points=0;
+
+        //get the suite
+        if(suiteStr == "Rosu") suite = MagyarSuite::Rosu;
+        else if(suiteStr == "Verde") suite = MagyarSuite::Verde;
+        else if(suiteStr == "Ghinda") suite = MagyarSuite::Ghinda;
+        else if(suiteStr == "Bata") suite = MagyarSuite::Bata;
+        else throw std::runtime_error("Invalid suite: " + suiteStr);
+
+        //get the rank
+        if(rankStr == "Doi"){
+            rank = MagyarRank::Doi;
+            points=2;
+        } 
+        else if(rankStr == "Trei"){
+            rank = MagyarRank::Trei;
+            points=3;
+        } 
+        else if(rankStr == "Cal"){
+            rank = MagyarRank::Cal;
+            points=4;
+        } 
+        else if(rankStr == "Craita"){
+            rank = MagyarRank::Craita;
+            points=10;
+        } 
+        else if(rankStr == "Tuz"){
+            rank = MagyarRank::Tuz;
+            points=11;
+        } 
+        else throw std::runtime_error("Invalid rank: " + rankStr);
+
+        //add the card to the m_deck
+        loadTexture(CardID(rank,suite),path);
+        m_deck.addCard(std::make_shared<Card<MagyarSuite,MagyarRank>>(suite,rank,points));
     }
-    return CardFactory::createDeckFromXML(type, deckPath);
+    return std::make_unique<Deck>(m_deck);
 }
 
-Game::Game(){
-    this->players = {makePlayer("Paul"),makePlayer("Coco")};
-    this->deck = makeDeck();
-    
-    setState(std::make_unique<StartState>());
+Game::Game(SDL_Window* window, SDL_Renderer* renderer, TTF_Font* font):
+    m_context(window, renderer, font),
+    m_players(makePlayer("Paul"),makePlayer("Coco")),
+    m_deck(makeDeck())
+{
+    loadTexture(CardID(MagyarRank::Back, MagyarSuite::Back),"resources/cards/back.png");
+    loadTexture(CardID(MagyarRank::Placeholder, MagyarSuite::Placeholder),"resources/cards/placeholder.png");
+    loadTexture(CardID(MagyarRank::Background, MagyarSuite::Background),"resources/Background.png");
+    setState(std::make_unique<StateStart>());
 }
 
-void Game::setState(std::unique_ptr<GameState> newState){
-    this->gameState = std::move(newState);
-    if(gameState){
-        gameState->enter(*this);
-        gameState->update(*this);
+void Game::setState(std::unique_ptr<StateGame> newState){
+    m_gameState = std::move(newState);
+    if(m_gameState){
+        m_gameState->enter(*this);
+        m_gameState->update(*this);
     } 
 }
 
 void Game::update(){
-    if(gameState) gameState->update(*this);
+    if(m_gameState) m_gameState->update(*this);
 }
 
 void Game::swapPlayerOrder(){
-    std::swap(players.first,players.second);
+    std::swap(m_players.first,m_players.second);
 }
 
 std::pair<std::shared_ptr<ICard>,std::shared_ptr<ICard>> Game::getCurrentHand() const{
-    return this->currentHand;
+    return m_currentHand;
 }
 
 void Game::setCurrentHand(std::shared_ptr<ICard> first,std::shared_ptr<ICard> second){
-    this->currentHand=std::make_pair(first,second);
+    m_currentHand=std::make_pair(first,second);
 }
 
 void Game::flushCurrentHand(){
-    this->currentHand.first.reset();
-    this->currentHand.second.reset();
+    m_currentHand.first.reset();
+    m_currentHand.second.reset();
 }
 
 
 void Game::setIsDrawingAllowed(bool newValue){
-    this->isDrawingAllowed=newValue;
+    m_isDrawingAllowed=newValue;
 }
 bool Game::getIsDrawingAllowed(){   
-    return this->isDrawingAllowed;
+    return m_isDrawingAllowed;
+}
+
+void Game::loadTexture(CardID id,const std::string& path) {
+    SDL_Surface* surface = IMG_Load(path.c_str());
+    if (!surface) {
+        std::cerr << "Failed to load surface from " << path << ": " << IMG_GetError() << "\n";
+        std::cin.get();
+        throw std::runtime_error("Failed to load surface from "+path);
+    }
+
+    SDL_Texture* texture = SDL_CreateTextureFromSurface(m_context.m_renderer.get(), surface);
+    SDL_FreeSurface(surface);
+   
+    if (!texture) {
+        std::cerr << "Failed to create texture from " << path << ": " << SDL_GetError() << "\n";
+    }
+    try {
+        m_cardTextures.emplace(id, texture);
+    } catch (const std::exception& e) {
+        std::cerr << "Caught std::exception of type: " << typeid(e).name() << "\n";
+        std::cerr << "What(): " << e.what() << "\n"; 
+        std::cin.get();
+    } catch (...) {
+        std::cerr << "Caught unknown non-std exception!\n"; 
+        std::cin.get();
+    }
+}
+
+bool Game::renderBackground(){
+    auto it = m_cardTextures.find(CardID(MagyarRank::Background, MagyarSuite::Background));
+    if(it!= m_cardTextures.end()){
+        SDL_Texture* texture = it->second;
+        SDL_Rect destination{0,0,c_windowWidth, c_windowHeight};
+        SDL_RenderCopy(m_context.m_renderer.get(), texture, nullptr, &destination);
+        return true;
+    }
+    else{
+        std::cerr << "Missing texture for card!\n";
+        std::cin.get();
+    }
+    return false;
+}
+
+bool Game::renderCard(CardID cardID, int x, int y, double rotate){
+    auto it = m_cardTextures.find(cardID);
+    if(it!= m_cardTextures.end()){
+        SDL_Texture* texture = it->second;
+        SDL_Rect destination{x,y,c_cardWidth, c_cardHeight};
+        SDL_RenderCopyEx(m_context.m_renderer.get(), texture, nullptr, &destination, rotate, nullptr, SDL_FLIP_NONE);
+        return true;
+    }
+    else{
+        std::cerr << "Missing texture for card!\n";   
+        std::cin.get();
+    }
+    return false;
+}
+
+bool Game::renderText(const std::string& text,int x, int y){
+    //std::string cardsLeft=std::to_string(m_deck->cardsLeft());
+
+    int textWidth, textHeight;
+    TTF_SizeText(m_context.m_font.get(), text.c_str(), &textWidth, &textHeight);
+
+    SDL_Rect textRect{x-textWidth/2, y-textHeight/2, textWidth, textHeight};
+
+    SDL_Surface* textSurface = TTF_RenderText_Blended(m_context.m_font.get(), text.c_str(), {255, 255, 255});
+    if(!textSurface){
+        std::cerr<<"Error creating text Surface: "<<SDL_GetError()<<std::endl;
+        std::cin.get();
+        throw std::runtime_error("text surface create error");
+    }
+    SDL_Texture* texture = SDL_CreateTextureFromSurface(m_context.m_renderer.get(), textSurface);
+    if(!texture){
+        std::cerr<<"Error creating text texture: "<<SDL_GetError()<<std::endl;
+        std::cin.get();
+        throw std::runtime_error("text texture create error");
+    }
+    SDL_RenderCopy(m_context.m_renderer.get(), texture, NULL, &textRect);
+
+    SDL_DestroyTexture(texture);
+    SDL_FreeSurface(textSurface);
+    return true;
 }
 
 void Game::render(bool isFirst,Hand& hand){
-    int tromfCounter=0;
-    int playedCardCounter=0;
-    std::cout<<std::endl<<std::endl<<std::endl<<std::endl<<std::endl<<std::endl<<std::endl<<std::endl<<std::endl<<std::endl<<std::endl<<std::endl<<std::endl<<std::endl<<std::endl<<std::endl<<std::endl<<std::endl;
-    std::cout<<isFirst<<std::endl;
+    SDL_SetRenderDrawColor(m_context.m_renderer.get(), 30, 30, 30, 255);
+    SDL_RenderClear(m_context.m_renderer.get());
+
+    renderBackground();
+    //render the hand
+    int offset=static_cast<int>((c_windowWidth-((hand.size()*c_cardWidth)+((hand.size()-1)*20)))/2);//20px between cards
+    for(const auto& card: hand)
+    {
+        renderCard(card.first->getCardID(), offset, c_windowHeight-c_cardHeight-70, 0.0);
+        offset+=c_cardWidth+20;
+    }
+
+    int x=(c_windowWidth-c_cardWidth)/2;
+    int y=(c_windowHeight-(2*c_cardHeight))-100;
+    //render played card
     if(isFirst)
     {
-        std::cout<<getFirstPlayer().getName()<<"                                                     Over All Score"<<std::endl;
-        std::cout<<"Points: "<<getFirstPlayer().getScore()<<"                                             "<<getFirstPlayer().getName()<<" "<<getFirstPlayer().getRoundsWon()<<" : "<<getSecondPlayer().getRoundsWon()<<" "<<getSecondPlayer().getName()<<std::endl<<std::endl;
+        renderCard(CardID(MagyarRank::Placeholder, MagyarSuite::Placeholder),x,y, 0.0);
     } 
     else{
-        std::cout<<getSecondPlayer().getName()<<"                                                     Over All Score"<<std::endl;
-        std::cout<<"Points: "<<getSecondPlayer().getScore()<<"                                             "<<getFirstPlayer().getName()<<" "<<getFirstPlayer().getRoundsWon()<<" : "<<getSecondPlayer().getRoundsWon()<<" "<<getSecondPlayer().getName()<<std::endl<<std::endl;
+        renderCard(m_currentHand.first->getCardID(),x,y, 0.0);
     }
-    std::cout<<"                                                          Deck: "<<getDeck().cardsLeft()<<" Cards Left"<<std::endl;
-    std::cout<<"                                                                Tromf"<<std::endl;
-    std::cout<<"                                                           "<<deck->getTromf()->toString(tromfCounter++)<<std::endl;
-    std::cout<<"                                    "<<(isFirst ? "Play a card": "Played Card")<<"            "<<deck->getTromf()->toString(tromfCounter++)<<std::endl;
-    std::cout<<"                                                           "<<deck->getTromf()->toString(tromfCounter++)<<std::endl;
-    std::cout<<"                                    "<<(isFirst ? "                ": getCurrentHand().first->toString(playedCardCounter++))<<"       "<<deck->getTromf()->toString(tromfCounter++)<<std::endl;
-    std::cout<<"                                    "<<(isFirst ? "                ": getCurrentHand().first->toString(playedCardCounter++))<<"       "<<deck->getTromf()->toString(tromfCounter++)<<std::endl;
-    std::cout<<"                                    "<<(isFirst ? "                ": getCurrentHand().first->toString(playedCardCounter++))<<"       "<<deck->getTromf()->toString(tromfCounter++)<<std::endl;
-    std::cout<<"                                    "<<(isFirst ? "                ": getCurrentHand().first->toString(playedCardCounter++))<<"       "<<deck->getTromf()->toString(tromfCounter++)<<std::endl;
-    std::cout<<"                                    "<<(isFirst ? "                ": getCurrentHand().first->toString(playedCardCounter++))<<"       "<<deck->getTromf()->toString(tromfCounter++)<<std::endl;
-    std::cout<<"                                    "<<(isFirst ? "                ": getCurrentHand().first->toString(playedCardCounter++))<<"       "<<deck->getTromf()->toString(tromfCounter++)<<std::endl;
-    std::cout<<"                                    "<<(isFirst ? "                ": getCurrentHand().first->toString(playedCardCounter++))<<"       "<<deck->getTromf()->toString(tromfCounter++)<<std::endl;
-    std::cout<<"                                    "<<(isFirst ? "                ": getCurrentHand().first->toString(playedCardCounter++))<<"       "<<deck->getTromf()->toString(tromfCounter++)<<std::endl;
-    std::cout<<"                                    "<<(isFirst ? "                ": getCurrentHand().first->toString(playedCardCounter++))<<"       "<<deck->getTromf()->toString(tromfCounter++)<<std::endl;
-    std::cout<<"                                    "<<(isFirst ? "                ": getCurrentHand().first->toString(playedCardCounter++))<<std::endl;
-    std::cout<<"                                    "<<(isFirst ? "                ": getCurrentHand().first->toString(playedCardCounter++))<<std::endl;
-    std::cout<<"                                    "<<(isFirst ? "                ": getCurrentHand().first->toString(playedCardCounter++))<<std::endl;
-    std::cout<<std::endl<<std::endl<<std::endl;
-    //This implementation right now is made for card representations that are 12 rows deep
-    for(int i=0; i<12;i++)
+
+    //render tromf
+    x+=c_cardWidth+150;
+    y-=(c_cardHeight/2)-(c_cardWidth/2)-10;
+    renderCard(m_deck->getTromf()->getCardID(),x, y, 90.0 );
+
+    //render deck
+    x+=(c_cardWidth/2);
+    for(int i=0; i<static_cast<int>(m_deck->cardsLeft()/2); i++)
     {
-        for(const auto& card : hand)
-        {
-            std::cout<<card.first->toString(i)<<" ";
-        }
-        std::cout<<std::endl;
+        renderCard(CardID(MagyarRank::Back, MagyarSuite::Back),x,y, 0.0);
+        x+=5;
+        y-=5;
     }
-    std::string content = "";
-    int padding = 0;
-    if(isFirst){
-        for(size_t i=0;i<hand.size();i++){
-            if(hand.at(i).second.empty())
-                std::cout<<"       "<<i+1<<"         ";
-            else{
-                content = std::to_string(i+1) + ".";
-                for(std::vector<CardOption>::const_iterator j = hand.at(i).second.begin()+1; j!= hand.at(i).second.end(); ++j){
-                    content+=j->shortDescription;
-                    if(j!=hand.at(i).second.end())
-                        content+=",";
-                }
-                padding = (16 - content.size())/2;
-                std::cout<<std::string(padding, ' ')<<content<<std::string(padding, ' ');
-            }
-        }
-        std::cout<<std::endl<<"Other Options"<<std::endl;
-    }
-    else
-        for(size_t i=1;i<=hand.size();i++)
-            std::cout<<"       "<<i<<"         ";
-    if(isFirst){
-        std::cout<<hand.size()+1<<". That is enough for me(close the round)"<<std::endl;
-        if(deck->cardsLeft()>2)
-            std::cout<<hand.size()+2<<". Close the card"<<std::endl;
-    }
+
+    x+=c_cardWidth/2;
+    y+=c_cardHeight/2;
+    renderText(std::to_string(m_deck->cardsLeft()),x,y);
+    SDL_RenderPresent(m_context.m_renderer.get());
+
+    // std::string content = "";
+    // if(isFirst){
+    //     for(size_t i=0;i<hand.size();i++){
+    //         if(hand.at(i).second.empty())
+    //             std::cout<<"       "<<std::endl;
+    //         else{
+    //             content = std::to_string(i+1) + ".";
+    //             for(std::vector<CardOption>::const_iterator j = hand.at(i).second.begin()+1; j!= hand.at(i).second.end(); ++j){
+    //                 content+=j->shortDescription;
+    //                 if(j!=hand.at(i).second.end())
+    //                     content+=",";
+    //             }
+    //         }
+    //     }
+    // }
+    // else
+    //     for(size_t i=1;i<=hand.size();i++)
+    // if(isFirst){
+    //     if(m_deck->cardsLeft()>2)
+    //         std::cout<</*hand.size()+2<<". Close the card"<<*/std::endl;
+    // }
 }
 void Game::run() {
-    // std::cout<<"Creating a Classic Deck"<<std::endl;
-    // std::shared_ptr<Deck> classicDeck = CardFactory::createDeckFromXML(DeckType::Classic, "resources/Clasic_Cards.xml");
 
-    
-    // std::cout<< std::endl << "Printing the Classic Deck"<<std::endl;
-    // classicDeck->printDeck();
-
-    // std::cout<< std::endl << "Shuffling the Classic Deck"<<std::endl;
-    // classicDeck->shuffleDeck();
-
-    // std::cout<< std::endl << "Printing the Classic Deck after shuffling"<<std::endl;
-    // classicDeck->printDeck();
-    
-    // std::cout<<"Creating a Magyar Deck"<<std::endl;
-    // std::shared_ptr<Deck> magyarDeck = CardFactory::createDeckFromXML(DeckType::Magyar, "resources/Magyar_Cards.xml");
-    
-    // std::cout<< std::endl << "Printing the Magyar Deck"<<std::endl;
-    // magyarDeck->printDeck();
-
-    // std::cout<< std::endl << "Suffling the Magyar Deck"<<std::endl;
-    // magyarDeck->shuffleDeck();
-    // magyarDeck->shuffleDeck();
-    // magyarDeck->shuffleDeck();
-    // magyarDeck->shuffleDeck();
-
-    // std::cout<< std::endl << "Printing the Magyar Deck after shuffling"<<std::endl;
-    // magyarDeck->printDeck();
-
-    // std::cout<< std::endl << "Creating a Player"<<std::endl;
-    // Player p1(PlayerType::Player, [this]() { std::cout<<"ENDING the game"<<std::endl; });
-    // Player p2(PlayerType::NPC, [this]() { std::cout<<"ENDING the game"<<std::endl; });
-    // std::cout<< std::endl << "Drawing cards"<<std::endl;
-    // p1.drawCard(*magyarDeck);
-    // p2.drawCard(*magyarDeck);
-    // p1.drawCard(*magyarDeck);
-    // p2.drawCard(*magyarDeck);
-    // p1.drawCard(*magyarDeck);
-    // p2.drawCard(*magyarDeck);
-    // p1.drawCard(*magyarDeck);
-    // p2.drawCard(*magyarDeck);
-    // p1.drawCard(*magyarDeck);
-    // p2.drawCard(*magyarDeck);
-
-    // std::cout<< std::endl << "Player 1 Showing the hand"<<std::endl;
-    // p1.calculateOptions(*magyarDeck);
-    // p1.renderOptions();
-    // std::cout<< std::endl << "Player 1 Showing the hand"<<std::endl;
-    // p2.calculateOptions(*magyarDeck);
-    // p2.renderOptions();
-
-    // std::cout<<p1.playCard(1)->toString()<<std::endl;
-    // std::cout<<p1.playCard(1)->toString()<<std::endl;
-
-    setState(std::make_unique<StartState>());
-    while(gameState){
-        gameState->update(*this);
+    setState(std::make_unique<StateStart>());
+    while(m_gameState){
+        m_gameState->update(*this);
     }
 
 }

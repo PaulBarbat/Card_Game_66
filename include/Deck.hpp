@@ -11,8 +11,8 @@
 
 class Deck {
 private:
-    std::vector<std::shared_ptr<ICard>> deck;
-    uint32_t currentCard = 0;
+    std::vector<std::shared_ptr<ICard>> m_deck;
+    uint32_t m_currentCard = 0;
 public:
     Deck() = default;
     void addCard(std::shared_ptr<ICard> card);

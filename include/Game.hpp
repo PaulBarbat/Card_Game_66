@@ -56,6 +56,7 @@ public:
     void loadTexture(CardID id,const std::string& path);
     bool renderBackground();
     bool renderCard(CardID cardID, int x, int y, double rotate);
+    bool renderText(const std::string& text,int x, int y);
     void render(bool isFirst,Hand& hand);
 
     void update();

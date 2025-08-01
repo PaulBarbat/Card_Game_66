@@ -170,6 +170,21 @@ void Game::loadTexture(CardID id,const std::string& path) {
     }
 }
 
+bool Game::renderBackground(){
+    auto it = m_cardTextures.find(CardID(MagyarRank::Background, MagyarSuite::Background));
+    if(it!= m_cardTextures.end()){
+        SDL_Texture* texture = it->second;
+        SDL_Rect destination{0,0,c_windowWidth, c_windowHeight};
+        SDL_RenderCopy(m_context.m_renderer.get(), texture, nullptr, &destination);
+        return true;
+    }
+    else{
+        std::cerr << "Missing texture for card!\n";
+        std::cin.get();
+    }
+    return false;
+}
+
 bool Game::renderCard(CardID cardID, int x, int y, double rotate){
     auto it = m_cardTextures.find(cardID);
     if(it!= m_cardTextures.end()){
@@ -185,19 +200,31 @@ bool Game::renderCard(CardID cardID, int x, int y, double rotate){
     return false;
 }
 
-bool Game::renderBackground(){
-    auto it = m_cardTextures.find(CardID(MagyarRank::Background, MagyarSuite::Background));
-    if(it!= m_cardTextures.end()){
-        SDL_Texture* texture = it->second;
-        SDL_Rect destination{0,0,c_windowWidth, c_windowHeight};
-        SDL_RenderCopy(m_context.m_renderer.get(), texture, nullptr, &destination);
-        return true;
-    }
-    else{
-        std::cerr << "Missing texture for card!\n";
+bool Game::renderText(const std::string& text,int x, int y){
+    //std::string cardsLeft=std::to_string(m_deck->cardsLeft());
+
+    int textWidth, textHeight;
+    TTF_SizeText(m_context.m_font.get(), text.c_str(), &textWidth, &textHeight);
+
+    SDL_Rect textRect{x-textWidth/2, y-textHeight/2, textWidth, textHeight};
+
+    SDL_Surface* textSurface = TTF_RenderText_Blended(m_context.m_font.get(), text.c_str(), {255, 255, 255});
+    if(!textSurface){
+        std::cerr<<"Error creating text Surface: "<<SDL_GetError()<<std::endl;
         std::cin.get();
+        throw std::runtime_error("text surface create error");
     }
-    return false;
+    SDL_Texture* texture = SDL_CreateTextureFromSurface(m_context.m_renderer.get(), textSurface);
+    if(!texture){
+        std::cerr<<"Error creating text texture: "<<SDL_GetError()<<std::endl;
+        std::cin.get();
+        throw std::runtime_error("text texture create error");
+    }
+    SDL_RenderCopy(m_context.m_renderer.get(), texture, NULL, &textRect);
+
+    SDL_DestroyTexture(texture);
+    SDL_FreeSurface(textSurface);
+    return true;
 }
 
 void Game::render(bool isFirst,Hand& hand){
@@ -237,6 +264,10 @@ void Game::render(bool isFirst,Hand& hand){
         x+=5;
         y-=5;
     }
+
+    x+=c_cardWidth/2;
+    y+=c_cardHeight/2;
+    renderText(std::to_string(m_deck->cardsLeft()),x,y);
     SDL_RenderPresent(m_context.m_renderer.get());
 
     // std::string content = "";

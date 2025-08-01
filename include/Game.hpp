@@ -11,17 +11,28 @@
 #include <SDL_image.h>
 #include <SDL_ttf.h>
 
-using CardID = std::pair<MagyarRank, MagyarSuite>;
+inline constexpr std::size_t c_cardWidth{180};
+inline constexpr std::size_t c_cardHeight{290};//these are the sizes of the sprites i use
+inline constexpr std::size_t c_windowWidth{1600};
+inline constexpr std::size_t c_windowHeight{1000};
+
 
 struct GameContext{
     std::unique_ptr<SDL_Window, decltype(&SDL_DestroyWindow)> m_window;
     std::unique_ptr<SDL_Renderer, decltype(&SDL_DestroyRenderer)> m_renderer;
     std::unique_ptr<TTF_Font, decltype(&TTF_CloseFont)> m_font;
 
+    GameContext()=delete;
     GameContext(SDL_Window* window, SDL_Renderer* renderer, TTF_Font* font)
         :   m_window(window, SDL_DestroyWindow),
             m_renderer(renderer, SDL_DestroyRenderer),
-            m_font(font, TTF_CloseFont){}
+            m_font(font, TTF_CloseFont){
+                std::cout << "Renderer in GameContextConstructor: " << renderer << std::endl;
+            }
+    GameContext(const GameContext&) = delete;
+    GameContext& operator=(const GameContext&) = delete;
+    GameContext(GameContext&&) = delete;
+    GameContext& operator=(GameContext&&) = delete;
 };
 
 class Game{
@@ -42,17 +53,24 @@ public:
     void flushCurrentHand();
     void setIsDrawingAllowed(bool newValue);
     bool getIsDrawingAllowed();
-    void loadTexture(const CardID& id,const std::string& path);
+    void loadTexture(CardID id,const std::string& path);
+    bool renderBackground();
+    bool renderCard(CardID cardID, int x, int y, double rotate);
     void render(bool isFirst,Hand& hand);
 
     void update();
 
+    Game(const Game&) = delete;
+    Game& operator=(const Game&) = delete;
+    Game(Game&&) = delete;
+    Game& operator=(Game&&) = delete;
+
 private:
+    std::unordered_map<CardID, SDL_Texture*, CardHash, CardEqual> m_cardTextures;
+    GameContext m_context;
     std::pair<std::unique_ptr<Player> ,std::unique_ptr<Player> > m_players;
     std::unique_ptr<Deck> m_deck;
     std::pair<std::shared_ptr<ICard>,std::shared_ptr<ICard>> m_currentHand;
-    GameContext m_context;
-    std::unordered_map<CardID, SDL_Texture*, CardHash, CardEqual> m_cardTextures;
 
     std::unique_ptr<StateGame> m_gameState;
 

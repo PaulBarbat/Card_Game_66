@@ -26,8 +26,8 @@ int main(){
         "Card Game 66",
         SDL_WINDOWPOS_CENTERED,
         SDL_WINDOWPOS_CENTERED,
-        1200,
-        800,
+        c_windowWidth,
+        c_windowHeight,
         SDL_WINDOW_SHOWN
     );
 
@@ -58,16 +58,7 @@ int main(){
         std::cin.get();
         throw std::runtime_error("Font Opening Error");
     }
-    
-    std::cout<<"Welcome to CardGame66"<<std::endl;
-    std::cout<<"Once you press any key the game will start"<<std::endl;
-    std::cin.get();
     Game game{window, renderer, font};
 
-    std::cout << " This is from the main " << std::endl;
-
-    std::cout << "Press any key to exit..." << std::endl;
-    std::cin.get(); 
-    
     return 0;
 }

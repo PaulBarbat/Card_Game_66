@@ -34,7 +34,6 @@ void StateGameOver::update(Game& game){
     std::cout<<"                                "<<game.getFirstPlayer().getName()<<" won this round"<<std::endl;
     std::cout<<"                             "<<game.getFirstPlayer().getName()<<" "<<game.getFirstPlayer().getRoundsWon()<<
         " - "<<game.getSecondPlayer().getRoundsWon()<<" "<<game.getSecondPlayer().getName()<<std::endl;
-    std::cin.get();
     game.setState(std::make_unique<StateShuffleAndDraw>());
 }
 

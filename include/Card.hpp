@@ -4,7 +4,6 @@
 #include <iostream>
 #include <stdio.h>
 #include "ICard.hpp"
-#include "SuiteAndRank.hpp"
 
 template <typename SuiteType, typename RankType>
 class Card : public ICard{
@@ -54,6 +53,10 @@ public:
 
     std::shared_ptr<ICard> clone() const {
         return std::make_shared<Card<SuiteType, RankType>>(*this);
+    }
+
+    CardID getCardID() const{
+        return CardID(m_rank, m_suite);
     }
 };
 

@@ -6,7 +6,10 @@ enum class MagyarSuite{
     Rosu = 1,
     Ghinda,
     Bata,
-    Verde
+    Verde,
+    Back,
+    Placeholder,
+    Background
 };
 
 enum class MagyarRank{
@@ -14,7 +17,10 @@ enum class MagyarRank{
     Trei,
     Cal,
     Craita = 10,
-    Tuz
+    Tuz,
+    Back,
+    Placeholder,
+    Background
 };
 
 inline std::string rankToString(MagyarRank rank){

@@ -4,6 +4,7 @@
 #include "Game.hpp"
 
 void StateCalculateHandPoints::enter(Game& game){//there probably is a better way to do this
+    std::cout<<"Calculate Enter" <<std::endl;
     int compareRank = game.getCurrentHand().first->compareRank(*game.getCurrentHand().second);
     if(compareRank==-2) {
         std::cout<<"There is an error when comparing ranks "<<compareRank<<std::endl;
@@ -27,6 +28,7 @@ void StateCalculateHandPoints::enter(Game& game){//there probably is a better wa
 }
 
 void StateCalculateHandPoints::update(Game& game){
+    std::cout<<"Calculate Update" <<std::endl;
     if(game.getIsDrawingAllowed()){
         game.getFirstPlayer().drawCard(game.getDeck());
         game.getSecondPlayer().drawCard(game.getDeck());
@@ -37,3 +39,11 @@ void StateCalculateHandPoints::update(Game& game){
         game.setState(std::make_unique<StatePlayHand>());
 }
 
+void StateCalculateHandPoints::render(Game& game){
+    std::cout<<"Render Calculate"<<std::endl;
+}
+
+bool StateCalculateHandPoints::handleEvent(Game& game){
+    std::cout<<"Calculate Handle Event" <<std::endl;
+    return true;
+}

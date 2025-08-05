@@ -245,6 +245,10 @@ void Player::drawCard(Deck& deck){
     }
 }
 
+Hand& Player::getHand(){
+    return hand;
+}
+
 std::shared_ptr<ICard> Player::playCard(const unsigned& cardPosition,Hand& hand, bool isFilteredHand){
     auto& cardEntry = hand.at(cardPosition);
     auto card = cardEntry.first->clone();

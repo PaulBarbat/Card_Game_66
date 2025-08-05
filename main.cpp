@@ -59,6 +59,8 @@ int main(){
         throw std::runtime_error("Font Opening Error");
     }
     Game game{window, renderer, font};
-
+    game.run();
+    std::cout<<"After run"<<std::endl;
+    std::cin.get();
     return 0;
 }

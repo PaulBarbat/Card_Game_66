@@ -53,6 +53,7 @@ public:
     size_t getCurrentHandSize()const;
     bool getHasClosedTheCard()const;
     void changeTromf(std::shared_ptr<ICard> card, Deck& deck);
+    Hand& getHand();
     //Tromf is the name given to the color that can take any card. 
     //If the player has the Two of Tromf and he starts a turn, 
     //as long as there are more than 2 cards in the deck, he can change it with his Two of Tromf.

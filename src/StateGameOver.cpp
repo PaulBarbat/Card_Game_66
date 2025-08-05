@@ -37,3 +37,11 @@ void StateGameOver::update(Game& game){
     game.setState(std::make_unique<StateShuffleAndDraw>());
 }
 
+void StateGameOver::render(Game& game){
+    std::cout<<"Render Start"<<std::endl;
+}
+
+bool StateGameOver::handleEvent(Game& game){
+    std::cout<<"Start Handle Event" <<std::endl;
+    return true;
+}

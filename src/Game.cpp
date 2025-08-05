@@ -109,10 +109,6 @@ Game::Game(SDL_Window* window, SDL_Renderer* renderer, TTF_Font* font):
 
 void Game::setState(std::unique_ptr<StateGame> newState){
     m_gameState = std::move(newState);
-    if(m_gameState){
-        m_gameState->enter(*this);
-        m_gameState->update(*this);
-    } 
 }
 
 void Game::update(){
@@ -128,6 +124,7 @@ std::pair<std::shared_ptr<ICard>,std::shared_ptr<ICard>> Game::getCurrentHand() 
 }
 
 void Game::setCurrentHand(std::shared_ptr<ICard> first,std::shared_ptr<ICard> second){
+    std::cout<<"Make Pair"<< first->toString() << (second ==nullptr ? "nullptr" : second->toString()) <<std::endl; 
     m_currentHand=std::make_pair(first,second);
 }
 
@@ -231,17 +228,22 @@ void Game::render(bool isFirst,Hand& hand){
     SDL_SetRenderDrawColor(m_context.m_renderer.get(), 30, 30, 30, 255);
     SDL_RenderClear(m_context.m_renderer.get());
 
+    m_handSize=0;
+
     renderBackground();
     //render the hand
-    int offset=static_cast<int>((c_windowWidth-((hand.size()*c_cardWidth)+((hand.size()-1)*20)))/2);//20px between cards
+
+    int x=static_cast<int>((c_windowWidth-((hand.size()*c_cardWidth)+((hand.size()-1)*20)))/2);//20px between cards
+    int y=c_windowHeight-c_cardHeight-70;
     for(const auto& card: hand)
     {
-        renderCard(card.first->getCardID(), offset, c_windowHeight-c_cardHeight-70, 0.0);
-        offset+=c_cardWidth+20;
+        if(renderCard(card.first->getCardID(), x, y, 0.0))
+            m_cardPositions[m_handSize++]=LocalizedCard(Vertex(x,y), card.first->getCardID());
+        x+=c_cardWidth+20;
     }
 
-    int x=(c_windowWidth-c_cardWidth)/2;
-    int y=(c_windowHeight-(2*c_cardHeight))-100;
+    x=(c_windowWidth-c_cardWidth)/2;
+    y=(c_windowHeight-(2*c_cardHeight))-100;
     //render played card
     if(isFirst)
     {
@@ -292,11 +294,64 @@ void Game::render(bool isFirst,Hand& hand){
     //         std::cout<</*hand.size()+2<<". Close the card"<<*/std::endl;
     // }
 }
+
+int Game::handleEvents(const SDL_Event &event){
+    switch(event.type){
+        case SDL_QUIT:
+            std::cout<<"QUIT"<<std::endl;
+            return -1;
+            break;
+        case SDL_MOUSEMOTION:
+            handleMouseHover(event.motion.x, event.motion.y);
+            return 0;
+            break;
+        case SDL_MOUSEBUTTONUP:
+            if(event.button.button == SDL_BUTTON_LEFT){
+                return handleMouseClick(event.button.x, event.button.y);
+            }
+            break;
+    }
+    return 0;
+}
+
+bool Game::pointOnCardInHand(int x, int y, int cardX, int cardY)
+{
+    return (x>cardX && x<cardX+c_cardWidth && y>cardY && y<cardY+c_cardHeight);
+}
+
+void Game::handleMouseHover(int x, int y){
+    for(const auto& card : m_cardPositions)
+    {
+        if(pointOnCardInHand(x,y,card.first.first, card.first.second))
+            std::cout<<"Hovering over card "<<rankToString(card.second.first)<<" "<<suiteToString(card.second.second)<<std::endl;
+    }
+}
+
+int Game::handleMouseClick(int x, int y){
+    int i =1;
+    for(const auto& card : m_cardPositions)
+    {
+        if(pointOnCardInHand(x,y,card.first.first, card.first.second)){
+            std::cout<<"clicked on card "<<rankToString(card.second.first)<<" "<<suiteToString(card.second.second)<<std::endl;
+            std::cout<<"Option: "<<i<<std::endl;
+            return i;
+        }
+        i++;
+    }
+    return 0;
+}
+
 void Game::run() {
+    bool isRunning = true;
 
     setState(std::make_unique<StateStart>());
-    while(m_gameState){
+    
+    while(isRunning){
+        m_gameState->enter(*this);
+        while(!m_gameState->handleEvent(*this)){
+            m_gameState->render(*this);
+            SDL_Delay(16);
+        }
         m_gameState->update(*this);
     }
-
 }

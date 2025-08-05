@@ -16,6 +16,8 @@ inline constexpr std::size_t c_cardHeight{290};//these are the sizes of the spri
 inline constexpr std::size_t c_windowWidth{1600};
 inline constexpr std::size_t c_windowHeight{1000};
 
+using Vertex = std::pair<int, int>;
+using LocalizedCard = std::pair<Vertex,CardID>; 
 
 struct GameContext{
     std::unique_ptr<SDL_Window, decltype(&SDL_DestroyWindow)> m_window;
@@ -58,6 +60,10 @@ public:
     bool renderCard(CardID cardID, int x, int y, double rotate);
     bool renderText(const std::string& text,int x, int y);
     void render(bool isFirst,Hand& hand);
+    int handleEvents(const SDL_Event& event);
+    void handleMouseHover(int x, int y);
+    int handleMouseClick(int x, int y);
+    bool pointOnCardInHand(int x, int y, int cardX, int cardY);
 
     void update();
 
@@ -74,6 +80,8 @@ private:
     std::pair<std::shared_ptr<ICard>,std::shared_ptr<ICard>> m_currentHand;
 
     std::unique_ptr<StateGame> m_gameState;
+    std::array<LocalizedCard,5> m_cardPositions;
+    size_t m_handSize = 0;
 
     //Game rules change if there are no more cards to draw 
     //or if one of the players chooses to "close the cards"

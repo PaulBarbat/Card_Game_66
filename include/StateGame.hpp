@@ -10,8 +10,6 @@ public:
     virtual ~StateGame()=default;
     virtual void enter(Game& game) = 0;
     virtual void update(Game& game) = 0;
-    virtual void render(Game& game) = 0;
-    virtual bool handleEvent(Game& game) = 0;
 };
 
 #endif

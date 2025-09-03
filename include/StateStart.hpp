@@ -8,8 +8,6 @@ class StateStart : public StateGame{
 public:
     void enter(Game& game) override;
     void update(Game& game) override;
-    void render(Game& game) override;
-    bool handleEvent(Game& game) override;
 };
 
 #endif

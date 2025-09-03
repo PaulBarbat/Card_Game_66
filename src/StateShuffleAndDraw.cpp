@@ -29,12 +29,3 @@ void StateShuffleAndDraw::update(Game& game){
 
     game.setState(std::make_unique<StatePlayHand>());
 }
-
-void StateShuffleAndDraw::render(Game& game){
-    std::cout<<"Render Shuffle"<<std::endl;
-}
-
-bool StateShuffleAndDraw::handleEvent(Game& game){
-    std::cout<<"Shuffle Handle Event" <<std::endl;
-    return true;
-}

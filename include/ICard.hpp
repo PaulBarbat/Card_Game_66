@@ -1,6 +1,7 @@
 #ifndef ICARD_HPP
 #define ICARD_HPP
 #include <string>
+#include <memory>
 #include "SuiteAndRank.hpp"
 
 using CardID = std::pair<MagyarRank, MagyarSuite>;

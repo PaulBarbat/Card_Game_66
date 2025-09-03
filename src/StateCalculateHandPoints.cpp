@@ -23,7 +23,7 @@ void StateCalculateHandPoints::enter(Game& game){//there probably is a better wa
         std::cout<<game.getSecondPlayer().getName()<<" takes this hand"<<std::endl;
         game.swapPlayerOrder();//Second player will be the first next turn
     }
-    game.getFirstPlayer().addScore(game.getCurrentHand().first->getEasyRank()+game.getCurrentHand().second->getEasyRank());
+    game.getFirstPlayer().m_score+=(game.getCurrentHand().first->getEasyRank()+game.getCurrentHand().second->getEasyRank());
     game.flushCurrentHand();
 }
 
@@ -33,17 +33,10 @@ void StateCalculateHandPoints::update(Game& game){
         game.getFirstPlayer().drawCard(game.getDeck());
         game.getSecondPlayer().drawCard(game.getDeck());
     }
+    if(game.getDeck().cardsLeft()==0)
+        game.setIsDrawingAllowed(false);
     if(game.getFirstPlayer().getCurrentHandSize()==0)
         game.setState(std::make_unique<StateGameOver>());
     else
         game.setState(std::make_unique<StatePlayHand>());
-}
-
-void StateCalculateHandPoints::render(Game& game){
-    std::cout<<"Render Calculate"<<std::endl;
-}
-
-bool StateCalculateHandPoints::handleEvent(Game& game){
-    std::cout<<"Calculate Handle Event" <<std::endl;
-    return true;
 }

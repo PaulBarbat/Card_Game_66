@@ -12,12 +12,3 @@ void StateStart::update(Game& game){
     game.setState(std::make_unique<StateShuffleAndDraw>());
 }
 
-void StateStart::render(Game& game){
-    std::cout<<"Render Start"<<std::endl;
-}
-
-bool StateStart::handleEvent(Game& game){
-    std::cout<<"Start Handle Event" <<std::endl;
-    return true;
-}
-

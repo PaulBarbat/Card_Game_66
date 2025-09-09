@@ -191,6 +191,25 @@ inline CardID textureIdToCardId(const TextureID& id){
     }
 }
 
+inline OptionType textureIdToOptionType(const TextureID& id){
+    switch(id){
+        case TextureID::Button20Play:
+            return OptionType::Play20;
+        case TextureID::Button20End:
+            return OptionType::Play20End;
+        case TextureID::Button40Play:
+            return OptionType::Play40;
+        case TextureID::Button40End:
+            return OptionType::Play40End;
+        case TextureID::ButtonChangeTromf:
+            return OptionType::ChangeTromf;
+        case TextureID::ButtonPlay:
+            return OptionType::Play;
+        default:
+            return OptionType::Play;
+    }
+}
+
 using Vertex = std::pair<int, int>;
 struct LocalizedTexture {
     Vertex pos;       // base position
@@ -203,17 +222,24 @@ struct LocalizedTexture {
     // Hover animation
     float scale = 1.0f;       // 1.0 = normal, >1.0 = highlighted
     bool isHovered = false;
+    bool isClicked = false;
+
+    int h = 0;
+    int w = 0;
 
     LocalizedTexture() = default;
-    LocalizedTexture(const Vertex& p, const TextureID& c, float phase = 0.0f)
-        : pos(p), id(c), wavePhase(phase) {}
+    LocalizedTexture(const Vertex& p, const TextureID& c, float phase = 0.0f, int height = 0, int width = 0)
+        : pos(p), id(c), wavePhase(phase) , h(height), w(width) {}
 };
 
 
 class GameDisplay {
 private:
+    bool m_isCardSelected;
+    CardID m_selectedCard;
     std::unordered_map<TextureID, SDL_Texture*> m_textures;
     std::array<LocalizedTexture,5> m_cardPositions;
+    std::array<LocalizedTexture,5> m_ButtonPositions;
     size_t m_handSize = 0;
     SDL_Window* m_window;
     SDL_Renderer* m_renderer;
@@ -238,7 +264,7 @@ public:
     int handleEvents();
     void handleMouseHover(int x, int y);
     bool handleMouseClick(int x, int y);
-    bool pointOnCardInHand(int x, int y, int cardX, int cardY);
+    bool pointOnTexture(int x, int y, int cardX, int cardY ,int h, int w);
 
     void run();
 };

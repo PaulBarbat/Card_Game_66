@@ -63,6 +63,8 @@ GameDisplay::GameDisplay(){
     }
 
     loadTextures("resources/Visual_Cards.xml");
+    m_isCardSelected=false;
+    m_selectedCard=CardID(MagyarRank::Placeholder,MagyarSuite::Placeholder);
     m_game = std::make_unique<Game>();
 }
 
@@ -331,8 +333,10 @@ void GameDisplay::render(){
 
 
     Uint32 ticks = SDL_GetTicks(); 
-    float waveSpeed = 0.005f;      
+    float waveSpeed = 0.005f;     
     float waveAmplitude = 10.0f;
+    if(m_isCardSelected) 
+        waveAmplitude=0;
 
     for (int i = 0; i < m_handSize; i++) {
         auto& lc = m_cardPositions[i];
@@ -341,7 +345,8 @@ void GameDisplay::render(){
         lc.waveOffsetY = sin(ticks * waveSpeed + lc.wavePhase) * waveAmplitude;
 
         // apply hover scaling
-        lc.scale = lc.isHovered ? 1.1f : 1.0f;
+        lc.scale = (lc.isHovered && !m_isCardSelected)? 1.1f : 1.0f;
+        lc.scale = lc.isClicked ? 1.2f : lc.scale;
 
 
         // compute adjusted position
@@ -351,7 +356,7 @@ void GameDisplay::render(){
 
         renderCard(lc.id, renderX, renderY, 0.0, lc.scale);
 
-        if(lc.isHovered){
+        if((lc.isHovered && !m_isCardSelected) || (m_isCardSelected && lc.isClicked)){
             renderOptions(lc.id, renderX, renderY);
         }
     }
@@ -426,9 +431,9 @@ int GameDisplay::handleEvents(){
     return 0;
 }
 
-bool GameDisplay::pointOnCardInHand(int x, int y, int cardX, int cardY)
+bool GameDisplay::pointOnTexture(int x, int y, int cardX, int cardY, int h, int w)
 {
-    return (x>cardX && x<cardX+c_cardWidth && y>cardY && y<cardY+c_cardHeight);
+    return (x>cardX && x<cardX+w && y>cardY && y<cardY+h);
 }
 
 void GameDisplay::handleMouseHover(int x, int y){
@@ -439,21 +444,62 @@ void GameDisplay::handleMouseHover(int x, int y){
 
     // then set the hovered one
     for (auto& card : m_cardPositions) {
-        if (pointOnCardInHand(x, y, card.pos.first, card.pos.second)) {
+        if (pointOnTexture(x, y, card.pos.first, card.pos.second, c_cardHeight, c_cardWidth)) {
             std::cout << "HOVERING" << std::endl;
             card.isHovered = true;
+            break; // stop at first hovered card
+        }
+    }
+    for (auto& button : m_ButtonPositions) {
+        if (pointOnTexture(x, y, button.pos.first, button.pos.second, button.h, button.w)) {
+            std::cout << "HOVERING" << std::endl;
+            button.isHovered = true;
             break; // stop at first hovered card
         }
     }
 }
 
 bool GameDisplay::handleMouseClick(int x, int y){
-    for(const auto& card : m_cardPositions)
+    if(m_isCardSelected)
     {
-        if(pointOnCardInHand(x,y,card.pos.first, card.pos.second)){//card.second = CardID
+        for(auto& button : m_ButtonPositions)
+        {
+            if(pointOnTexture(x,y,button.pos.first,button.pos.second, button.h, button.w))
+            {
+                m_game->playOption(m_selectedCard, textureIdToOptionType(button.id));
+                m_isCardSelected=false;
+                m_selectedCard=CardID(MagyarRank::Placeholder,MagyarSuite::Placeholder);
+            }
+        }
+    }
+    m_isCardSelected=false;
+    m_selectedCard=CardID(MagyarRank::Placeholder,MagyarSuite::Placeholder);
+    for(auto& card : m_cardPositions)
+    {
+        if(pointOnTexture(x,y,card.pos.first, card.pos.second, c_cardHeight, c_cardWidth)){//card.second = CardID
             //handle option screen with m_game->m_context.m_options(card.second);
-            std::cout<<"clicked on card "<<rankToString(textureIdToCardId(card.id).first)<<" "<<suiteToString(textureIdToCardId(card.id).second)<<std::endl;
-            m_game->playOption(textureIdToCardId(card.id), OptionType::Play);
+            auto it = m_game->m_context.m_options.find(textureIdToCardId(card.id));
+            if(it!= m_game->m_context.m_options.end())
+            {
+                if(card.isClicked==false){
+                    card.isClicked=true;
+                    m_isCardSelected=true;
+                    m_selectedCard=textureIdToCardId(card.id);
+                    for(int i=0;i<it->second.size();i++){
+                        m_ButtonPositions[i]=LocalizedTexture(Vertex(card.pos.first, card.pos.second), cardIdToTextureId(it->first), 0);
+                    }
+                }else if(card.isClicked==true)
+                {
+                    m_isCardSelected=false;
+                    m_selectedCard=CardID(MagyarRank::Placeholder,MagyarSuite::Placeholder);
+                    card.isClicked=false;
+                    m_ButtonPositions.fill(LocalizedTexture());
+                }
+            }
+            else{
+                std::cout<<"clicked on card "<<rankToString(textureIdToCardId(card.id).first)<<" "<<suiteToString(textureIdToCardId(card.id).second)<<std::endl;
+                m_game->playOption(textureIdToCardId(card.id), OptionType::Play);
+            }
             return true;
         }
     }

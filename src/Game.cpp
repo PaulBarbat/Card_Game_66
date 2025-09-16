@@ -31,6 +31,7 @@ Game::Game():
 }
 
 void Game::playOption(const CardID& id, const OptionType& option){
+    std::cout<<"Playing option "<<toString(option)<<std::endl;
     switch(option){
         case OptionType::Play:
             if(m_context.m_isFirstPlayer){
@@ -64,25 +65,17 @@ void Game::playOption(const CardID& id, const OptionType& option){
             break;
         case OptionType::Play20End:
             std::cout<<"Play 20 END "<<rankToString(id.first)<<" "<<suiteToString(id.second)<<std::endl;
-            std::cout<<"Play 20 "<<rankToString(id.first)<<" "<<suiteToString(id.second)<<std::endl;
-            if(m_players.first->m_score==0)
-                m_players.first->m_latentPoints+=20;
-            else
+            if(m_players.first->m_score!=0)
                 m_players.first->m_score+=20;
             m_currentHand.first=m_players.first->getCardById(id);
             if(m_currentHand.first==nullptr)
             {
                 throw std::runtime_error("Card is null");
             }
-            m_players.first->removeCard(id);
-            m_context.m_isFirstPlayer=false;
-            m_context.m_playedCard=id;
-            m_context.m_hand=m_players.second->getHand();
             endRound();
             break;
         case OptionType::Play40:
             std::cout<<"Play 40 "<<rankToString(id.first)<<" "<<suiteToString(id.second)<<std::endl;
-            std::cout<<"Play 20 "<<rankToString(id.first)<<" "<<suiteToString(id.second)<<std::endl;
             if(m_players.first->m_score==0)
                 m_players.first->m_latentPoints+=40;
             else
@@ -99,21 +92,14 @@ void Game::playOption(const CardID& id, const OptionType& option){
             break;
         case OptionType::Play40End:
             std::cout<<"Play 40 END "<<rankToString(id.first)<<" "<<suiteToString(id.second)<<std::endl;
-            std::cout<<"Play 20 "<<rankToString(id.first)<<" "<<suiteToString(id.second)<<std::endl;
-            if(m_players.first->m_score==0)
-                m_players.first->m_latentPoints+=40;
-            else
+            if(m_players.first->m_score!=0)
                 m_players.first->m_score+=40;
             m_currentHand.first=m_players.first->getCardById(id);
             if(m_currentHand.first==nullptr)
             {
                 throw std::runtime_error("Card is null");
             }
-            m_players.first->removeCard(id);
             endRound();
-            m_context.m_isFirstPlayer=false;
-            m_context.m_playedCard=id;
-            m_context.m_hand=m_players.second->getHand();
             break;
         case OptionType::ChangeTromf:
             std::cout<<"Change tromf "<<rankToString(id.first)<<" "<<suiteToString(id.second)<<std::endl;
@@ -123,7 +109,7 @@ void Game::playOption(const CardID& id, const OptionType& option){
             std::cout<<"Not an option"<<std::endl;
             break;
     }
-    std::cout<<"HAND "<<m_currentHand.first->toString()<<" second "<<(m_currentHand.second == nullptr ? "nullptr" : m_currentHand.second->toString())<<std::endl;
+    std::cout<<"HAND "<<(m_currentHand.first == nullptr ? "nullptr" : m_currentHand.first->toString())<<" second "<<(m_currentHand.second == nullptr ? "nullptr" : m_currentHand.second->toString())<<std::endl;
 }
 
 void Game::closeCard(){

@@ -12,6 +12,7 @@ void StateShuffleAndDraw::enter(Game& game){
     game.setIsDrawingAllowed(true);
     game.getFirstPlayer().resetPlayerForNewRound();
     game.getSecondPlayer().resetPlayerForNewRound();
+    game.flushCurrentHand();
 }
 
 void StateShuffleAndDraw::update(Game& game){

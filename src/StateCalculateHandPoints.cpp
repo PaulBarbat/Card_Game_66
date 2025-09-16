@@ -24,6 +24,11 @@ void StateCalculateHandPoints::enter(Game& game){//there probably is a better wa
         game.swapPlayerOrder();//Second player will be the first next turn
     }
     game.getFirstPlayer().m_score+=(game.getCurrentHand().first->getEasyRank()+game.getCurrentHand().second->getEasyRank());
+    if(game.getFirstPlayer().m_latentPoints>0)
+    {
+        game.getFirstPlayer().m_score+=game.getFirstPlayer().m_latentPoints;
+        game.getFirstPlayer().m_latentPoints=0;
+    }
     game.flushCurrentHand();
 }
 

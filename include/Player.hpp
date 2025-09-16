@@ -18,6 +18,18 @@ enum class OptionType{
     ChangeTromf
 };
 
+inline std::string toString(OptionType option) {
+    switch (option) {
+        case OptionType::Play:        return "Play";
+        case OptionType::Play20:      return "Play20";
+        case OptionType::Play40:      return "Play40";
+        case OptionType::Play20End:   return "Play20End";
+        case OptionType::Play40End:   return "Play40End";
+        case OptionType::ChangeTromf: return "ChangeTromf";
+        default:                      return "UnknownOptionType";
+    }
+}
+
 enum class PlayerType{
     Player,
     NPC

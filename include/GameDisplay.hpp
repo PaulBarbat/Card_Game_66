@@ -210,6 +210,64 @@ inline OptionType textureIdToOptionType(const TextureID& id){
     }
 }
 
+inline TextureID optionTypeToTextureId(const OptionType& option) {
+    switch (option) {
+        case OptionType::Play20:
+            return TextureID::Button20Play;
+        case OptionType::Play20End:
+            return TextureID::Button20End;
+        case OptionType::Play40:
+            return TextureID::Button40Play;
+        case OptionType::Play40End:
+            return TextureID::Button40End;
+        case OptionType::ChangeTromf:
+            return TextureID::ButtonChangeTromf;
+        case OptionType::Play:
+            return TextureID::ButtonPlay;
+        default:
+            return TextureID::Placeholder; // fallback
+    }
+}
+
+inline std::string textureIdToString(TextureID id) {
+    switch (id) {
+        case Background:         return "Background";
+        case Button20End:        return "Button20End";
+        case Button20Play:       return "Button20Play";
+        case Button40End:        return "Button40End";
+        case Button40Play:       return "Button40Play";
+        case ButtonChangeTromf:  return "ButtonChangeTromf";
+        case ButtonCloseTheCard: return "ButtonCloseTheCard";
+        case ButtonEndTheRound:  return "ButtonEndTheRound";
+        case ButtonPlay:         return "ButtonPlay";
+        case IconActions:        return "IconActions";
+        case IconTromf:          return "IconTromf";
+        case CardAcornAce:       return "CardAcornAce";
+        case CardAcornKing:      return "CardAcornKing";
+        case CardAcornOber:      return "CardAcornOber";
+        case CardAcornTen:       return "CardAcornTen";
+        case CardAcornUnter:     return "CardAcornUnter";
+        case CardBellAce:        return "CardBellAce";
+        case CardBellKing:       return "CardBellKing";
+        case CardBellOber:       return "CardBellOber";
+        case CardBellTen:        return "CardBellTen";
+        case CardBellUnter:      return "CardBellUnter";
+        case CardHeartAce:       return "CardHeartAce";
+        case CardHeartKing:      return "CardHeartKing";
+        case CardHeartOber:      return "CardHeartOber";
+        case CardHeartTen:       return "CardHeartTen";
+        case CardHeartUnter:     return "CardHeartUnter";
+        case CardLeafAce:        return "CardLeafAce";
+        case CardLeafKing:       return "CardLeafKing";
+        case CardLeafOber:       return "CardLeafOber";
+        case CardLeafTen:        return "CardLeafTen";
+        case CardLeafUnter:      return "CardLeafUnter";
+        case Back:               return "Back";
+        case Placeholder:        return "Placeholder";
+        default:                 return "UnknownTextureID";
+    }
+}
+
 using Vertex = std::pair<int, int>;
 struct LocalizedTexture {
     Vertex pos;       // base position
@@ -260,6 +318,7 @@ public:
     bool renderTexture(TextureID id, int h, int w, int x, int y, double rotate, float scale);
     bool renderText(const std::string& text,int x, int y);
     bool renderOptions(TextureID id,int x, int y);
+    bool renderClickableOptions();
     void render();
     int handleEvents();
     void handleMouseHover(int x, int y);

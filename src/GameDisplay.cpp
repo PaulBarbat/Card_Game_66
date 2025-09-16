@@ -226,7 +226,7 @@ bool GameDisplay::renderTexture(TextureID id, int h, int w, int x, int y, double
         return true;
     }
     else{
-        std::cerr << "Missing texture!\n";   
+        std::cerr << "Missing texture! "<<textureIdToString(id)<<"\n";   
         std::cin.get();
     }
     return false;
@@ -299,6 +299,16 @@ bool GameDisplay::renderOptions(TextureID id,int x, int y){
     return true;
 }
 
+
+bool GameDisplay::renderClickableOptions(){
+    for(const auto& button : m_ButtonPositions)
+    {
+        if(textureIdToString(button.id)!="UnknownTextureID")
+            renderTexture(button.id, button.h, button.w, button.pos.first , button.pos.second, button.wavePhase , button.scale);
+    }
+    return true;
+}
+
 void GameDisplay::render(){
     SDL_SetRenderDrawColor(m_renderer, 30, 30, 30, 255);
     SDL_RenderClear(m_renderer);
@@ -356,8 +366,10 @@ void GameDisplay::render(){
 
         renderCard(lc.id, renderX, renderY, 0.0, lc.scale);
 
-        if((lc.isHovered && !m_isCardSelected) || (m_isCardSelected && lc.isClicked)){
+        if((lc.isHovered && !m_isCardSelected)){
             renderOptions(lc.id, renderX, renderY);
+        }else if((m_isCardSelected && lc.isClicked)){
+            renderClickableOptions();
         }
     }
 
@@ -460,17 +472,28 @@ void GameDisplay::handleMouseHover(int x, int y){
 }
 
 bool GameDisplay::handleMouseClick(int x, int y){
+    std::cout<<"CLICK"<<std::endl;
     if(m_isCardSelected)
     {
+        std::cout<<"A card is selected "<<m_ButtonPositions.size()<<std::endl;
         for(auto& button : m_ButtonPositions)
         {
-            if(pointOnTexture(x,y,button.pos.first,button.pos.second, button.h, button.w))
+            bool a = pointOnTexture(x,y,button.pos.first,button.pos.second, button.h, button.w);
+            std::cout<<a<<" x-"<<x<<" y-"<<y<<" posfirst-"<<button.pos.first<<" possecond-"<<button.pos.second<<" h"<<button.h<<" w"<<button.w<<std::endl;
+            if(a)
             {
+                std::cout<<"CLicked on option "<<std::endl;
                 m_game->playOption(m_selectedCard, textureIdToOptionType(button.id));
                 m_isCardSelected=false;
                 m_selectedCard=CardID(MagyarRank::Placeholder,MagyarSuite::Placeholder);
+                for(auto& card : m_cardPositions)
+                {
+                    card.isClicked=false;
+                    card.scale=1.0f;
+                }    
             }
         }
+        m_ButtonPositions.fill(LocalizedTexture());
     }
     m_isCardSelected=false;
     m_selectedCard=CardID(MagyarRank::Placeholder,MagyarSuite::Placeholder);
@@ -486,8 +509,12 @@ bool GameDisplay::handleMouseClick(int x, int y){
                     m_isCardSelected=true;
                     m_selectedCard=textureIdToCardId(card.id);
                     for(int i=0;i<it->second.size();i++){
-                        m_ButtonPositions[i]=LocalizedTexture(Vertex(card.pos.first, card.pos.second), cardIdToTextureId(it->first), 0);
+                        int w = (c_cardWidth/it->second.size());
+                        int temp_x=(card.pos.first+i*(w+5)-5);
+                        m_ButtonPositions[i]=LocalizedTexture(Vertex(temp_x, card.pos.second-80), optionTypeToTextureId(it->second[i]), 0, 40, w);
                     }
+                    for(const auto& button: m_ButtonPositions)
+                        std::cout<<textureIdToString(button.id)<<std::endl;
                 }else if(card.isClicked==true)
                 {
                     m_isCardSelected=false;

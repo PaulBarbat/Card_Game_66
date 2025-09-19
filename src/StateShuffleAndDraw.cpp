@@ -9,10 +9,7 @@ void StateShuffleAndDraw::enter(Game& game){
     std::uniform_int_distribution<> dist(1, 20);
     for(int i=0;i<=dist(gen);i++)
         game.getDeck().shuffleDeck();
-    game.setIsDrawingAllowed(true);
-    game.getFirstPlayer().resetPlayerForNewRound();
-    game.getSecondPlayer().resetPlayerForNewRound();
-    game.flushCurrentHand();
+    game.resetForNextRound();
 }
 
 void StateShuffleAndDraw::update(Game& game){

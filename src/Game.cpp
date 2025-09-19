@@ -238,6 +238,14 @@ bool Game::getIsDrawingAllowed(){
     return m_isDrawingAllowed;
 }
 
+void Game::resetForNextRound(){
+    m_context.m_isCardClosed=false;
+    setIsDrawingAllowed(true);
+    getFirstPlayer().resetPlayerForNewRound();
+    getSecondPlayer().resetPlayerForNewRound();
+    flushCurrentHand();
+}
+
 void Game::update(){
     m_context.m_tromf=m_deck->getTromf()->getCardID();
     if(m_context.m_cardsLeft!=m_deck->cardsLeft())

@@ -66,6 +66,8 @@ GameDisplay::GameDisplay(){
     m_isCardSelected=false;
     m_selectedCard=CardID(MagyarRank::Placeholder,MagyarSuite::Placeholder);
     m_game = std::make_unique<Game>();
+    m_EndRoundButton=LocalizedTexture(Vertex(c_windowWidth-300,  c_windowHeight - c_cardHeight - 70), TextureID::ButtonEndTheRound, 0, 140, 200);
+    m_CloseTheCardButton=LocalizedTexture(Vertex(c_windowWidth-300, c_windowHeight - c_cardHeight +80), TextureID::ButtonCloseTheCard, 0, 140, 200);
 }
 
 GameDisplay::~GameDisplay()
@@ -381,9 +383,9 @@ void GameDisplay::render(){
         //render placeholder
         renderCard(TextureID::Placeholder,x,y, 0.0);
         //render buttons
-        if(m_game->m_context.m_cardsLeft>2)
-            renderTexture(TextureID::ButtonCloseTheCard, 140, 200, c_windowWidth-300,  c_windowHeight - c_cardHeight - 70, 0, 1.0f);
-        renderTexture(TextureID::ButtonEndTheRound, 140, 200, c_windowWidth-300, c_windowHeight - c_cardHeight +80, 0, 1.0f);
+        if(m_game->m_context.m_cardsLeft>2&&!m_game->m_context.m_isCardClosed)
+            renderTexture(m_CloseTheCardButton.id, m_CloseTheCardButton.h, m_CloseTheCardButton.w, m_CloseTheCardButton.pos.first,  m_CloseTheCardButton.pos.second, 0, 1.0f);
+        renderTexture(m_EndRoundButton.id, m_EndRoundButton.h, m_EndRoundButton.w, m_EndRoundButton.pos.first,  m_EndRoundButton.pos.second, 0, 1.0f);
     } 
     else{
         //render played card
@@ -414,6 +416,8 @@ void GameDisplay::render(){
     //render player name and score
     renderText(m_game->m_context.m_playerName,100,100);
     renderText(std::to_string(m_game->m_context.m_points),100,130);
+    if(m_game->m_context.m_isCardClosed)
+        renderText("Card is Closed!",800,130);
     SDL_RenderPresent(m_renderer);
     
 }
@@ -486,13 +490,13 @@ bool GameDisplay::handleMouseClick(int x, int y){
                 m_game->playOption(m_selectedCard, textureIdToOptionType(button.id));
                 m_isCardSelected=false;
                 m_selectedCard=CardID(MagyarRank::Placeholder,MagyarSuite::Placeholder);
-                for(auto& card : m_cardPositions)
-                {
-                    card.isClicked=false;
-                    card.scale=1.0f;
-                }    
             }
         }
+        for(auto& card : m_cardPositions)
+        {
+            card.isClicked=false;
+            card.scale=1.0f;
+        }    
         m_ButtonPositions.fill(LocalizedTexture());
     }
     m_isCardSelected=false;
@@ -529,6 +533,17 @@ bool GameDisplay::handleMouseClick(int x, int y){
             }
             return true;
         }
+    }
+    
+    if(pointOnTexture(x,y,m_CloseTheCardButton.pos.first,m_CloseTheCardButton.pos.second, m_CloseTheCardButton.h, m_CloseTheCardButton.w))
+    {
+        std::cout<<"Clicked on Close The Card "<<std::endl;
+        m_game->closeCard();
+    }
+    else if(pointOnTexture(x,y,m_EndRoundButton.pos.first,m_EndRoundButton.pos.second, m_EndRoundButton.h, m_EndRoundButton.w))
+    {
+        std::cout<<"Clicked on End the Round "<<std::endl;
+        m_game->endRound();
     }
     return false;
 }

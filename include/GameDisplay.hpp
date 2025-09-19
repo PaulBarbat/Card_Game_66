@@ -297,7 +297,9 @@ private:
     CardID m_selectedCard;
     std::unordered_map<TextureID, SDL_Texture*> m_textures;
     std::array<LocalizedTexture,5> m_cardPositions;
-    std::array<LocalizedTexture,5> m_ButtonPositions;
+    std::array<LocalizedTexture,3> m_ButtonPositions;
+    LocalizedTexture m_CloseTheCardButton;
+    LocalizedTexture m_EndRoundButton;
     size_t m_handSize = 0;
     SDL_Window* m_window;
     SDL_Renderer* m_renderer;

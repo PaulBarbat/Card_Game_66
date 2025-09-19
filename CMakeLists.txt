@@ -130,21 +130,15 @@ file(GLOB GAME_SOURCES
 # Create the game executable
 add_executable(${EXECUTABLE_NAME} ${GAME_SOURCES})
 
-# Viewer (single file, so no need to glob)
-add_executable(Card_Viewer CardViewer.cpp)
-
 # --- Apply include paths ---
 target_include_directories(${EXECUTABLE_NAME} PRIVATE ${PROJECT_COMMON_INCLUDES} ${SDL2_INCLUDE_DIRS})
-target_include_directories(Card_Viewer PRIVATE ${PROJECT_COMMON_INCLUDES} ${SDL2_INCLUDE_DIRS})
 
 # --- Apply library paths and linking ---
 if(SDL2_LIBRARY_DIRS)
     target_link_directories(${EXECUTABLE_NAME} PRIVATE ${SDL2_LIBRARY_DIRS})
-    target_link_directories(Card_Viewer PRIVATE ${SDL2_LIBRARY_DIRS})
 endif()
 
 target_link_libraries(${EXECUTABLE_NAME} PRIVATE ${SDL2_LIBS})
-target_link_libraries(Card_Viewer PRIVATE ${SDL2_LIBS})
 
 # --- Compiler warnings ---
 target_compile_options(${EXECUTABLE_NAME} PRIVATE -Wall -Wextra -Wpedantic)
@@ -156,11 +150,11 @@ if(WIN32 OR CMAKE_SYSTEM_NAME STREQUAL "Windows")
     set(SDL2_DLL "${CMAKE_SOURCE_DIR}/external/SDL2-devel-2.32.8-mingw/SDL2-2.32.8/x86_64-w64-mingw32/bin/SDL2.dll")
     set(SDL2_IMAGE_DLL "${CMAKE_SOURCE_DIR}/external/SDL2_image-devel-2.8.8-mingw/SDL2_image-2.8.8/x86_64-w64-mingw32/bin/SDL2_image.dll")
     set(SDL2_TTF_DLL "${CMAKE_SOURCE_DIR}/external/SDL2_ttf-devel-2.24.0-mingw/SDL2_ttf-2.24.0/x86_64-w64-mingw32/bin/SDL2_ttf.dll")
-
-    add_custom_command(TARGET Card_Viewer POST_BUILD
-        COMMAND ${CMAKE_COMMAND} -E copy_if_different ${SDL2_DLL} $<TARGET_FILE_DIR:Card_Viewer>
-        COMMAND ${CMAKE_COMMAND} -E copy_if_different ${SDL2_IMAGE_DLL} $<TARGET_FILE_DIR:Card_Viewer>
-        COMMAND ${CMAKE_COMMAND} -E copy_if_different ${SDL2_TTF_DLL} $<TARGET_FILE_DIR:Card_Viewer>
+    
+    add_custom_command(TARGET ${EXECUTABLE_NAME} POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different ${SDL2_DLL} $<TARGET_FILE_DIR:${EXECUTABLE_NAME}>
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different ${SDL2_IMAGE_DLL} $<TARGET_FILE_DIR:${EXECUTABLE_NAME}>
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different ${SDL2_TTF_DLL} $<TARGET_FILE_DIR:${EXECUTABLE_NAME}>
         COMMENT "Copying SDL2 DLLs for Windows target"
         COMMAND ${CMAKE_COMMAND} -E copy_directory
             "${CMAKE_SOURCE_DIR}/resources"

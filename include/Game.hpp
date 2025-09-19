@@ -33,6 +33,7 @@ public:
     void flushCurrentHand();
     void setIsDrawingAllowed(bool newValue);
     bool getIsDrawingAllowed();
+    void resetForNextRound();
 
 private:
     std::pair<std::unique_ptr<Player> ,std::unique_ptr<Player> > m_players;

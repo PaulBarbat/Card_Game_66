@@ -3,23 +3,18 @@
 #include "Game.hpp"
 
 void StatePlayHand::enter(Game& game){
+    std::cout<<"PlayHand enter"<<std::endl;
     if(game.getDeck().cardsLeft()==0)
         game.setIsDrawingAllowed(false);
 }
 
 void StatePlayHand::update(Game& game){
-    std::shared_ptr<ICard> first = game.getFirstPlayer().playHand(game.getDeck(),true);
-    if(game.getFirstPlayer().getHasClosedTheCard())
-        game.setIsDrawingAllowed(false);
-    game.setCurrentHand(first,nullptr);
-    std::shared_ptr<ICard> second;
-    if(game.getIsDrawingAllowed()){
-        second = game.getSecondPlayer().playHand(game.getDeck(),false);
-    }else{
-        second = game.getSecondPlayer().playFilteredHand(game.getDeck(),false, first);
+    //std::cout<<"Update  "<<(game.getCurrentHand().first ==nullptr ? "nullptr" : game.getCurrentHand().first->toString())<<" "<<(game.getCurrentHand().second ==nullptr ? "nullptr" : game.getCurrentHand().second->toString())<<std::endl;
+    if(game.getCurrentHand().first!= nullptr && game.getCurrentHand().second !=nullptr)
+    {
+        std::cout<<"Changing states to calculate"<<std::endl;
+        game.setState(std::make_unique<StateCalculateHandPoints>());
     }
-    
-    game.setCurrentHand(first,second);
-    game.setState(std::make_unique<StateCalculateHandPoints>());
 }
+
 

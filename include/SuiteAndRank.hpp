@@ -7,9 +7,7 @@ enum class MagyarSuite{
     Ghinda,
     Bata,
     Verde,
-    Back,
-    Placeholder,
-    Background
+    Placeholder
 };
 
 enum class MagyarRank{
@@ -18,9 +16,7 @@ enum class MagyarRank{
     Cal,
     Craita = 10,
     Tuz,
-    Back,
-    Placeholder,
-    Background
+    Placeholder
 };
 
 inline std::string rankToString(MagyarRank rank){
@@ -49,6 +45,11 @@ inline std::string rankToString(MagyarRank rank){
         case MagyarRank::Tuz:
         {
             return "Tuz";
+            break;
+        }
+        case MagyarRank::Placeholder:
+        {
+            return "Placeholder";
             break;
         }
         default:
@@ -80,6 +81,11 @@ inline std::string suiteToString(MagyarSuite suite)
         case MagyarSuite::Verde:
         {
             return " de Verde";
+            break;
+        }
+        case MagyarSuite::Placeholder:
+        {
+            return " de Placeholder";
             break;
         }
         default:

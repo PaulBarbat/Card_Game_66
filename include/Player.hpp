@@ -9,53 +9,64 @@
 #include "SuiteAndRank.hpp"
 
 
+enum class OptionType{
+    Play,
+    Play20,
+    Play40,
+    Play20End,
+    Play40End,
+    ChangeTromf
+};
+
+inline std::string toString(OptionType option) {
+    switch (option) {
+        case OptionType::Play:        return "Play";
+        case OptionType::Play20:      return "Play20";
+        case OptionType::Play40:      return "Play40";
+        case OptionType::Play20End:   return "Play20End";
+        case OptionType::Play40End:   return "Play40End";
+        case OptionType::ChangeTromf: return "ChangeTromf";
+        default:                      return "UnknownOptionType";
+    }
+}
+
 enum class PlayerType{
     Player,
     NPC
 };
 
-struct CardOption {
-    std::string shortDescription;
-    std::string description;//Description of the option. Something like "Play the card as part of 20"
-    std::function<void(unsigned position)> action;//Optional. This can be set with a function for example for 2 of Tromf to change it with the Tromf that is down on the deck
-};
-
-using Hand = std::vector<std::pair<std::shared_ptr<ICard>,std::vector<CardOption>>>;
+using Hand = std::vector<std::shared_ptr<ICard>>;
 
 class Player{
-private:
-    PlayerType type;
-    unsigned score;
-    unsigned roundsWon;
-    unsigned latentPoints; //Some points can be declared at one point but can only be added whenever the player takes a card.
-    Hand hand;
-    static constexpr size_t MAX_HAND_SIZE = 5;
-    std::function<void()> endGameCallback;
-    std::function<void(bool isFirst,Hand& hand)> renderCallback;
-    bool hasClosedTheCard;
-    std::string name;
 public:
     Player() = delete;
-    Player(PlayerType type,std::function<void()> endGameCallback, std::function<void(bool isFirst,Hand& hand)> renderCallback, std::string name);
-    void drawCard(Deck& deck);
-    void calculateOptions(Deck& deck);
-    void renderOptions(const Hand& hand) const;
-    std::shared_ptr<ICard> playHand(Deck& deck, bool isFirst);
-    std::shared_ptr<ICard> playFilteredHand(Deck& deck, bool isFirst, const std::shared_ptr<ICard> &card);
-    std::shared_ptr<ICard> playCard(const unsigned& cardPosition, Hand& hand,bool isFilteredHand=false);
-    void endRound();
-    void addScore(const unsigned &points);
-    unsigned getScore()const;
-    void addRoundsWon(const unsigned &points);
-    unsigned getRoundsWon()const;
+    Player(PlayerType type, std::string name);
+
+    std::string getName() const { return m_name;}
+    using Hand = std::vector<std::shared_ptr<ICard>>;
+    Hand& getHand() {return m_hand;}
+    size_t getCurrentHandSize()const { return m_hand.size();}
     void resetPlayerForNewRound();
-    std::string getName() const;
-    size_t getCurrentHandSize()const;
-    bool getHasClosedTheCard()const;
+    void drawCard(Deck& deck);
+    std::shared_ptr<ICard> getCardById(CardID id);
+    void removeCard(CardID id);
     void changeTromf(std::shared_ptr<ICard> card, Deck& deck);
+    void calculateOptions(int cards_left, const CardID& tromf, std::unordered_map<CardID,std::vector<OptionType>, CardHash, CardEqual> &options);
+
     //Tromf is the name given to the color that can take any card. 
     //If the player has the Two of Tromf and he starts a turn, 
     //as long as there are more than 2 cards in the deck, he can change it with his Two of Tromf.
+
+    bool m_hasClosedTheCard;
+    size_t m_score;
+    size_t m_roundsWon;
+    size_t m_latentPoints; //Some points can be declared at one point but can only be added whenever the player takes a card.
+    
+private:
+    static constexpr size_t s_MAX_HAND_SIZE = 5;
+    PlayerType m_type;
+    std::string m_name;
+    Hand m_hand;
 };
 
 #endif

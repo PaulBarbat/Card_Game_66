@@ -9,12 +9,11 @@ void StateShuffleAndDraw::enter(Game& game){
     std::uniform_int_distribution<> dist(1, 20);
     for(int i=0;i<=dist(gen);i++)
         game.getDeck().shuffleDeck();
-    game.setIsDrawingAllowed(true);
-    game.getFirstPlayer().resetPlayerForNewRound();
-    game.getSecondPlayer().resetPlayerForNewRound();
+    game.resetForNextRound();
 }
 
 void StateShuffleAndDraw::update(Game& game){
+    std::cout<<"ShuffleAndDraw state update"<<std::endl;
     game.getFirstPlayer().drawCard(game.getDeck());
     game.getFirstPlayer().drawCard(game.getDeck());
     game.getFirstPlayer().drawCard(game.getDeck());
@@ -28,4 +27,3 @@ void StateShuffleAndDraw::update(Game& game){
 
     game.setState(std::make_unique<StatePlayHand>());
 }
-

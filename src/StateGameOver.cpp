@@ -4,28 +4,29 @@
 
 void StateGameOver::enter(Game& game){
     std::cout<<"GAME OVER STATE"<<std::endl;
+    std::cout<<game.getFirstPlayer().getName()<<" "<<game.getFirstPlayer().m_score<<" - "<<game.getSecondPlayer().getName()<<" "<<game.getSecondPlayer().m_score<<std::endl;
+    std::cout<<game.getFirstPlayer().m_score<<" "<<game.getSecondPlayer().m_score<<std::endl;
     int pointsWon=0;
-    if(game.getFirstPlayer().m_hasClosedTheCard&&game.getFirstPlayer().m_score<66){
-        game.swapPlayerOrder();
+    if(game.m_context.m_isCardClosed){
         pointsWon=3;
+        if(game.getFirstPlayer().m_hasClosedTheCard)
+        {
+            if(game.getFirstPlayer().m_score<66){
+                game.swapPlayerOrder();
+                std::cout<<"Case 1"<<std::endl;
+            }
+        }
     }
-    else if(game.getSecondPlayer().m_hasClosedTheCard)//if he closed the card but he is the second player, it means he did not win the last round
-        pointsWon=3;
-    else if(game.getSecondPlayer().m_score>=33)
+    else if(game.getFirstPlayer().getCurrentHandSize()>0 && game.getFirstPlayer().m_score<66){
+            game.swapPlayerOrder();
+    }
+    if(game.getSecondPlayer().m_score>=33){
         pointsWon=1;
-    else if(game.getSecondPlayer().m_score<33)
+        std::cout<<"Case 5"<<std::endl;
+    } 
+    else{
         pointsWon=2;
-    else if(game.getFirstPlayer().getCurrentHandSize()>0&&game.getFirstPlayer().m_score>=66)
-        if(game.getSecondPlayer().m_score>=33)
-            pointsWon=1;
-        else
-            pointsWon=2;
-    else if(game.getFirstPlayer().getCurrentHandSize()>0&&game.getFirstPlayer().m_score<66)    {
-        if(game.getFirstPlayer().m_score>=33)
-            pointsWon=1;
-        else
-            pointsWon=2;
-        game.swapPlayerOrder();
+        std::cout<<"Case 6"<<std::endl;
     }
     game.getFirstPlayer().m_roundsWon+=pointsWon;
 }

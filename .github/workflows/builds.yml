@@ -18,9 +18,9 @@ jobs:
             libsdl2-dev libsdl2-image-dev libsdl2-ttf-dev \
             g++-mingw-w64 pkg-config
       - name: Configure CMake
-        run: cmake -B build -G Ninja -DCMAKE_BUILD_TYPE=Release -DPLATFORM_NAME=Linux
+        run: cmake -G "Ninja" -DCMAKE_C_COMPILER=gcc -DCMAKE_CXX_COMPILER=g++ ..
       - name: Build
-        run: cmake --build build --parallel
+        run: ninja
 
   build-windows:
     runs-on: windows-latest

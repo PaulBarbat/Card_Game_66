@@ -317,14 +317,14 @@ void GameDisplay::render(){
 
     renderBackground();
     //render the hand
-    int handSize = static_cast<int>(m_game->getCurrentPlayerHand().size());
+    m_game->getCurrentPlayerHand();
+    int handSize = static_cast<int>(m_game->m_context.m_hand.size());
     int x = static_cast<int>((c_windowWidth - (handSize * c_cardWidth + (handSize - 1) * 20)) / 2);
     int y = c_windowHeight - c_cardHeight - 70;
-
     m_handSize = handSize;
 
     for (int i = 0; i < handSize; i++) {
-        const auto& card = m_game->getCurrentPlayerHand()[i];
+        const auto& card = m_game->m_context.m_hand[i];
 
         // Preserve hover/scale state if the same card is already here
         if (m_cardPositions[i].id == cardIdToTextureId(card->getCardID())) {

@@ -26,5 +26,5 @@ public:
     virtual void playOption(const CardID& id, const OptionType& option) = 0;
     virtual void closeCard() = 0;
     virtual void endRound() = 0;
-    virtual Hand& getCurrentPlayerHand() = 0;
+    virtual void getCurrentPlayerHand() = 0;
 };

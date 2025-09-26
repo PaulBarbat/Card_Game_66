@@ -121,8 +121,28 @@ void Game::endRound(){
     setState(std::make_unique<StateGameOver>());
 }
 
-Hand& Game::getCurrentPlayerHand(){
-    return (m_context.m_isFirstPlayer ? m_players.first->getHand() : m_players.second->getHand());
+void Game::getCurrentPlayerHand(){
+    m_context.m_hand.clear();
+    if(!m_context.m_isFirstPlayer && (m_context.m_isCardClosed||m_context.m_cardsLeft<2))
+    {
+        const auto tromf=m_deck->getTromf();
+        for(const auto& card:m_players.second->getHand()){
+            if(card->compareSuite(*m_currentHand.first))
+                m_context.m_hand.push_back(card);
+        }
+        if(m_context.m_hand.size()==0){
+            for(const auto& card:m_players.second->getHand()){
+                if(card->compareSuite(*tromf))
+                    m_context.m_hand.push_back(card);
+            }
+            if(m_context.m_hand.size()==0){
+                m_context.m_hand=m_players.second->getHand();
+            }
+        }
+    }
+    else{
+        m_context.m_hand= (m_context.m_isFirstPlayer ? m_players.first->getHand() : m_players.second->getHand());
+    }
 }
 
 void Game::setState(std::unique_ptr<StateGame> newState){

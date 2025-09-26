@@ -13,12 +13,9 @@ jobs:
       - name: Install dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y \
-            openjdk-11-jdk cmake ninja-build git \
-            libsdl2-dev libsdl2-image-dev libsdl2-ttf-dev \
-            g++-mingw-w64 pkg-config
+          sudo apt-get install -y openjdk-11-jdk cmake ninja-build git libsdl2-dev libsdl2-image-dev libsdl2-ttf-dev g++-mingw-w64 pkg-config
       - name: Configure CMake
-        run: cmake -G "Ninja" -DCMAKE_C_COMPILER=gcc -DCMAKE_CXX_COMPILER=g++ ..
+        run: cmake -G "Ninja" -DCMAKE_C_COMPILER=gcc -DCMAKE_CXX_COMPILER=g++ $GITHUB_WORKSPACE
       - name: Build
         run: ninja
 
@@ -34,9 +31,6 @@ jobs:
           .\vcpkg\vcpkg.exe install sdl2 sdl2-image sdl2-ttf
       - name: Configure CMake (MinGW)
         run: |
-          cmake -B build -G "Ninja" ^
-            -DCMAKE_C_COMPILER=gcc ^
-            -DCMAKE_CXX_COMPILER=g++ ^
-            -DCMAKE_TOOLCHAIN_FILE=.\vcpkg\scripts\buildsystems\vcpkg.cmake
+          cmake -B build -G "Ninja" -DCMAKE_C_COMPILER=gcc -DCMAKE_CXX_COMPILER=g++ -DCMAKE_TOOLCHAIN_FILE=.\vcpkg\scripts\buildsystems\vcpkg.cmake
       - name: Build
         run: cmake --build build --parallel

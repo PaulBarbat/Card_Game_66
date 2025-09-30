@@ -68,6 +68,7 @@ GameDisplay::GameDisplay(){
     m_game = std::make_unique<Game>();
     m_EndRoundButton=LocalizedTexture(Vertex(c_windowWidth-300,  c_windowHeight - c_cardHeight - 70), TextureID::ButtonEndTheRound, 0, 140, 200);
     m_CloseTheCardButton=LocalizedTexture(Vertex(c_windowWidth-300, c_windowHeight - c_cardHeight +80), TextureID::ButtonCloseTheCard, 0, 140, 200);
+    m_ContinueButton=LocalizedTexture(Vertex(c_windowWidth/2-150, c_windowHeight/2-100), TextureID::ButtonContinue, 0, 200, 300);
 }
 
 GameDisplay::~GameDisplay()
@@ -149,6 +150,7 @@ void GameDisplay::loadTextures(const std::string& path) {
     loadSingleTexture(TextureID::ButtonCloseTheCard,"resources/ButtonCloseTheCard.png");
     loadSingleTexture(TextureID::ButtonEndTheRound,"resources/ButtonEndTheRound.png");
     loadSingleTexture(TextureID::ButtonPlay,"resources/ButtonPlay.png");
+    loadSingleTexture(TextureID::ButtonContinue,"resources/ButtonContinue.png");
     loadSingleTexture(TextureID::IconActions,"resources/icon1.png");
     loadSingleTexture(TextureID::IconTromf,"resources/icon3.png");
 }
@@ -316,108 +318,118 @@ void GameDisplay::render(){
     SDL_RenderClear(m_renderer);
 
     renderBackground();
-    //render the hand
-    m_game->getCurrentPlayerHand();
-    int handSize = static_cast<int>(m_game->m_context.m_hand.size());
-    int x = static_cast<int>((c_windowWidth - (handSize * c_cardWidth + (handSize - 1) * 20)) / 2);
-    int y = c_windowHeight - c_cardHeight - 70;
-    m_handSize = handSize;
+    if(!m_game->m_context.m_isGameOverState)
+    {//render the hand
+        m_game->getCurrentPlayerHand();
+        int handSize = static_cast<int>(m_game->m_context.m_hand.size());
+        int x = static_cast<int>((c_windowWidth - (handSize * c_cardWidth + (handSize - 1) * 20)) / 2);
+        int y = c_windowHeight - c_cardHeight - 70;
+        m_handSize = handSize;
 
-    for (int i = 0; i < handSize; i++) {
-        const auto& card = m_game->m_context.m_hand[i];
+        for (int i = 0; i < handSize; i++) {
+            const auto& card = m_game->m_context.m_hand[i];
 
-        // Preserve hover/scale state if the same card is already here
-        if (m_cardPositions[i].id == cardIdToTextureId(card->getCardID())) {
-            m_cardPositions[i].pos = Vertex(x, y);
-            m_cardPositions[i].wavePhase = i * 0.5f;
-        } else {
-            // Overwrite with a new LocalizedTexture (resets hover)
-            m_cardPositions[i] = LocalizedTexture(Vertex(x, y), cardIdToTextureId(card->getCardID()), i * 0.5f);
+            // Preserve hover/scale state if the same card is already here
+            if (m_cardPositions[i].id == cardIdToTextureId(card->getCardID())) {
+                m_cardPositions[i].pos = Vertex(x, y);
+                m_cardPositions[i].wavePhase = i * 0.5f;
+            } else {
+                // Overwrite with a new LocalizedTexture (resets hover)
+                m_cardPositions[i] = LocalizedTexture(Vertex(x, y), cardIdToTextureId(card->getCardID()), i * 0.5f);
+            }
+
+            x += c_cardWidth + 20;
         }
 
-        x += c_cardWidth + 20;
-    }
-
-    // If fewer cards than before, clear the unused slots
-    for (int i = handSize; i < m_cardPositions.size(); i++) {
-        m_cardPositions[i] = LocalizedTexture(); // or some "empty" state
-    }
-
-
-    Uint32 ticks = SDL_GetTicks(); 
-    float waveSpeed = 0.005f;     
-    float waveAmplitude = 10.0f;
-    if(m_isCardSelected) 
-        waveAmplitude=0;
-
-    for (int i = 0; i < m_handSize; i++) {
-        auto& lc = m_cardPositions[i];
-
-        // idle wave
-        lc.waveOffsetY = sin(ticks * waveSpeed + lc.wavePhase) * waveAmplitude;
-
-        // apply hover scaling
-        lc.scale = (lc.isHovered && !m_isCardSelected)? 1.1f : 1.0f;
-        lc.scale = lc.isClicked ? 1.2f : lc.scale;
-
-
-        // compute adjusted position
-        int renderX = lc.pos.first - ((c_cardWidth * lc.scale - c_cardWidth) / 2);
-        int renderY = lc.pos.second + static_cast<int>(lc.waveOffsetY)
-                    - ((c_cardHeight * lc.scale - c_cardHeight) / 2);
-
-        renderCard(lc.id, renderX, renderY, 0.0, lc.scale);
-
-        if((lc.isHovered && !m_isCardSelected)){
-            renderOptions(lc.id, renderX, renderY);
-        }else if((m_isCardSelected && lc.isClicked)){
-            renderClickableOptions();
+        // If fewer cards than before, clear the unused slots
+        for (int i = handSize; i < m_cardPositions.size(); i++) {
+            m_cardPositions[i] = LocalizedTexture(); // or some "empty" state
         }
-    }
 
-    x=(c_windowWidth-c_cardWidth)/2;
-    y=(c_windowHeight-(2*c_cardHeight))-200;
-    
-    if(m_game->m_context.m_isFirstPlayer)
-    {
-        //render placeholder
-        renderCard(TextureID::Placeholder,x,y, 0.0);
-        //render buttons
-        if(m_game->m_context.m_cardsLeft>2&&!m_game->m_context.m_isCardClosed)
-            renderTexture(m_CloseTheCardButton.id, m_CloseTheCardButton.h, m_CloseTheCardButton.w, m_CloseTheCardButton.pos.first,  m_CloseTheCardButton.pos.second, 0, 1.0f);
-        renderTexture(m_EndRoundButton.id, m_EndRoundButton.h, m_EndRoundButton.w, m_EndRoundButton.pos.first,  m_EndRoundButton.pos.second, 0, 1.0f);
-    } 
-    else{
-        //render played card
-        renderCard(cardIdToTextureId(m_game->m_context.m_playedCard),x,y, 0.0);
-    }
 
-    if(m_game->m_context.m_cardsLeft>0){
-        //render tromf
-        x+=c_cardWidth+150;
-        y-=(c_cardHeight/2)-(c_cardWidth/2)-10;
-        renderCard(cardIdToTextureId(m_game->m_context.m_tromf),x, y, 90.0 );
-        //render deck
-        x+=(c_cardWidth/2);
-        for(int i=0; i<static_cast<int>(m_game->m_context.m_cardsLeft/2); i++)
+        Uint32 ticks = SDL_GetTicks(); 
+        float waveSpeed = 0.005f;     
+        float waveAmplitude = 10.0f;
+        if(m_isCardSelected) 
+            waveAmplitude=0;
+
+        for (int i = 0; i < m_handSize; i++) {
+            auto& lc = m_cardPositions[i];
+
+            // idle wave
+            lc.waveOffsetY = sin(ticks * waveSpeed + lc.wavePhase) * waveAmplitude;
+
+            // apply hover scaling
+            lc.scale = (lc.isHovered && !m_isCardSelected)? 1.1f : 1.0f;
+            lc.scale = lc.isClicked ? 1.2f : lc.scale;
+
+
+            // compute adjusted position
+            int renderX = lc.pos.first - ((c_cardWidth * lc.scale - c_cardWidth) / 2);
+            int renderY = lc.pos.second + static_cast<int>(lc.waveOffsetY)
+                        - ((c_cardHeight * lc.scale - c_cardHeight) / 2);
+
+            renderCard(lc.id, renderX, renderY, 0.0, lc.scale);
+
+            if((lc.isHovered && !m_isCardSelected)){
+                renderOptions(lc.id, renderX, renderY);
+            }else if((m_isCardSelected && lc.isClicked)){
+                renderClickableOptions();
+            }
+        }
+
+        x=(c_windowWidth-c_cardWidth)/2;
+        y=(c_windowHeight-(2*c_cardHeight))-200;
+        
+        if(m_game->m_context.m_isFirstPlayer)
         {
-            renderCard(TextureID::Back,x,y, 0.0);
-            x+=5;
-            y-=5;
+            //render placeholder
+            renderCard(TextureID::Placeholder,x,y, 0.0);
+            //render buttons
+            if(m_game->m_context.m_cardsLeft>2&&!m_game->m_context.m_isCardClosed)
+                renderTexture(m_CloseTheCardButton.id, m_CloseTheCardButton.h, m_CloseTheCardButton.w, m_CloseTheCardButton.pos.first,  m_CloseTheCardButton.pos.second, 0, 1.0f);
+            renderTexture(m_EndRoundButton.id, m_EndRoundButton.h, m_EndRoundButton.w, m_EndRoundButton.pos.first,  m_EndRoundButton.pos.second, 0, 1.0f);
+        } 
+        else{
+            //render played card
+            renderCard(cardIdToTextureId(m_game->m_context.m_playedCard),x,y, 0.0);
         }
 
-        //render deck size
         if(m_game->m_context.m_cardsLeft>0){
-            x+=c_cardWidth/2;
-            y+=c_cardHeight/2;
-            renderText(std::to_string(m_game->m_context.m_cardsLeft),x,y);
+            //render tromf
+            x+=c_cardWidth+150;
+            y-=(c_cardHeight/2)-(c_cardWidth/2)-10;
+            renderCard(cardIdToTextureId(m_game->m_context.m_tromf),x, y, 90.0 );
+            //render deck
+            x+=(c_cardWidth/2);
+            for(int i=0; i<static_cast<int>(m_game->m_context.m_cardsLeft/2); i++)
+            {
+                renderCard(TextureID::Back,x,y, 0.0);
+                x+=5;
+                y-=5;
+            }
+
+            //render deck size
+            if(m_game->m_context.m_cardsLeft>0){
+                x+=c_cardWidth/2;
+                y+=c_cardHeight/2;
+                renderText(std::to_string(m_game->m_context.m_cardsLeft),x,y);
+            }
         }
+        //render player name and score
+        renderText(m_game->m_context.m_playerName,100,100);
+        renderText(std::to_string(m_game->m_context.m_points),100,130);
+        if(m_game->m_context.m_isCardClosed)
+            renderText("Card is Closed!",800,130);
     }
-    //render player name and score
-    renderText(m_game->m_context.m_playerName,100,100);
-    renderText(std::to_string(m_game->m_context.m_points),100,130);
-    if(m_game->m_context.m_isCardClosed)
-        renderText("Card is Closed!",800,130);
+    else{
+        if(m_game->m_context.m_endRoundText.first.size()!=0) 
+        {
+            renderText(m_game->m_context.m_endRoundText.first,m_ContinueButton.pos.first+m_ContinueButton.w/2,m_ContinueButton.pos.second-130);
+            renderText(m_game->m_context.m_endRoundText.second,m_ContinueButton.pos.first+m_ContinueButton.w/2,m_ContinueButton.pos.second-100);
+        }    
+        renderTexture(m_ContinueButton.id, m_ContinueButton.h, m_ContinueButton.w, m_ContinueButton.pos.first,  m_ContinueButton.pos.second, 0, 1.0f);
+    }
     SDL_RenderPresent(m_renderer);
     
 }
@@ -477,6 +489,11 @@ void GameDisplay::handleMouseHover(int x, int y){
 
 bool GameDisplay::handleMouseClick(int x, int y){
     std::cout<<"CLICK"<<std::endl;
+    if(m_game->m_context.m_isGameOverState && pointOnTexture(x,y,m_ContinueButton.pos.first,m_ContinueButton.pos.second,m_ContinueButton.h,m_ContinueButton.w))
+    {
+        m_game->m_context.m_isGameOverState=false;
+        m_game->nextRound();
+    }
     if(m_isCardSelected)
     {
         std::cout<<"A card is selected "<<m_ButtonPositions.size()<<std::endl;

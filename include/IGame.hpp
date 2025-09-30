@@ -9,12 +9,14 @@
 struct GameContext{
     bool m_isCardClosed;
     bool m_isFirstPlayer;
+    bool m_isGameOverState;
     size_t m_cardsLeft;
     size_t m_points; //REMOVE
     Hand m_hand;
     CardID m_playedCard;
     CardID m_tromf;
     std::string m_playerName;
+    std::pair<std::string,std::string> m_endRoundText;
     std::vector<CardID> m_currentHand;
     std::unordered_map<CardID,std::vector<OptionType>, CardHash, CardEqual> m_options;
 };
@@ -27,4 +29,5 @@ public:
     virtual void closeCard() = 0;
     virtual void endRound() = 0;
     virtual void getCurrentPlayerHand() = 0;
+    virtual void nextRound() = 0;
 };

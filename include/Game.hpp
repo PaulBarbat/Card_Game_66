@@ -19,6 +19,7 @@ public:
     void closeCard() override;
     void endRound() override;
     void getCurrentPlayerHand() override;
+    void nextRound() override;
 
     void setState(std::unique_ptr<StateGame> newState);
     std::unique_ptr<Player> makePlayer(std::string player);

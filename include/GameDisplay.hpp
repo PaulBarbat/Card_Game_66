@@ -22,6 +22,7 @@ enum TextureID{
     ButtonCloseTheCard,
     ButtonEndTheRound,
     ButtonPlay,
+    ButtonContinue,
     IconActions,
     IconTromf,
     CardAcornAce,
@@ -300,6 +301,7 @@ private:
     std::array<LocalizedTexture,3> m_ButtonPositions;
     LocalizedTexture m_CloseTheCardButton;
     LocalizedTexture m_EndRoundButton;
+    LocalizedTexture m_ContinueButton;
     size_t m_handSize = 0;
     SDL_Window* m_window;
     SDL_Renderer* m_renderer;

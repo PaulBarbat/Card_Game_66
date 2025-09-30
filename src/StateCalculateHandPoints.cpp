@@ -41,7 +41,9 @@ void StateCalculateHandPoints::update(Game& game){
     if(game.getDeck().cardsLeft()==0)
         game.setIsDrawingAllowed(false);
     if(game.getFirstPlayer().getCurrentHandSize()==0)
+    {
         game.setState(std::make_unique<StateGameOver>());
+    }    
     else
         game.setState(std::make_unique<StatePlayHand>());
 }

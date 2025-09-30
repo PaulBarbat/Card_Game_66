@@ -20,12 +20,14 @@ Game::Game():
 {
     m_context.m_isCardClosed=false;
     m_context.m_isFirstPlayer=true;
+    m_context.m_isGameOverState=false;
     m_context.m_cardsLeft=m_deck->cardsLeft();
     m_context.m_points=0;//REMOVE
     m_context.m_hand=m_players.first->getHand();
     m_context.m_playedCard=CardID(MagyarRank::Placeholder, MagyarSuite::Placeholder);
     m_context.m_tromf=m_deck->getTromf()->getCardID();
     m_context.m_playerName=m_players.first->getName();
+    m_context.m_endRoundText=std::pair("","");
     m_players.first->calculateOptions(m_context.m_cardsLeft, m_context.m_tromf,m_context.m_options);
     setState(std::make_unique<StateStart>());
 }
@@ -143,6 +145,10 @@ void Game::getCurrentPlayerHand(){
     else{
         m_context.m_hand= (m_context.m_isFirstPlayer ? m_players.first->getHand() : m_players.second->getHand());
     }
+}
+
+void Game::nextRound(){
+    setState(std::make_unique<StateShuffleAndDraw>());
 }
 
 void Game::setState(std::unique_ptr<StateGame> newState){

@@ -526,44 +526,46 @@ bool GameDisplay::handleMouseClick(int x, int y){
             card.scale=1.0f;
         }    
         m_ButtonPositions.fill(LocalizedTexture());
+    }else{
+        int i=0;
+        for(auto& card : m_cardPositions)
+        {
+            if(pointOnTexture(x,y,card.pos.first, card.pos.second, m_cardHeight, m_cardWidth)){//card.second = CardID
+                //handle option screen with m_game->m_context.m_options(card.second);
+                auto it = m_game->m_context.m_options.find(textureIdToCardId(card.id));
+                if(it!= m_game->m_context.m_options.end())
+                {
+                    if(card.isClicked==false){
+                        card.isClicked=true;
+                        m_isCardSelected=true;
+                        m_selectedCardIndex=i;
+                        for(int i=0;i<it->second.size();i++){
+                            int w = (m_cardWidth/it->second.size());
+                            int temp_x=(card.pos.first+i*(w+5)-5);
+                            m_ButtonPositions[i]=LocalizedTexture(Vertex(temp_x, card.pos.second-80), optionTypeToTextureId(it->second[i]), 0, m_cardHeight/9, w);
+                        }
+                        for(const auto& button: m_ButtonPositions)
+                            std::cout<<textureIdToString(button.id)<<std::endl;
+                    }else if(card.isClicked==true)
+                    {
+                        m_isCardSelected=false;
+                        m_selectedCard=CardID(MagyarRank::Placeholder,MagyarSuite::Placeholder);
+                        card.isClicked=false;
+                        m_ButtonPositions.fill(LocalizedTexture());
+                    }
+                }
+                else{
+                    std::cout<<"clicked on card "<<rankToString(textureIdToCardId(card.id).first)<<" "<<suiteToString(textureIdToCardId(card.id).second)<<std::endl;
+                    m_game->playOption(textureIdToCardId(card.id), OptionType::Play);
+                }
+                return true;
+            }
+            ++i;
+        }
     }
     m_isCardSelected=false;
     m_selectedCard=CardID(MagyarRank::Placeholder,MagyarSuite::Placeholder);
-    int i=0;
-    for(auto& card : m_cardPositions)
-    {
-        if(pointOnTexture(x,y,card.pos.first, card.pos.second, m_cardHeight, m_cardWidth)){//card.second = CardID
-            //handle option screen with m_game->m_context.m_options(card.second);
-            auto it = m_game->m_context.m_options.find(textureIdToCardId(card.id));
-            if(it!= m_game->m_context.m_options.end())
-            {
-                if(card.isClicked==false){
-                    card.isClicked=true;
-                    m_isCardSelected=true;
-                    m_selectedCardIndex=i;
-                    for(int i=0;i<it->second.size();i++){
-                        int w = (m_cardWidth/it->second.size());
-                        int temp_x=(card.pos.first+i*(w+5)-5);
-                        m_ButtonPositions[i]=LocalizedTexture(Vertex(temp_x, card.pos.second-80), optionTypeToTextureId(it->second[i]), 0, m_cardHeight/9, w);
-                    }
-                    for(const auto& button: m_ButtonPositions)
-                        std::cout<<textureIdToString(button.id)<<std::endl;
-                }else if(card.isClicked==true)
-                {
-                    m_isCardSelected=false;
-                    m_selectedCard=CardID(MagyarRank::Placeholder,MagyarSuite::Placeholder);
-                    card.isClicked=false;
-                    m_ButtonPositions.fill(LocalizedTexture());
-                }
-            }
-            else{
-                std::cout<<"clicked on card "<<rankToString(textureIdToCardId(card.id).first)<<" "<<suiteToString(textureIdToCardId(card.id).second)<<std::endl;
-                m_game->playOption(textureIdToCardId(card.id), OptionType::Play);
-            }
-            return true;
-        }
-        ++i;
-    }
+    
     
     if(pointOnTexture(x,y,m_CloseTheCardButton.pos.first,m_CloseTheCardButton.pos.second, m_CloseTheCardButton.h, m_CloseTheCardButton.w))
     {

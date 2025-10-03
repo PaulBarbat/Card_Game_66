@@ -29,9 +29,9 @@ GameDisplay::GameDisplay(){
         "Card Game 66",
         SDL_WINDOWPOS_CENTERED,
         SDL_WINDOWPOS_CENTERED,
-        c_windowWidth,
-        c_windowHeight,
-        SDL_WINDOW_SHOWN
+        m_windowWidth,
+        m_windowHeight,
+        SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE
     );
 
     if(!m_window){
@@ -39,6 +39,16 @@ GameDisplay::GameDisplay(){
         std::cin.get();
         throw std::runtime_error("SDL Window Creation Error");
     } 
+
+    SDL_MaximizeWindow(m_window);
+
+    int w, h;
+    SDL_GetWindowSize(m_window, &w, &h);
+    m_windowWidth=w;
+    m_windowHeight=h;
+    m_cardWidth=m_windowWidth/9;
+    m_cardHeight=m_windowHeight/3.4;
+
 
     m_renderer = SDL_CreateRenderer(
         m_window,
@@ -66,9 +76,9 @@ GameDisplay::GameDisplay(){
     m_isCardSelected=false;
     m_selectedCard=CardID(MagyarRank::Placeholder,MagyarSuite::Placeholder);
     m_game = std::make_unique<Game>();
-    m_EndRoundButton=LocalizedTexture(Vertex(c_windowWidth-300,  c_windowHeight - c_cardHeight - 70), TextureID::ButtonEndTheRound, 0, 140, 200);
-    m_CloseTheCardButton=LocalizedTexture(Vertex(c_windowWidth-300, c_windowHeight - c_cardHeight +80), TextureID::ButtonCloseTheCard, 0, 140, 200);
-    m_ContinueButton=LocalizedTexture(Vertex(c_windowWidth/2-150, c_windowHeight/2-100), TextureID::ButtonContinue, 0, 200, 300);
+    m_EndRoundButton=LocalizedTexture(Vertex(m_windowWidth-300,  m_windowHeight - m_cardHeight - 70), TextureID::ButtonEndTheRound, 0, 140, 200);
+    m_CloseTheCardButton=LocalizedTexture(Vertex(m_windowWidth-300, m_windowHeight - m_cardHeight +80), TextureID::ButtonCloseTheCard, 0, 140, 200);
+    m_ContinueButton=LocalizedTexture(Vertex(m_windowWidth/2-150, m_windowHeight/2-100), TextureID::ButtonContinue, 0, 200, 300);
 }
 
 GameDisplay::~GameDisplay()
@@ -185,7 +195,7 @@ bool GameDisplay::renderBackground(){
     auto it = m_textures.find(TextureID::Background);
     if(it!= m_textures.end()){
         SDL_Texture* texture = it->second;
-        SDL_Rect destination{0,0,c_windowWidth, c_windowHeight};
+        SDL_Rect destination{0,0,m_windowWidth, m_windowHeight};
         SDL_RenderCopy(m_renderer, texture, nullptr, &destination);
         return true;
     }
@@ -200,17 +210,17 @@ bool GameDisplay::renderCard(TextureID id, int x, int y, double rotate, float sc
     auto it = m_textures.find(id);
     if(it!= m_textures.end()){
         SDL_Texture* texture = it->second;
-        SDL_Rect destination{x,y,c_cardWidth*scale, c_cardHeight*scale};
+        SDL_Rect destination{x,y,m_cardWidth*scale, m_cardHeight*scale};
         SDL_RenderCopyEx(m_renderer, texture, nullptr, &destination, rotate, nullptr, SDL_FLIP_NONE);
-        int temp_x = x+static_cast<int>(static_cast<float>(c_cardWidth)*scale)-40;
+        int temp_x = x+static_cast<int>(static_cast<float>(m_cardWidth)*scale)-m_cardWidth/8-10;
         if(textureIdToCardId(it->first).second==m_game->m_context.m_tromf.second)
         {
-            renderTexture(TextureID::IconTromf,30, 30, temp_x , y+10, rotate, scale);
-            temp_x -=40;
+            renderTexture(TextureID::IconTromf,m_cardWidth/8, m_cardWidth/8, temp_x , y+10, rotate, scale);
+            temp_x -=m_cardWidth/8+10;
         }    
         auto it = m_game->m_context.m_options.find(textureIdToCardId(id));
         if(it!= m_game->m_context.m_options.end() && it->second.size()>1){
-            renderTexture(TextureID::IconActions,30, 30, temp_x , y+10, rotate, scale);
+            renderTexture(TextureID::IconActions,m_cardWidth/8, m_cardWidth/8, temp_x , y+10, rotate, scale);
         }
         return true;
     }
@@ -269,12 +279,12 @@ bool GameDisplay::renderOptions(TextureID id,int x, int y){
     
     if(!m_game->m_context.m_options.empty() && it!=m_game->m_context.m_options.end() && it->second.size()>1){
         TextureID temp_ti;
-        int w = (c_cardWidth/it->second.size());
-        int temp_x;
+        int w = (m_cardWidth/it->second.size());
+        int padding=m_cardWidth-(it->second.size()*(w-3));
+        int temp_x=x+padding;
         
         for(int i=0; i<it->second.size();i++)
         {
-            temp_x=(x+i*(w+5));
             switch(it->second.at(i)){
                 case OptionType::Play:
                     temp_ti=TextureID::ButtonPlay;
@@ -297,7 +307,8 @@ bool GameDisplay::renderOptions(TextureID id,int x, int y){
                 default:
                     return false;
             }
-            renderTexture(temp_ti, 40, w, temp_x , y-50, 0, 1.0f);
+            renderTexture(temp_ti, m_cardHeight/9, w, temp_x , y-(m_cardHeight/9)-5, 0, 1.0f);
+            temp_x+=w+padding;
         }
     }
     return true;
@@ -307,7 +318,7 @@ bool GameDisplay::renderOptions(TextureID id,int x, int y){
 bool GameDisplay::renderClickableOptions(){
     for(const auto& button : m_ButtonPositions)
     {
-        if(textureIdToString(button.id)!="UnknownTextureID")
+        if(textureIdToString(button.id)!="UnknownTextureID"&&textureIdToString(button.id)!="Background")
             renderTexture(button.id, button.h, button.w, button.pos.first , button.pos.second, button.wavePhase , button.scale);
     }
     return true;
@@ -322,8 +333,8 @@ void GameDisplay::render(){
     {//render the hand
         m_game->getCurrentPlayerHand();
         int handSize = static_cast<int>(m_game->m_context.m_hand.size());
-        int x = static_cast<int>((c_windowWidth - (handSize * c_cardWidth + (handSize - 1) * 20)) / 2);
-        int y = c_windowHeight - c_cardHeight - 70;
+        int x = static_cast<int>((m_windowWidth - (handSize * m_cardWidth + (handSize - 1) * 20)) / 2);
+        int y = m_windowHeight - m_cardHeight - m_windowHeight/10;
         m_handSize = handSize;
 
         for (int i = 0; i < handSize; i++) {
@@ -338,7 +349,7 @@ void GameDisplay::render(){
                 m_cardPositions[i] = LocalizedTexture(Vertex(x, y), cardIdToTextureId(card->getCardID()), i * 0.5f);
             }
 
-            x += c_cardWidth + 20;
+            x += m_cardWidth + m_cardWidth/8;
         }
 
         // If fewer cards than before, clear the unused slots
@@ -365,9 +376,9 @@ void GameDisplay::render(){
 
 
             // compute adjusted position
-            int renderX = lc.pos.first - ((c_cardWidth * lc.scale - c_cardWidth) / 2);
+            int renderX = lc.pos.first - ((m_cardWidth * lc.scale - m_cardWidth) / 2);
             int renderY = lc.pos.second + static_cast<int>(lc.waveOffsetY)
-                        - ((c_cardHeight * lc.scale - c_cardHeight) / 2);
+                        - ((m_cardHeight * lc.scale - m_cardHeight) / 2);
 
             renderCard(lc.id, renderX, renderY, 0.0, lc.scale);
 
@@ -378,8 +389,8 @@ void GameDisplay::render(){
             }
         }
 
-        x=(c_windowWidth-c_cardWidth)/2;
-        y=(c_windowHeight-(2*c_cardHeight))-200;
+        x=m_windowWidth/2-m_cardWidth/2;
+        y=(m_windowHeight-(3*m_cardHeight));
         
         if(m_game->m_context.m_isFirstPlayer)
         {
@@ -397,11 +408,11 @@ void GameDisplay::render(){
 
         if(m_game->m_context.m_cardsLeft>0){
             //render tromf
-            x+=c_cardWidth+150;
-            y-=(c_cardHeight/2)-(c_cardWidth/2)-10;
+            x+=m_cardWidth+150;
+            y-=(m_cardHeight/2)-(m_cardWidth/2)-10;
             renderCard(cardIdToTextureId(m_game->m_context.m_tromf),x, y, 90.0 );
             //render deck
-            x+=(c_cardWidth/2);
+            x+=(m_cardWidth/2);
             for(int i=0; i<static_cast<int>(m_game->m_context.m_cardsLeft/2); i++)
             {
                 renderCard(TextureID::Back,x,y, 0.0);
@@ -411,8 +422,8 @@ void GameDisplay::render(){
 
             //render deck size
             if(m_game->m_context.m_cardsLeft>0){
-                x+=c_cardWidth/2;
-                y+=c_cardHeight/2;
+                x+=m_cardWidth/2;
+                y+=m_cardHeight/2;
                 renderText(std::to_string(m_game->m_context.m_cardsLeft),x,y);
             }
         }
@@ -420,7 +431,7 @@ void GameDisplay::render(){
         renderText(m_game->m_context.m_playerName,100,100);
         renderText(std::to_string(m_game->m_context.m_points),100,130);
         if(m_game->m_context.m_isCardClosed)
-            renderText("Card is Closed!",800,130);
+            renderText("Card is Closed!",m_windowWidth/2,m_windowHeight/8);
     }
     else{
         if(m_game->m_context.m_endRoundText.first.size()!=0) 
@@ -472,7 +483,7 @@ void GameDisplay::handleMouseHover(int x, int y){
 
     // then set the hovered one
     for (auto& card : m_cardPositions) {
-        if (pointOnTexture(x, y, card.pos.first, card.pos.second, c_cardHeight, c_cardWidth)) {
+        if (pointOnTexture(x, y, card.pos.first, card.pos.second, m_cardHeight, m_cardWidth)) {
             std::cout << "HOVERING" << std::endl;
             card.isHovered = true;
             break; // stop at first hovered card
@@ -518,9 +529,10 @@ bool GameDisplay::handleMouseClick(int x, int y){
     }
     m_isCardSelected=false;
     m_selectedCard=CardID(MagyarRank::Placeholder,MagyarSuite::Placeholder);
+    int i=0;
     for(auto& card : m_cardPositions)
     {
-        if(pointOnTexture(x,y,card.pos.first, card.pos.second, c_cardHeight, c_cardWidth)){//card.second = CardID
+        if(pointOnTexture(x,y,card.pos.first, card.pos.second, m_cardHeight, m_cardWidth)){//card.second = CardID
             //handle option screen with m_game->m_context.m_options(card.second);
             auto it = m_game->m_context.m_options.find(textureIdToCardId(card.id));
             if(it!= m_game->m_context.m_options.end())
@@ -528,11 +540,11 @@ bool GameDisplay::handleMouseClick(int x, int y){
                 if(card.isClicked==false){
                     card.isClicked=true;
                     m_isCardSelected=true;
-                    m_selectedCard=textureIdToCardId(card.id);
+                    m_selectedCardIndex=i;
                     for(int i=0;i<it->second.size();i++){
-                        int w = (c_cardWidth/it->second.size());
+                        int w = (m_cardWidth/it->second.size());
                         int temp_x=(card.pos.first+i*(w+5)-5);
-                        m_ButtonPositions[i]=LocalizedTexture(Vertex(temp_x, card.pos.second-80), optionTypeToTextureId(it->second[i]), 0, 40, w);
+                        m_ButtonPositions[i]=LocalizedTexture(Vertex(temp_x, card.pos.second-80), optionTypeToTextureId(it->second[i]), 0, m_cardHeight/9, w);
                     }
                     for(const auto& button: m_ButtonPositions)
                         std::cout<<textureIdToString(button.id)<<std::endl;
@@ -550,6 +562,7 @@ bool GameDisplay::handleMouseClick(int x, int y){
             }
             return true;
         }
+        ++i;
     }
     
     if(pointOnTexture(x,y,m_CloseTheCardButton.pos.first,m_CloseTheCardButton.pos.second, m_CloseTheCardButton.h, m_CloseTheCardButton.w))
@@ -565,6 +578,50 @@ bool GameDisplay::handleMouseClick(int x, int y){
     return false;
 }
 
+void GameDisplay::updatePositions()
+{
+    m_cardWidth=m_windowWidth/11;
+    m_cardHeight=m_windowHeight/3.6f;
+    int size=0;
+    for(auto& button : m_ButtonPositions)
+    {
+        if(textureIdToString(button.id)!="UnknownTextureID"&&textureIdToString(button.id)!="Background")
+        {
+            ++size;
+        }
+    }
+    if(size>0){
+        int i=0;
+        for(auto& button : m_ButtonPositions)
+        {
+            if(textureIdToString(button.id)!="UnknownTextureID"&&textureIdToString(button.id)!="Background")
+            {
+                button.h=m_cardHeight/9;
+                button.w=m_cardWidth/size;
+                button.pos.first=m_cardPositions[m_selectedCardIndex].pos.first+i*(button.w+5)-5;
+                button.pos.second=m_cardPositions[m_selectedCardIndex].pos.second-2*button.h;
+                ++i;
+            }
+        }
+    }
+        
+    m_CloseTheCardButton.h=m_cardHeight/2-m_cardHeight/20;
+    m_CloseTheCardButton.w=m_cardWidth* 1.1f;
+    m_CloseTheCardButton.pos.first=m_windowWidth-(m_cardWidth*2);
+    m_CloseTheCardButton.pos.second=m_windowHeight - m_cardHeight - m_windowHeight/10;
+    
+    m_EndRoundButton.h=m_cardHeight/2-m_cardHeight/20;
+    m_EndRoundButton.w=m_cardWidth* 1.1f;
+    m_EndRoundButton.pos.first= m_windowWidth-(m_cardWidth*2);
+    m_EndRoundButton.pos.second=m_windowHeight - m_cardHeight - m_windowHeight/10+(m_cardHeight/2-m_cardHeight/20+20);
+       
+    m_ContinueButton.h=m_cardWidth*0.55f;
+    m_ContinueButton.w=m_cardWidth;
+    m_ContinueButton.pos.first=m_windowWidth/2-m_cardWidth/2;
+    m_ContinueButton.pos.second=m_windowHeight/2-(m_cardWidth/2);
+    
+}
+
 void GameDisplay::run(){
     bool isRunning = true;
 
@@ -577,5 +634,12 @@ void GameDisplay::run(){
         SDL_Delay(16);
         
         m_game->update();
+        int w, h;
+        SDL_GetWindowSize(m_window, &w, &h);
+        if(h!=m_windowWidth || w!=m_windowHeight){
+            m_windowWidth=w;
+            m_windowHeight=h;
+            updatePositions();
+        }
     }
 }

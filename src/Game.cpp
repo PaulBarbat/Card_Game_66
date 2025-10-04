@@ -33,7 +33,7 @@ Game::Game():
 }
 
 void Game::playOption(const CardID& id, const OptionType& option){
-    std::cout<<"Playing option "<<toString(option)<<std::endl;
+    std::cout<<"Playing option "<<toString(option)<<rankToString(id.first)<<" "<<suiteToString(id.second)<<std::endl;
     switch(option){
         case OptionType::Play:
             if(m_context.m_isFirstPlayer){

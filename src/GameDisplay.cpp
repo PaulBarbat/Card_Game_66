@@ -514,7 +514,7 @@ bool GameDisplay::handleMouseClick(int x, int y){
             std::cout<<a<<" x-"<<x<<" y-"<<y<<" posfirst-"<<button.pos.first<<" possecond-"<<button.pos.second<<" h"<<button.h<<" w"<<button.w<<std::endl;
             if(a)
             {
-                std::cout<<"CLicked on option "<<std::endl;
+                std::cout<<"CLicked on option "<<textureIdToString(button.id)<<std::endl;
                 m_game->playOption(m_selectedCard, textureIdToOptionType(button.id));
                 m_isCardSelected=false;
                 m_selectedCard=CardID(MagyarRank::Placeholder,MagyarSuite::Placeholder);
@@ -525,6 +525,7 @@ bool GameDisplay::handleMouseClick(int x, int y){
             card.isClicked=false;
             card.scale=1.0f;
         }    
+        m_isCardSelected=false;
         m_ButtonPositions.fill(LocalizedTexture());
     }else{
         int i=0;
@@ -537,12 +538,14 @@ bool GameDisplay::handleMouseClick(int x, int y){
                 {
                     if(card.isClicked==false){
                         card.isClicked=true;
+                        m_selectedCard=textureIdToCardId(card.id);
                         m_isCardSelected=true;
                         m_selectedCardIndex=i;
                         for(int i=0;i<it->second.size();i++){
                             int w = (m_cardWidth/it->second.size());
                             int temp_x=(card.pos.first+i*(w+5)-5);
                             m_ButtonPositions[i]=LocalizedTexture(Vertex(temp_x, card.pos.second-80), optionTypeToTextureId(it->second[i]), 0, m_cardHeight/9, w);
+                            std::cout<<"Add option "<<textureIdToString(m_ButtonPositions[i].id)<<std::endl;
                         }
                         for(const auto& button: m_ButtonPositions)
                             std::cout<<textureIdToString(button.id)<<std::endl;
@@ -562,20 +565,16 @@ bool GameDisplay::handleMouseClick(int x, int y){
             }
             ++i;
         }
-    }
-    m_isCardSelected=false;
-    m_selectedCard=CardID(MagyarRank::Placeholder,MagyarSuite::Placeholder);
-    
-    
-    if(pointOnTexture(x,y,m_CloseTheCardButton.pos.first,m_CloseTheCardButton.pos.second, m_CloseTheCardButton.h, m_CloseTheCardButton.w))
-    {
-        std::cout<<"Clicked on Close The Card "<<std::endl;
-        m_game->closeCard();
-    }
-    else if(pointOnTexture(x,y,m_EndRoundButton.pos.first,m_EndRoundButton.pos.second, m_EndRoundButton.h, m_EndRoundButton.w))
-    {
-        std::cout<<"Clicked on End the Round "<<std::endl;
-        m_game->endRound();
+        if(pointOnTexture(x,y,m_CloseTheCardButton.pos.first,m_CloseTheCardButton.pos.second, m_CloseTheCardButton.h, m_CloseTheCardButton.w))
+        {
+            std::cout<<"Clicked on Close The Card "<<std::endl;
+            m_game->closeCard();
+        }
+        else if(pointOnTexture(x,y,m_EndRoundButton.pos.first,m_EndRoundButton.pos.second, m_EndRoundButton.h, m_EndRoundButton.w))
+        {
+            std::cout<<"Clicked on End the Round "<<std::endl;
+            m_game->endRound();
+        }
     }
     return false;
 }

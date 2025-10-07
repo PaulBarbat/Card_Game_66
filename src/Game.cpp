@@ -20,18 +20,20 @@ Game::Game():
 {
     m_context.m_isCardClosed=false;
     m_context.m_isFirstPlayer=true;
+    m_context.m_isGameOverState=false;
     m_context.m_cardsLeft=m_deck->cardsLeft();
     m_context.m_points=0;//REMOVE
     m_context.m_hand=m_players.first->getHand();
     m_context.m_playedCard=CardID(MagyarRank::Placeholder, MagyarSuite::Placeholder);
     m_context.m_tromf=m_deck->getTromf()->getCardID();
     m_context.m_playerName=m_players.first->getName();
+    m_context.m_endRoundText=std::pair("","");
     m_players.first->calculateOptions(m_context.m_cardsLeft, m_context.m_tromf,m_context.m_options);
     setState(std::make_unique<StateStart>());
 }
 
 void Game::playOption(const CardID& id, const OptionType& option){
-    std::cout<<"Playing option "<<toString(option)<<std::endl;
+    std::cout<<"Playing option "<<toString(option)<<rankToString(id.first)<<" "<<suiteToString(id.second)<<std::endl;
     switch(option){
         case OptionType::Play:
             if(m_context.m_isFirstPlayer){
@@ -121,8 +123,32 @@ void Game::endRound(){
     setState(std::make_unique<StateGameOver>());
 }
 
-Hand& Game::getCurrentPlayerHand(){
-    return (m_context.m_isFirstPlayer ? m_players.first->getHand() : m_players.second->getHand());
+void Game::getCurrentPlayerHand(){
+    m_context.m_hand.clear();
+    if(!m_context.m_isFirstPlayer && (m_context.m_isCardClosed||m_context.m_cardsLeft<2))
+    {
+        const auto tromf=m_deck->getTromf();
+        for(const auto& card:m_players.second->getHand()){
+            if(card->compareSuite(*m_currentHand.first))
+                m_context.m_hand.push_back(card);
+        }
+        if(m_context.m_hand.size()==0){
+            for(const auto& card:m_players.second->getHand()){
+                if(card->compareSuite(*tromf))
+                    m_context.m_hand.push_back(card);
+            }
+            if(m_context.m_hand.size()==0){
+                m_context.m_hand=m_players.second->getHand();
+            }
+        }
+    }
+    else{
+        m_context.m_hand= (m_context.m_isFirstPlayer ? m_players.first->getHand() : m_players.second->getHand());
+    }
+}
+
+void Game::nextRound(){
+    setState(std::make_unique<StateShuffleAndDraw>());
 }
 
 void Game::setState(std::unique_ptr<StateGame> newState){

@@ -1,0 +1,65 @@
+name: CMake Build
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build-linux:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: sudo apt-get update && sudo apt-get install -y cmake ninja-build libsdl2-dev libsdl2-ttf-dev libsdl2-image-dev
+
+      - name: Configure (Linux)
+        run: cmake -B build -G Ninja -DCMAKE_BUILD_TYPE=Release .
+
+      - name: Build (Linux)
+        run: cmake --build build --parallel
+
+      - name: Test (Linux)
+        run: ctest --test-dir build --output-on-failure
+
+
+  build-windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install MSYS2 and MinGW
+        uses: msys2/setup-msys2@v2
+        with:
+          update: true
+          install: >
+            mingw-w64-x86_64-gcc
+            mingw-w64-x86_64-cmake
+            mingw-w64-x86_64-ninja
+            mingw-w64-x86_64-SDL2
+            mingw-w64-x86_64-SDL2_ttf
+            mingw-w64-x86_64-SDL2_image
+
+      - name: Configure (Windows MinGW)
+        shell: msys2 {0}
+        run: |
+          cmake -B build -G "Ninja" \
+            -DCMAKE_BUILD_TYPE=Release \
+            -DCMAKE_C_COMPILER=gcc \
+            -DCMAKE_CXX_COMPILER=g++ \
+            -DCMAKE_EXE_LINKER_FLAGS="" \
+            -DCMAKE_CXX_FLAGS_RELEASE="-O2 -pipe" \
+            -DSDL2_DIR=/mingw64 \
+            -DSDL2_TTF_DIR=/mingw64 \
+            -DSDL2_IMAGE_DIR=/mingw64 \
+            .
+
+      - name: Build (Windows)
+        shell: msys2 {0}
+        run: cmake --build build --parallel --verbose
+
+      - name: Test (Windows)
+        shell: msys2 {0}
+        run: ctest --test-dir build --output-on-failure

@@ -7,11 +7,6 @@
 #include <SDL_ttf.h>
 #include <unordered_map>
 
-inline constexpr std::size_t c_cardWidth{180};
-inline constexpr std::size_t c_cardHeight{290};//these are the sizes of the sprites i use
-inline constexpr std::size_t c_windowWidth{1600};
-inline constexpr std::size_t c_windowHeight{1000};
-
 enum TextureID{
     Background,
     Button20End,
@@ -22,6 +17,7 @@ enum TextureID{
     ButtonCloseTheCard,
     ButtonEndTheRound,
     ButtonPlay,
+    ButtonContinue,
     IconActions,
     IconTromf,
     CardAcornAce,
@@ -300,11 +296,19 @@ private:
     std::array<LocalizedTexture,3> m_ButtonPositions;
     LocalizedTexture m_CloseTheCardButton;
     LocalizedTexture m_EndRoundButton;
+    LocalizedTexture m_ContinueButton;
+    int m_selectedCardIndex;
     size_t m_handSize = 0;
     SDL_Window* m_window;
     SDL_Renderer* m_renderer;
     TTF_Font* m_font;
     std::unique_ptr<IGame> m_game;
+
+    std::size_t m_cardWidth{180};
+    std::size_t m_cardHeight{290};//these are the sizes of the sprites i use
+    std::size_t m_windowWidth{1600};
+    std::size_t m_windowHeight{1000};
+
 public:
     GameDisplay();
     ~GameDisplay();
@@ -326,6 +330,7 @@ public:
     void handleMouseHover(int x, int y);
     bool handleMouseClick(int x, int y);
     bool pointOnTexture(int x, int y, int cardX, int cardY ,int h, int w);
+    void updatePositions();
 
     void run();
 };

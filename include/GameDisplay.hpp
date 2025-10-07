@@ -7,6 +7,12 @@
 #include <SDL_ttf.h>
 #include <unordered_map>
 
+enum Screen{
+    Menu,
+    Main,
+    Rules
+};
+
 enum TextureID{
     Background,
     Button20End,
@@ -41,6 +47,10 @@ enum TextureID{
     CardLeafTen,
     CardLeafUnter,
     Back,
+    ButtonMenuPlay,
+    ButtonMenuExit,
+    ButtonMenuRules,
+    ButtonMenuBack,
     Placeholder
 };
 
@@ -258,6 +268,10 @@ inline std::string textureIdToString(TextureID id) {
         case CardLeafOber:       return "CardLeafOber";
         case CardLeafTen:        return "CardLeafTen";
         case CardLeafUnter:      return "CardLeafUnter";
+        case ButtonMenuBack:     return "ButtonMenuBack";
+        case ButtonMenuPlay:     return "ButtonMenuPlay";
+        case ButtonMenuExit:     return "ButtonMenuExit";
+        case ButtonMenuRules:    return "ButtonMenuRules";
         case Back:               return "Back";
         case Placeholder:        return "Placeholder";
         default:                 return "UnknownTextureID";
@@ -291,9 +305,11 @@ class GameDisplay {
 private:
     bool m_isCardSelected;
     CardID m_selectedCard;
+    Screen m_activeScreen;
     std::unordered_map<TextureID, SDL_Texture*> m_textures;
     std::array<LocalizedTexture,5> m_cardPositions;
     std::array<LocalizedTexture,3> m_ButtonPositions;
+    std::array<LocalizedTexture,4> m_menuButtons;
     LocalizedTexture m_CloseTheCardButton;
     LocalizedTexture m_EndRoundButton;
     LocalizedTexture m_ContinueButton;
@@ -325,10 +341,11 @@ public:
     bool renderText(const std::string& text,int x, int y);
     bool renderOptions(TextureID id,int x, int y);
     bool renderClickableOptions();
+    void renderRules();
     void render();
     int handleEvents();
     void handleMouseHover(int x, int y);
-    bool handleMouseClick(int x, int y);
+    int handleMouseClick(int x, int y);
     bool pointOnTexture(int x, int y, int cardX, int cardY ,int h, int w);
     void updatePositions();
 

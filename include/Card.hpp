@@ -19,9 +19,14 @@ public:
 
     Card(SuiteType suite, RankType rank, unsigned points): m_suite(suite), m_rank(rank), m_points(points){}
 
-    std::string toString() const override {
-        return rankToString(m_rank)+suiteToString(m_suite);
+    std::shared_ptr<ICard> clone() const {
+        return std::make_shared<Card<SuiteType, RankType>>(*this);
     }
+    
+    CardId getCardId() const{
+        return CardId(m_rank, m_suite);
+    }
+    
 
     bool compareSuite(const ICard& card)const{
         auto* other = dynamic_cast<const Card<SuiteType, RankType>*>(&card);
@@ -50,14 +55,11 @@ public:
         m_rank = other->m_rank;
         m_points = other->m_points;
     }
-
-    std::shared_ptr<ICard> clone() const {
-        return std::make_shared<Card<SuiteType, RankType>>(*this);
+    
+    std::string toString() const override {
+        return rankToString(m_rank)+suiteToString(m_suite);
     }
 
-    CardID getCardID() const{
-        return CardID(m_rank, m_suite);
-    }
 };
 
 #endif

@@ -3,13 +3,22 @@
 
 #include <memory>
 
-class Game; //Forward declaration to be able to use it
+class Game; 
+
+enum class StateType{
+    Start,
+    ShuffleAndDraw,
+    PlayHand,
+    CalculateHandPoints,
+    GameOver
+};
 
 class StateGame {
 public:
     virtual ~StateGame()=default;
     virtual void enter(Game& game) = 0;
     virtual void update(Game& game) = 0;
+    virtual StateType getType() = 0;
 };
 
 #endif

@@ -54,7 +54,7 @@ enum TextureID{
     Placeholder
 };
 
-inline TextureID cardIdToTextureId(const CardID& id){
+inline TextureID CardIdToTextureId(const CardId& id){
     switch(id.second){
         case MagyarSuite::Ghinda:
             switch(id.first){
@@ -150,50 +150,50 @@ inline TextureID cardIdToTextureId(const CardID& id){
     }
 }
 
-inline CardID textureIdToCardId(const TextureID& id){
+inline CardId textureIdToCardId(const TextureID& id){
     switch(id){
         case TextureID::CardAcornUnter:
-            return CardID(MagyarRank::Doi, MagyarSuite::Ghinda);
+            return CardId(MagyarRank::Doi, MagyarSuite::Ghinda);
         case TextureID::CardAcornOber:
-            return CardID(MagyarRank::Trei, MagyarSuite::Ghinda);
+            return CardId(MagyarRank::Trei, MagyarSuite::Ghinda);
         case TextureID::CardAcornKing:
-            return CardID(MagyarRank::Cal, MagyarSuite::Ghinda);
+            return CardId(MagyarRank::Cal, MagyarSuite::Ghinda);
         case TextureID::CardAcornTen:
-            return CardID(MagyarRank::Craita, MagyarSuite::Ghinda);
+            return CardId(MagyarRank::Craita, MagyarSuite::Ghinda);
         case TextureID::CardAcornAce:
-            return CardID(MagyarRank::Tuz, MagyarSuite::Ghinda);
+            return CardId(MagyarRank::Tuz, MagyarSuite::Ghinda);
         case TextureID::CardBellUnter:
-            return CardID(MagyarRank::Doi, MagyarSuite::Bata);
+            return CardId(MagyarRank::Doi, MagyarSuite::Bata);
         case TextureID::CardBellOber:
-            return CardID(MagyarRank::Trei, MagyarSuite::Bata);
+            return CardId(MagyarRank::Trei, MagyarSuite::Bata);
         case TextureID::CardBellKing:
-            return CardID(MagyarRank::Cal, MagyarSuite::Bata);
+            return CardId(MagyarRank::Cal, MagyarSuite::Bata);
         case TextureID::CardBellTen:
-            return CardID(MagyarRank::Craita, MagyarSuite::Bata);
+            return CardId(MagyarRank::Craita, MagyarSuite::Bata);
         case TextureID::CardBellAce:
-            return CardID(MagyarRank::Tuz, MagyarSuite::Bata);
+            return CardId(MagyarRank::Tuz, MagyarSuite::Bata);
         case TextureID::CardHeartUnter:
-            return CardID(MagyarRank::Doi, MagyarSuite::Rosu);
+            return CardId(MagyarRank::Doi, MagyarSuite::Rosu);
         case TextureID::CardHeartOber:
-            return CardID(MagyarRank::Trei, MagyarSuite::Rosu);
+            return CardId(MagyarRank::Trei, MagyarSuite::Rosu);
         case TextureID::CardHeartKing:
-            return CardID(MagyarRank::Cal, MagyarSuite::Rosu);
+            return CardId(MagyarRank::Cal, MagyarSuite::Rosu);
         case TextureID::CardHeartTen:
-            return CardID(MagyarRank::Craita, MagyarSuite::Rosu);
+            return CardId(MagyarRank::Craita, MagyarSuite::Rosu);
         case TextureID::CardHeartAce:
-            return CardID(MagyarRank::Tuz, MagyarSuite::Rosu);
+            return CardId(MagyarRank::Tuz, MagyarSuite::Rosu);
         case TextureID::CardLeafUnter:
-            return CardID(MagyarRank::Doi, MagyarSuite::Verde);
+            return CardId(MagyarRank::Doi, MagyarSuite::Verde);
         case TextureID::CardLeafOber:
-            return CardID(MagyarRank::Trei, MagyarSuite::Verde);
+            return CardId(MagyarRank::Trei, MagyarSuite::Verde);
         case TextureID::CardLeafKing:
-            return CardID(MagyarRank::Cal, MagyarSuite::Verde);
+            return CardId(MagyarRank::Cal, MagyarSuite::Verde);
         case TextureID::CardLeafTen:
-            return CardID(MagyarRank::Craita, MagyarSuite::Verde);
+            return CardId(MagyarRank::Craita, MagyarSuite::Verde);
         case TextureID::CardLeafAce:
-            return CardID(MagyarRank::Tuz, MagyarSuite::Verde);
+            return CardId(MagyarRank::Tuz, MagyarSuite::Verde);
         default:
-            return CardID(MagyarRank::Placeholder, MagyarSuite::Placeholder);
+            return CardId(MagyarRank::Placeholder, MagyarSuite::Placeholder);
     }
 }
 
@@ -231,7 +231,7 @@ inline TextureID optionTypeToTextureId(const OptionType& option) {
         case OptionType::Play:
             return TextureID::ButtonPlay;
         default:
-            return TextureID::Placeholder; // fallback
+            return TextureID::Placeholder;
     }
 }
 
@@ -279,24 +279,22 @@ inline std::string textureIdToString(TextureID id) {
 }
 
 using Vertex = std::pair<int, int>;
-struct LocalizedTexture {
-    Vertex pos;       // base position
-    TextureID id;        // card type
+struct Sprite {
+    Vertex pos;       
+    TextureID id;      
 
-    // Wave animation
     float waveOffsetY = 0.0f;
-    float wavePhase = 0.0f;   // for phase difference between cards
+    float wavePhase = 0.0f; 
 
-    // Hover animation
-    float scale = 1.0f;       // 1.0 = normal, >1.0 = highlighted
+    float scale = 1.0f;    
     bool isHovered = false;
     bool isClicked = false;
 
     int h = 0;
     int w = 0;
 
-    LocalizedTexture() = default;
-    LocalizedTexture(const Vertex& p, const TextureID& c, float phase = 0.0f, int height = 0, int width = 0)
+    Sprite() = default;
+    Sprite(const Vertex& p, const TextureID& c, float phase = 0.0f, int height = 0, int width = 0)
         : pos(p), id(c), wavePhase(phase) , h(height), w(width) {}
 };
 
@@ -304,15 +302,15 @@ struct LocalizedTexture {
 class GameDisplay {
 private:
     bool m_isCardSelected;
-    CardID m_selectedCard;
+    CardId m_selectedCard;
     Screen m_activeScreen;
     std::unordered_map<TextureID, SDL_Texture*> m_textures;
-    std::array<LocalizedTexture,5> m_cardPositions;
-    std::array<LocalizedTexture,3> m_ButtonPositions;
-    std::array<LocalizedTexture,4> m_menuButtons;
-    LocalizedTexture m_CloseTheCardButton;
-    LocalizedTexture m_EndRoundButton;
-    LocalizedTexture m_ContinueButton;
+    std::array<Sprite,5> m_cardPositions;
+    std::array<Sprite,3> m_buttonPositions;
+    std::array<Sprite,4> m_menuButtons;
+    Sprite m_CloseTheCardButton;
+    Sprite m_EndRoundButton;
+    Sprite m_ContinueButton;
     int m_selectedCardIndex;
     size_t m_handSize = 0;
     SDL_Window* m_window;
@@ -320,10 +318,10 @@ private:
     TTF_Font* m_font;
     std::unique_ptr<IGame> m_game;
 
-    std::size_t m_cardWidth{180};
-    std::size_t m_cardHeight{290};//these are the sizes of the sprites i use
-    std::size_t m_windowWidth{1600};
-    std::size_t m_windowHeight{1000};
+    std::size_t m_cardWidth;
+    std::size_t m_cardHeight;
+    int m_windowWidth;
+    int m_windowHeight;
 
 public:
     GameDisplay();
@@ -336,11 +334,11 @@ public:
     void loadTextures(const std::string& path);
     void loadSingleTexture(TextureID id, const std::string& path);
     bool renderBackground();
-    bool renderCard(TextureID cardID, int x, int y, double rotate,float scale = 1.0f);
+    bool renderCard(TextureID CardId, int x, int y, double rotate,float scale = 1.0f);
     bool renderTexture(TextureID id, int h, int w, int x, int y, double rotate, float scale);
     bool renderText(const std::string& text,int x, int y);
     bool renderOptions(TextureID id,int x, int y);
-    bool renderClickableOptions();
+    bool renderInteractiveElements();
     void renderRules();
     void render();
     int handleEvents();

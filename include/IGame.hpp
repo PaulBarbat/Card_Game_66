@@ -11,23 +11,24 @@ struct GameContext{
     bool m_isFirstPlayer;
     bool m_isGameOverState;
     size_t m_cardsLeft;
-    size_t m_points; //REMOVE
+    size_t m_points;
     Hand m_hand;
-    CardID m_playedCard;
-    CardID m_tromf;
+    CardId m_playedCard;
+    CardId m_tromf;
     std::string m_playerName;
     std::pair<std::string,std::string> m_endRoundText;
-    std::vector<CardID> m_currentHand;
-    std::unordered_map<CardID,std::vector<OptionType>, CardHash, CardEqual> m_options;
+    std::vector<CardId> m_currentHand;
+    std::unordered_map<CardId,std::vector<OptionType>, CardHash, CardEqual> m_options;
 };
 
 class IGame{
 public:
     GameContext m_context;
     virtual void update() = 0;
-    virtual void playOption(const CardID& id, const OptionType& option) = 0;
+    virtual void playOption(const CardId& id, const OptionType& option) = 0;
     virtual void closeCard() = 0;
     virtual void endRound() = 0;
     virtual void getCurrentPlayerHand() = 0;
     virtual void nextRound() = 0;
+    virtual const GameContext& context() const = 0;
 };

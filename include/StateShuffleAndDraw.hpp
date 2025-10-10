@@ -8,6 +8,7 @@ class StateShuffleAndDraw : public StateGame{
 public:
     void enter(Game& game) override;
     void update(Game& game) override;
+    StateType getType() override {return StateType::ShuffleAndDraw;}
 };
 
 #endif

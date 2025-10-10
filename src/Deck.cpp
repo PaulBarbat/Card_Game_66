@@ -5,18 +5,14 @@ void Deck::addCard(std::shared_ptr<ICard> card){
     m_deck.push_back(std::move(card));
 }
 
-std::shared_ptr<ICard> Deck::drawCard(){
-    if(m_currentCard >= m_deck.size())
-        return nullptr;
-    std::cout<<"Current Card is "<<m_deck[m_currentCard]->toString()<<" position "<<m_currentCard <<std::endl;
-    return m_deck[m_currentCard++];
-}
-
 void Deck::shuffleDeck(){
-    std::cout<<"Shuffle the deck"<<std::endl;
     auto randomizer = std::default_random_engine {};
     std::shuffle(std::begin(m_deck), std::end(m_deck), randomizer);
     m_currentCard=0;
+}
+
+void Deck::showFirstCard()const{
+    std::cout<<m_deck[m_currentCard]->toString()<<" position "<<m_currentCard<<std::endl;
 }
 
 void Deck::printDeck(){
@@ -26,13 +22,16 @@ void Deck::printDeck(){
     std::cout <<"Tromf is "<<this->getTromf()->toString(); 
 }
 
+std::shared_ptr<ICard> Deck::drawCard(){
+    if(m_currentCard >= m_deck.size())
+        return nullptr;
+    return m_deck[m_currentCard++];
+}
+
+
 std::shared_ptr<ICard> Deck::getTromf() const{
     if (m_deck.empty()) return nullptr;
     return m_deck.at(m_deck.size()-1);
-}
-
-void Deck::showFirstCard()const{
-    std::cout<<m_deck[m_currentCard]->toString()<<" position "<<m_currentCard<<std::endl;
 }
 
 uint32_t Deck::cardsLeft() const{
